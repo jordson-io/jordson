@@ -1,5 +1,5 @@
 {
-  "name": "kiwako",
+  "name": "jord",
   "version": "0.0.1",
   "description": "",
   "main": "server.js",
@@ -12,14 +12,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AndreLeclercq/fastdrive.git"
+    "url": "git+https://git.jetbrains.space/jord/jord/JORD.git"
   },
   "author": "Andre LECLERCQ",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/AndreLeclercq/fastdrive/issues"
+    "url": ""
   },
-  "homepage": "https://github.com/AndreLeclercq/fastdrive#readme",
+  "homepage": "",
   "devDependencies": {
     "argon2": "^0.27.0",
     "mongodb": "^3.6.2",

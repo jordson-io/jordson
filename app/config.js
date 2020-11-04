@@ -1,12 +1,12 @@
 export const config = {
     "global": {
-        "siteName": "Kiwako",
-        "domain": "kiwako.fr",
+        "siteName": "JORD",
+        "domain": "",
         "email_admin": "andreleclercqpro@gmail.com",
         "port": 4002
     },
     "db": {
-        "dbName": 'kwk',
+        "dbName": 'jrd',
         "publicCollections": [ 'pages' ]
     },
     "mail": {
