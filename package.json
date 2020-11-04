@@ -1,0 +1,30 @@
+{
+  "name": "kiwako",
+  "version": "0.0.1",
+  "description": "",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "watch": "./app/bundler.js --watch public/app.js & sass --watch components/ressources/sass:public/",
+    "prod": "./app/bundler.js --compress public/app.js; sass components/ressources/sass:public/ --style=compressed",
+    "fonts": "./app/bundler.js --fonts",
+    "start": "node --experimental-modules --trace-warnings ./server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AndreLeclercq/fastdrive.git"
+  },
+  "author": "Andre LECLERCQ",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AndreLeclercq/fastdrive/issues"
+  },
+  "homepage": "https://github.com/AndreLeclercq/fastdrive#readme",
+  "devDependencies": {
+    "argon2": "^0.27.0",
+    "mongodb": "^3.6.2",
+    "nodemailer": "^6.4.11",
+    "sass": "^1.26.11",
+    "terser": "^4.8.0"
+  }
+}

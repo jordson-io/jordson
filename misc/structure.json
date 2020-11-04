@@ -1,0 +1,37 @@
+{
+  "category": {
+    "_id": "oerjgbopergno",
+    "type": "category",
+    "name": "First Category",
+    "slug": "first-category",
+    "color": "#FFCCEE"
+  },
+  "discussion": {
+    "_id": "qerognqerogqerog",
+    "type": "discussion",
+    "name": "Discussion name",
+    "slug": "discussion-name",
+    "category": "oerjgbopergno",
+    "author": "oqerngqeroobqreg",
+    "date": "2020-01-01",
+    "posts": [
+      "qronqerognqerr",
+      "qrmogqerogbqer",
+      "qrdmgqrgbqeriu"
+    ]
+  },
+  "post":{
+    "_id": "qronqerognqer",
+    "type": "post",
+    "date": "2020-01-01",
+    "author": "oqerngqeroobqreg",
+    "content": "Ceci est un contenu"
+  },
+  "user": {
+    "_id": "oqerngqeroobqreg",
+    "type": "user",
+    "name": "Andre Leclercq",
+    "date": "2020-01-01",
+    "avatar": "images/myAvatar.png"
+  }
+}

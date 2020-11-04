@@ -1,0 +1,55 @@
+* {
+  color:var(--dark);
+  font-size:16px;
+  font-family: var(--fontPrimary), Arial, Helvetica, sans-serif;
+}
+
+.h0 {
+  font-size:4.25rem;
+  font-weight: 600;
+}
+
+.h1 {
+  font-size:2.25rem;
+  font-weight: 600;
+}
+
+.h2 {
+  font-size:2rem;
+  font-weight: 600;
+}
+
+.h3 {
+  font-size:1.75rem;
+  font-weight: 600;
+}
+
+.h4 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.h5 {
+  font-size:1.25rem;
+  font-weight: 600;
+}
+
+.t-underline {
+  text-decoration: underline;
+}
+
+.t-uppercase {
+  text-transform: uppercase;
+}
+
+.t-left {
+  text-align:left;
+}
+
+.t-right {
+  text-align: right;
+}
+
+.t-center {
+  text-align: center;
+}

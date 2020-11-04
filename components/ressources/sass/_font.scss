@@ -1,0 +1,25 @@
+@font-face {
+  font-family: Raleway;
+  src: url(assets/fonts/Raleway-VariableFont_wght.ttf) format('ttf');
+}
+
+@font-face {
+  font-family: QuickSand;
+  src: url(assets/fonts/Quicksand-VariableFont_wght.ttf) format('ttf');
+}
+
+.f-pri {
+  font-family: var(--fontPrimary);
+}
+
+.f-sec {
+  font-family: var(--fontSecondary);
+}
+
+.f-bold {
+  font-weight: 600;
+}
+
+.f-light {
+  font-weight: 300;
+}

@@ -1,0 +1,85 @@
+input, select, button {
+  min-height: 35px;
+}
+
+//input {
+//  box-sizing: border-box;
+//  padding:0 .5rem;
+//}
+
+form{
+  margin: 20px;
+  padding: 20px;
+}
+
+fieldset {
+  background: var(--light);
+  position: relative;
+  padding: 0;
+  margin: 5px;
+  border: none;
+  overflow: visible;
+  hr {
+    content: '';
+    display: block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 2px;
+    border: none;
+    background: #607D8B;
+    font-size: 1px;
+    will-change: transform, visibility;
+    transition: all 200ms ease-out;
+    transform: scaleX(0);
+    visibility: hidden;
+    z-index: 10;
+  }
+  input:focus ~ hr {
+    transform: scaleX(1);
+    visibility: visible;
+  }
+}
+
+input {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 12px 10px 8px;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  border-bottom: 1px solid var(--grey);
+  font-size: 120%;
+  outline: none;
+  cursor: text;
+
+  &::-webkit-input-placeholder {
+    transition: color 300ms ease;
+  }
+  &:not(:focus)::-webkit-input-placeholder {
+    color: transparent;
+  }
+}
+
+input:focus ~ hr {
+  transform: scaleX(1);
+  visibility: visible;
+}
+
+label {
+  position: absolute;
+  top: 14px;
+  left: 10px;
+  font-size: 120%;
+  color: var(--secondary);
+  transform-origin: 0 -150%;
+  transition: transform 300ms ease;
+  pointer-events: none;
+}
+input:focus ~ label,
+input:valid ~ label {
+  transform: scale(0.6);
+}

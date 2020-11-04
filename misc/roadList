@@ -1,0 +1,33 @@
+List of Categories =>
+    find all document by type === category
+    Show list of categories by Alphabetic Order on Name
+
+List of Discussions by Category =>
+    find all document by type === discussion && category === categoryID
+    Show list of Discussions by Date (recent first)
+
+List of Posts by Discussion =>
+    find all document by type === post && discussions === discussionID
+    Show list of Posts by Date (older first)
+
+List of All Discussions =>
+    find all document by type === discussion
+    Show list of discussions by Date (recent first)
+    
+Show User profil =>
+    find document by type === user && user === userID
+    Show user data
+    
+Add new User =>
+    Register Form
+    check email and username in document by type === user
+    create new document with type user
+    
+Add new post =>
+    create new document with type post
+    
+Add new Discussion =>
+    create new document with type discussions
+    
+Server : Frigg on NodeJS
+Routes for Categories, discussions and User
