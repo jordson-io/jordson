@@ -1,10 +1,11 @@
 {
-  "name": "jord",
+  "name": "jordson",
   "version": "0.0.1",
   "description": "",
   "main": "server.js",
   "type": "module",
   "scripts": {
+    "cwebp": "cp components/assets/images/*.* public/assets/images && find public/assets/images -type f \\( -iname \"*.jpg\" -o -iname \"*.jpeg\" -o -iname \"*.png\" \\) -exec cwebp {} -o {}.webp \\;",
     "watch": "./app/bundler.js --watch public/app.js & sass --watch components/ressources/sass:public/",
     "prod": "./app/bundler.js --compress public/app.js; sass components/ressources/sass:public/ --style=compressed",
     "fonts": "./app/bundler.js --fonts",
@@ -26,5 +27,6 @@
     "nodemailer": "^6.4.11",
     "sass": "^1.26.11",
     "terser": "^4.8.0"
-  }
+  },
+  "dependencies": {}
 }

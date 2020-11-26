@@ -1,7 +1,7 @@
-export const config = {
+export const gConfig = {
     "global": {
-        "siteName": "JORD",
-        "domain": "",
+        "siteName": "JORDSON",
+        "domain": "https//www.jordson.fr",
         "email_admin": "andreleclercqpro@gmail.com",
         "port": 4002
     },

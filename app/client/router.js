@@ -4,6 +4,10 @@ let routeList = []
 let routes = {}
 let route
 let htmlData = document.createElement('html')
+const gAnalytics = {
+        'enable': false,
+        'UAid': 'UA-xxxxxxxxx-x'
+    }
 
 /**
  * Init website
@@ -32,6 +36,16 @@ let htmlData = document.createElement('html')
 })();
 
 /**
+ * Google Analytics script for page change tracking
+ */
+if(gAnalytics.enable){
+    ;(async () => {
+        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+        ga('create', gAnalytics.enable, 'auto');
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+}
+
+/**
  * Manage history and back to prev page
  */
 window.onpopstate = () => {
@@ -41,6 +55,7 @@ window.onpopstate = () => {
     })
     document.getElementById('content').innerHTML = htmlData.querySelector(`[data-id='${dataID}']`).innerHTML
     setTimeout(() => {
+        window.scrollTo(0, 0)
         document.dispatchEvent(pageChange)
     }, 100)
 }
@@ -67,6 +82,10 @@ class Router {
 
         this.event = event
         route = location.hash || '#'
+        if(route.endsWith('/')){
+            route = route.slice(0, -1)
+        }
+
         this.currentPage = await Object.values(this.routes).find(elt => route === `#${elt.slug}`)
 
         if (this.currentPage === undefined) {
@@ -84,6 +103,10 @@ class Router {
      * @returns {Promise<void>}
      */
     async showPage() {
+        if(gAnalytics.enable){
+            ga('set', 'page', `/${this.currentPage.slug}` )
+            ga('send', 'pageview')
+        }
         this.currentHTML = htmlData.querySelector(`[data-id='${this.currentPage.fileName}']`).innerHTML
         history.replaceState(this.currentHTML, this.currentPage.title, route.replace('#', '/'))
         document.getElementById('content').innerHTML = this.currentHTML

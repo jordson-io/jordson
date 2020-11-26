@@ -5,6 +5,7 @@ import fs from 'fs'
 import path from 'path'
 
 const dirPath = path.join('public/assets/structures.html')
+let htmlFiles = []
 
 /**
  * Compiling HTML structures
@@ -12,7 +13,7 @@ const dirPath = path.join('public/assets/structures.html')
  * @param {string} [pathOrigin] Folder in "components/ressources/html/"
  * @returns {Promise<void>}
  */
-async function getHTMLFiles(pathOrigin) {
+async function getHTMLFiles(pathOrigin= path.join('components/ressources/html/')) {
     fs.writeFileSync(dirPath, '', e => {
         logSys(e, 'error')
     })
@@ -20,15 +21,20 @@ async function getHTMLFiles(pathOrigin) {
         if (e)
             logSys(e, 'error')
         files.forEach(file => {
-            path.extname(file) === '.html'
-                ? (fs.appendFileSync(dirPath, `<div data-id="${file.replace(path.extname(file), '')}">${fs.readFileSync(pathOrigin + file).toString()}</div>`, err => {
+            if(path.extname(file) === '.html'){
+                fs.appendFileSync(dirPath, `<div data-id="${file.replace(path.extname(file), '')}">${fs.readFileSync(pathOrigin + file).toString()}</div>`, err => {
                     logSys(err, 'error')
-                }), logSys(`${file} add to ${dirPath}`, 'info'))
-                : path.extname(file) === '' ? getHTMLFiles(`${pathOrigin}${file}/`) : null
+                })
+                if(process.argv.includes('--watch')){
+                    fs.watchFile(pathOrigin + file, compile)
+                }
+                htmlFiles.push(pathOrigin + file)
+            } else if(path.extname(file) === '') {
+                getHTMLFiles(`${pathOrigin}${file}/`)
+            }
         })
     })
 }
-
 // Compil JAVASCRIPT
 const scripts = [
     'app/client/router.js',
@@ -47,12 +53,13 @@ let compile = async () => {
         if (process.argv.includes('--compress'))
             dist = Terser.minify(dist).code
         fs.writeFileSync(destFile, dist)
-        await getHTMLFiles(path.join('components/ressources/html/'))
-        logSys(`------ Get all HTML files ------`, 'info')
+        await getHTMLFiles()
+        logSys(`------ START COMPILING ------`, 'info')
     } catch (e) {
         logSys(e, 'error')
     } finally {
         logSys('Compiling Javascript Done with success !', 'success')
+        logSys('Compiling HTML Done with success !', 'success')
     }
 }
 
@@ -68,6 +75,7 @@ if (process.argv.includes('--watch')) {
     logSys('First Javascript Compilation', 'info')
     await compile()
     logSys('JS is now watching for Change...', 'info')
+    logSys('HTML is now watching for Change...', 'info')
 
 } else if(process.argv.includes('--fonts')) {
     logSys('Import FONTS files', 'info')
