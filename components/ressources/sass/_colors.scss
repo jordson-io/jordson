@@ -1,9 +1,13 @@
 .c-primary {
-  color: var(--primary);
+  color: var(--prim);
 }
 
 .c-secondary {
-  color: var(--secondary) !important;
+  color: var(--sec) !important;
+}
+
+.c-dark {
+  color: var(--dark);
 }
 
 .c-light {
@@ -31,11 +35,15 @@
 }
 
 .bg-primary {
-  background-color: var(--primary);
+  background-color: var(--prim);
 }
 
 .bg-secondary {
-  background-color: var(--secondary);
+  background-color: var(--sec);
+}
+
+.bg-dark {
+  background-color:  var(--dark);
 }
 
 .bg-grey {

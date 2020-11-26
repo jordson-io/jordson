@@ -15,16 +15,16 @@
   -webkit-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   &:hover {
-    box-shadow: rgba(0, 0, 0, 0.18) 0px 7px 14px, rgba(0, 0, 0, 0.12) 0px 5px 5px;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
     -webkit-transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   }
 }
 
 .btn-primary {
-  background-color: var(--primary);
+  background-color: var(--prim);
 }
 
 .btn-secondary {
-  background-color: var(--secondary);
+  background-color: var(--sec);
 }
