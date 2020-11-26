@@ -37,8 +37,8 @@ async function getHTMLFiles(pathOrigin= path.join('components/ressources/html/')
 }
 // Compil JAVASCRIPT
 const scripts = [
+    'app/client/events.js',
     'app/client/router.js',
-    'app/client/events.js'
 ]
 
 scripts.push('components/ressources/js/script.js')

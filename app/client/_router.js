@@ -64,7 +64,7 @@ window.onpopstate = () => {
  * Router to manage pages
  * @class
  */
-class Router {
+class _router {
 
     constructor(routes) {
         this.routes = routes
@@ -117,4 +117,4 @@ class Router {
         }
     }
 }
-let pagesRoutes = new Router(routes)
+let pagesRoutes = new _router(routes)
