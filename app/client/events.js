@@ -7,9 +7,9 @@ document.addEventListener('click', e => {
      * Manage internal Links
      * Link like "/my-link" doesn't reload page, just the body content.
      */
-    if(e.target.nodeName === 'A' && e.target.hostname === location.hostname && !e.target.href.includes('#')){
+    if(e.target.closest('A') && e.target.closest('A').hostname === location.hostname && !e.target.closest('A').href.includes('#')){
         e.preventDefault()
-        document.location.href = e.target.pathname.replace('/', '#')
+        document.location.href = e.target.closest('A').pathname.replace('/', '#')
     }
 
     /**
