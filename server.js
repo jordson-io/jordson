@@ -6,12 +6,12 @@ import fs from 'fs'
 import path from 'path'
 import logSys from './app/server/msgSystem.js'
 import Database from './app/server/database.js'
-import {config} from './app/config.js'
+import {gConfig} from './app/config.js'
 
 let db = new Database()
-const port = config.global.port
-const mimeTypes = config.mimeTypes
-const enableCollection = config.db.publicCollections
+const port = gConfig.global.port
+const mimeTypes = gConfig.mimeTypes
+const enableCollection = gConfig.db.publicCollections
 
 async function parseRequest(stream, headers, req) {
     req.url = new URL(headers[':path'], `https://localhost:${port}`)
