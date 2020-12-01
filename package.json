@@ -9,6 +9,7 @@
     "watch": "./app/bundler.js --watch public/app.js & sass --watch components/ressources/sass:public/",
     "prod": "./app/bundler.js --compress public/app.js; sass components/ressources/sass:public/ --style=compressed",
     "fonts": "./app/bundler.js --fonts",
+    "mexp": "mongoexport --collection=pages --db=jrd --out=components/database/pages.json",
     "start": "node --experimental-modules --trace-warnings ./server.js"
   },
   "repository": {
