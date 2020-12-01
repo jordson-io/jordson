@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@100;400;700;900&display=swap');
+
 @font-face {
   font-family: Raleway;
   src: url(assets/fonts/Raleway-VariableFont_wght.ttf) format('ttf');
@@ -16,10 +18,18 @@
   font-family: var(--fontSecondary);
 }
 
-.f-bold {
+.f-title {
+  font-family: var(--fontTitle);
+}
+
+.fw-900 {
+  font-weight: 900;
+}
+
+.fw-600 {
   font-weight: 600;
 }
 
-.f-light {
+.fw-300 {
   font-weight: 300;
 }
