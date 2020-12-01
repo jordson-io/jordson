@@ -58,6 +58,7 @@ window.onpopstate = () => {
         window.scrollTo(0, 0)
         document.dispatchEvent(pageChange)
     }, 100)
+
 }
 
 /**
@@ -86,7 +87,7 @@ class _router {
             route = route.slice(0, -1)
         }
 
-        this.currentPage = await Object.values(this.routes).find(elt => route === `#${elt.slug}`)
+        this.currentPage = await Object.values(this.routes).find(elt => route.replace(/(\?|\&)([^=]+)\=([^&]+)/, '') === `#${elt.slug}`)
 
         if (this.currentPage === undefined) {
             route = '#404'

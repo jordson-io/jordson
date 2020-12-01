@@ -49,7 +49,16 @@ async function handleRequest(req, res) {
             await prepareResponse(res, await db.getCollection(req.param.name))
         }
     } else if (path.extname(String(req.url)) === '' && String(req.url.pathname) !== '/') {
-        res.headers['Location'] = '/#' + String(req.url.pathname).replace('/', '')
+        let p = ''
+        if(Object.keys(req.param).length >= 1){
+            p = '?'
+            for (const k in req.param) {
+                let v = req.param[k]
+                let s = p === '?' ? '' : '&'
+                p += `${k}=${v}${s}`
+            }
+        }
+        res.headers['Location'] = '/#' + String(req.url.pathname).replace('/', '') + p
         res.headers[':status'] = 302
     } else {
         await readFile(req, res)
