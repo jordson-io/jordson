@@ -1,6 +1,6 @@
 import nodeMailer from 'nodemailer'
 import logSys from './msgSystem.js'
-import {config} from '../assets/config.js'
+import {gConfig} from '../config.js'
 
 /**
  * Manage email sending
@@ -10,11 +10,11 @@ export default class Email {
 
     constructor() {
         this.transporter = nodeMailer.createTransport({
-            host: config.mail.host,
-            port: config.mail.port,
+            host: gConfig.mail.host,
+            port: gConfig.mail.port,
             auth: {
-                user: config.mail.user,
-                pass: config.mail.pass
+                user: gConfig.mail.user,
+                pass: gConfig.mail.pass
             }
         })
     }

@@ -64,25 +64,15 @@ export default class User {
      * @param {object} [data] email & password
      * @returns {Promise<string|*>} token or error message
      */
+    // TODO: Créer un object "public" dans le document utilisateur pour acceuillir toutes les données que le serveur pourra
+    //  renvoyer au client afin d'éviter de modifier en dure les champs autorisé à être renvoyés au client.
     async login(data) {
         try {
             this.document = await db.getDocument('users', {email: data.email})
             if (typeof this.document === 'object') {
                 if (await argon2.verify(this.document.password, data.password)) {
                     logSys(`User login "${this.document._id}"`)
-                    return {
-                        'email': this.document.email,
-                        'firstname': this.document.firstname,
-                        'lastname': this.document.lastname,
-                        'phone': this.document.phone,
-                        'address': this.document.address,
-                        'postalCode': this.document.postalCode,
-                        'town': this.document.town,
-                        'shipping_address': this.document.shipping_address,
-                        'shipping_postalCode': this.document.shipping_postalCode,
-                        'shipping_town': this.document.shipping_town,
-                        'token': ''
-                    }
+                    return this.document.public
                 } else
                     return 'password incorrect'
             } else
