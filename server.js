@@ -49,21 +49,29 @@ async function handleRequest(req, res) {
             await prepareResponse(res, await db.getCollection(req.param.name))
         }
     } else if (path.extname(String(req.url)) === '' && String(req.url.pathname) !== '/') {
-        let p = ''
+        let p = '?'
         if(Object.keys(req.param).length >= 1){
-            p = '?'
             for (const k in req.param) {
                 let v = req.param[k]
                 let s = p === '?' ? '' : '&'
                 p += `${k}=${v}${s}`
             }
         }
+        p = p === '?' ? '' : p
         res.headers['Location'] = '/#' + String(req.url.pathname).replace('/', '') + p
         res.headers[':status'] = 302
+    } else if(path.extname(String(req.url)) === '' && Object.keys(req.param).length >= 1){
+        let p = '?'
+        for (const k in req.param) {
+            let v = req.param[k]
+            let s = p === '?' ? '' : '&'
+            p += `${k}=${v}${s}`
+        }
+        res.headers['Location'] = '/#' + p
+        await readFile(req, res)
     } else {
         await readFile(req, res)
     }
-
 }
 
 async function executeRequest(stream, headers) {
@@ -76,7 +84,7 @@ async function executeRequest(stream, headers) {
         data: '',
         compress: false,
         headers: {
-            'server': 'Server Made with NodeJS by aleclercq',
+            'server': 'Server FRIGG Made with NodeJS by aLeclercq',
             ':status': 200
         }
     }

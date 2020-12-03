@@ -3,6 +3,7 @@ let pageChange = new CustomEvent('pageChange', {bubbles: true})
 let routeList = []
 let routes = {}
 let route
+let currentParam = ''
 let htmlData = document.createElement('html')
 const gAnalytics = {
         'enable': false,
@@ -83,8 +84,17 @@ class _router {
 
         this.event = event
         route = location.hash || '#'
-        if(route.endsWith('/')){
+        if(route.endsWith('/'))
             route = route.slice(0, -1)
+        let regex = /(\?|\&)([^=]+)\=([^&]+)/
+        let param = regex.exec(location.href)
+        if(param){
+            let thisParam = param[0].replace('#', '')
+            if(thisParam !== currentParam){
+                if(location.hash === '')
+                    route += thisParam
+                currentParam = thisParam
+            }
         }
 
         this.currentPage = await Object.values(this.routes).find(elt => route.replace(/(\?|\&)([^=]+)\=([^&]+)/, '') === `#${elt.slug}`)
