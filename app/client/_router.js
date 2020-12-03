@@ -120,7 +120,9 @@ class _router {
         }
         this.currentHTML = htmlData.querySelector(`[data-id='${this.currentPage.fileName}']`).innerHTML
         history.replaceState(this.currentHTML, this.currentPage.title, route.replace('#', '/'))
-        document.getElementById('content').innerHTML = this.currentHTML
+        document.getElementById('content').classList.remove('show')
+        setTimeout( () => document.getElementById('content').innerHTML = this.currentHTML, 400)
+        setTimeout( () => document.getElementById('content').classList.add('show'), 400)
         document.querySelector('title').innerHTML = this.currentPage.title
 
         if (this.event.type === 'dbReady') {

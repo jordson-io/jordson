@@ -48,7 +48,7 @@ async function handleRequest(req, res) {
         if (req.param.action === 'get' && enableCollection.some(elt => elt === req.param.name)) {
             await prepareResponse(res, await db.getCollection(req.param.name))
         }
-    } else if (path.extname(String(req.url)) === '' && String(req.url.pathname) !== '/') {
+    } else if (path.extname(String(req.url)) === '') {
         let p = '?'
         if(Object.keys(req.param).length >= 1){
             for (const k in req.param) {
@@ -58,17 +58,13 @@ async function handleRequest(req, res) {
             }
         }
         p = p === '?' ? '' : p
-        res.headers['Location'] = '/#' + String(req.url.pathname).replace('/', '') + p
-        res.headers[':status'] = 302
-    } else if(path.extname(String(req.url)) === '' && Object.keys(req.param).length >= 1){
-        let p = '?'
-        for (const k in req.param) {
-            let v = req.param[k]
-            let s = p === '?' ? '' : '&'
-            p += `${k}=${v}${s}`
+        if(String(req.url.pathname) !== '/'){
+            res.headers['Location'] = '/#' + String(req.url.pathname).replace('/', '') + p
+            res.headers[':status'] = 302
+        } else {
+            res.headers['Location'] = '/#' + p
+            await readFile(req, res)
         }
-        res.headers['Location'] = '/#' + p
-        await readFile(req, res)
     } else {
         await readFile(req, res)
     }
