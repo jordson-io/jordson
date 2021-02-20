@@ -3,6 +3,7 @@
  * Do not add new elements in this Function, use "customEvents" to add new click event matches
  */
 document.addEventListener("click", (e) => {
+
   /**
    * Manage internal Links
    * Link like "/my-link" doesn't reload page, just the body content.

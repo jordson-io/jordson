@@ -4,25 +4,33 @@ import Terser from "terser";
 import fs from "fs";
 import path from "path";
 
-const dirPath = path.join("public/assets/structures.html");
-let htmlFiles = [];
+const directoryHTMLPath = path.join("public/assets/structures.html");
+let watching = false;
+const scripts = [
+  "app/client/_router.js",
+  "app/client/events.js"
+];
+scripts.push("components/ressources/js/script.js");
 
 /**
- * Compiling HTML structures
+ * Transpilation HTML structures
  * @function
  * @param {string} [pathOrigin] Folder in "components/ressources/html/"
  * @returns {Promise<void>}
  */
-async function getHTMLFiles(pathOrigin = path.join("components/ressources/html/")) {
-  fs.writeFileSync(dirPath, "", (e) => {
-    logSys(e, "error");
-  });
+async function compileHTMLFiles(pathOrigin = path.join("components/ressources/html/")) {
+// TODO : Créer une variable structure et la remplir avec le html puis tout envoyer en un bloc sur le fichier
+//  structure.html
   fs.readdir(pathOrigin, (e, files) => {
+
     if (e) logSys(e, "error");
+
     files.forEach((file) => {
+
       if (path.extname(file) === ".html") {
+
         fs.appendFileSync(
-          dirPath,
+            directoryHTMLPath,
           `<div data-id="${file.replace(path.extname(file), "")}">${fs
             .readFileSync(pathOrigin + file)
             .toString()}</div>`,
@@ -30,67 +38,178 @@ async function getHTMLFiles(pathOrigin = path.join("components/ressources/html/"
             logSys(err, "error");
           }
         );
+
         if (process.argv.includes("--watch")) {
-          fs.watchFile(pathOrigin + file, compile);
+
+          fs.watch(pathOrigin + file, watchHTMLFiles);
+          logSys(`${pathOrigin}${file}`, 'info');
+
         }
-        htmlFiles.push(pathOrigin + file);
+
       } else if (path.extname(file) === "") {
-        getHTMLFiles(`${pathOrigin}${file}/`);
+
+        compileHTMLFiles(`${pathOrigin}${file}/`);
+
       }
-    });
-  });
+    })
+  })
 }
-// Compil JAVASCRIPT
-const scripts = ["app/client/_router.js", "app/client/events.js"];
 
-scripts.push("components/ressources/js/script.js");
+/**
+ * Function trigger when html file was changed
+ * @function
+ * @param {string} [eventType] change or rename
+ * @param {string} [filename]
+ */
+function watchHTMLFiles(eventType, filename){
 
-let destFile = process.argv.slice(-1);
-destFile = destFile[0];
-// let destFile = process.argv.pop();
+  if(!watching){
 
-let compile = async () => {
-  try {
-    let dist = scripts.map((script) => fs.readFileSync(script, { encoding: "utf8" })).join("\n");
-    if (process.argv.includes("--compress")) dist = Terser.minify(dist).code;
-    fs.writeFileSync(destFile, dist);
-    await getHTMLFiles();
-    logSys(`------ START COMPILING ------`, "info");
-  } catch (e) {
-    logSys(e, "error");
-  } finally {
-    logSys("Compiling Javascript Done with success !", "success");
-    logSys("Compiling HTML Done with success !", "success");
+    watching = true;
+
+    let structure = fs.readFileSync(directoryHTMLPath, "utf-8");
+
+    let fileName = filename.replace('.html', '');
+
+    let newFileData = `<div data-id="${filename.replace(path.extname(filename), "")}">${fs
+        .readFileSync(getHTMLFilesPath(fileName))
+        .toString()}</div>`;
+
+    let regex = new RegExp(`<div data-id="${fileName}">(.*)(?=<div data-id)`);
+
+    structure = structure.replace(regex, newFileData);
+
+    logSys(`structures.html update (${filename})`, 'success');
+
+    fs.writeFileSync(directoryHTMLPath, structure);
+
+    setTimeout(() => watching = false, 100);
+
   }
-};
+
+}
+
+/**
+ * Create and return the path of the current change file.
+ * @function
+ * @param {string} [fileSearch]
+ * @param {string} [currentPath]
+ * @returns {string|*}
+ */
+function getHTMLFilesPath(fileSearch, currentPath= path.join("components/ressources/html/")) {
+
+  let files = fs.readdirSync(currentPath);
+
+  for (let i in files) {
+
+    let curFile = path.join(currentPath, files[i]);
+
+    if (fs.statSync(curFile).isFile() && curFile === `${currentPath}/${fileSearch}.html`)
+      return curFile;
+    else if (fs.statSync(curFile).isDirectory())
+      return getHTMLFilesPath(fileSearch, curFile);
+
+  }
+}
+
+/**
+ * Transpilation and watch JS files
+ * @function
+ * @returns {Promise<void>}
+ */
+async function compileJSFiles() {
+
+  await writeCompileJSFile();
+
+  if (process.argv.includes("--watch")) {
+
+    scripts.forEach((file) => {
+
+      fs.watch(file, writeCompileJSFile);
+      logSys(file, "info");
+
+    });
+
+  }
+
+}
+
+/**
+ * Write on the app.js file
+ * @function
+ * @param {string} [eventType]
+ * @param {string} [filename]
+ * @returns {Promise<void>}
+ */
+async function writeCompileJSFile(eventType = 'none', filename = 'none') {
+
+  if(!watching){
+
+    watching = true;
+
+    const destinationFile = 'public/app.js';
+
+    let dist = scripts.map((script) => fs.readFileSync(script, { encoding: "utf8" })).join("\n");
+
+    if (process.argv.includes('--compress'))
+      dist = Terser.minify(dist).code;
+
+    fs.writeFileSync(destinationFile, dist);
+
+    if(filename !== 'none')
+      logSys(`app.js update (${filename})`, 'success');
+
+    setTimeout(() => watching = false, 100);
+
+  }
+
+}
+
+/**
+ * Launch HTML and JS transpilation
+ * @function
+ * @param {string} [arg] watch or compress
+ * @returns {Promise<void>}
+ */
+async function compile(arg){
+  logSys(`-------------------------------------------`, 'success');
+  logSys(`---------- START COMPILE (${arg}) ----------`, 'success');
+  logSys(`-------------------------------------------`, 'success');
+  console.log();
+  logSys(`---------- START ${arg} JS FILES -----------`, 'success');
+  await compileJSFiles();
+  console.log();
+  logSys(`---------- START ${arg} HTML FILES -----------`, 'success');
+  fs.writeFileSync(directoryHTMLPath, "", (e) => {
+    logSys(e, "error");
+  });
+  await compileHTMLFiles();
+}
+
 
 if (process.argv.includes("--watch")) {
-  logSys(`Ready to watch files : `, "info");
-  logSys(`---------------`, "info");
-  scripts.forEach((e) => {
-    fs.watchFile(e, compile);
-    logSys(e, "info");
-  });
-  logSys(`---------------`, "info");
-  logSys(`Toward [${destFile}]`, "info");
-  logSys("First Javascript Compilation", "info");
-  await compile();
-  logSys("JS is now watching for Change...", "info");
-  logSys("HTML is now watching for Change...", "info");
+
+  await compile('WATCH');
+
 } else if (process.argv.includes("--fonts")) {
+
   logSys("Import FONTS files", "info");
+
   fs.readdir("./components/assets/fonts", (e, files) => {
+
     if (e) logSys(e, "error");
+
     files.forEach((file) => {
+
       fs.copyFile(`./components/assets/fonts/${file}`, `./public/assets/fonts/${file}`, (err) => {
-        if (err) {
-          logSys(err, "error");
-        } else {
-          logSys(`${file} was copied into public/assets/fonts`, "info");
-        }
-      });
-    });
-  });
+        err ? logSys(err, "error") : logSys(`${file} was copied into public/assets/fonts`, "info");
+      })
+
+    })
+  })
+
 } else {
-  await compile();
+
+  await compile('COMPRESS');
+
 }
