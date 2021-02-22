@@ -193,6 +193,7 @@ if (process.argv.includes("--watch")) {
 
 } else if (process.argv.includes("--fonts")) {
 
+  // TODO: Sortir ce code dans une fonction dédiée au fonts
   logSys("Import FONTS files", "info");
 
   fs.readdir("./components/assets/fonts", (e, files) => {
