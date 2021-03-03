@@ -51,8 +51,13 @@ async function compileHTMLFiles(pathOrigin = path.join("components/ressources/ht
         compileHTMLFiles(`${pathOrigin}${file}/`);
 
       }
+
     })
+
+    fs.appendFileSync(directoryHTMLPath, '<div data-id="dummy"></div>')
+
   })
+
 }
 
 /**
@@ -62,31 +67,37 @@ async function compileHTMLFiles(pathOrigin = path.join("components/ressources/ht
  * @param {string} [filename]
  */
 function watchHTMLFiles(eventType, filename){
+  try {
 
-  if(!watching){
+    if(!watching){
 
-    watching = true;
+      watching = true;
 
-    let structure = fs.readFileSync(directoryHTMLPath, "utf-8");
+      let structure = fs.readFileSync(directoryHTMLPath, "utf-8");
 
-    let fileName = filename.replace('.html', '');
+      let fileName = filename.replace('.html', '');
 
-    let newFileData = `<div data-id="${filename.replace(path.extname(filename), "")}">${fs
-        .readFileSync(getHTMLFilesPath(fileName))
-        .toString()}</div>`;
+      let newFileData = `<div data-id="${filename.replace(path.extname(filename), "")}">${fs
+          .readFileSync(getHTMLFilesPath(fileName))
+          .toString()}</div>`;
 
-    let regex = new RegExp(`<div data-id="${fileName}">(.*)(?=<div data-id)`);
+      let regex = new RegExp(`<div data-id="${fileName}">(.*?)(?=<div data-id)`, 's');
 
-    structure = structure.replace(regex, newFileData);
+      structure = structure.replace(regex, newFileData);
 
-    logSys(`structures.html update (${filename})`, 'success');
+      logSys(`structures.html update (${filename})`, 'success');
 
-    fs.writeFileSync(directoryHTMLPath, structure);
+      fs.writeFileSync(directoryHTMLPath, structure);
 
-    setTimeout(() => watching = false, 100);
+      setTimeout(() => watching = false, 100);
+
+    }
+
+  } catch (e){
+
+    logSys(e, 'error')
 
   }
-
 }
 
 /**
