@@ -4,57 +4,50 @@
     <meta charset="UTF-8">
     <title>Site Name</title>
     <script src="app.js" type="text/javascript"></script>
-    <link rel="stylesheet" type ="text/css" href="app.css">
+    <link href="app.css" rel="stylesheet" type="text/css">
 </head>
-<body class="w-full h-full bg-gray-900 flex flex-col h-screen" style="background-image:
-url(./assets/images/register_bg_2.png);
-background-size: 100%;
-                background-repeat: no-repeat;">
-<nav
-        class="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg"
->
-    <div
-            class="container px-4 mx-auto flex flex-wrap items-center justify-between"
-    >
-        <div
-                class="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start"
-        >
+<body class="w-full h-full bg-gray-900 flex flex-col h-screen"
+      style="
+        background-image: url(./assets/images/register_bg_2.png);
+        background-size: 100%;
+        background-repeat: no-repeat;">
+<nav class="top-0 absolute z-50 w-full flex flex-wrap items-center justify-between px-2 py-3 navbar-expand-lg">
+    <div class="container px-4 mx-auto flex flex-wrap items-center justify-between">
+        <div class="w-full relative flex justify-between lg:w-auto lg:static lg:block lg:justify-start">
             <a
-                    class=" font-bold leading-relaxed inline-block mr-4 py-2 whitespace-no-wrap uppercase text-white"
-                    href="/"
-            >JORDSON</a
-            >
+                class=" font-bold leading-relaxed inline-block mr-4 py-2 whitespace-no-wrap uppercase text-white"
+                href="/"
+            >JORDSON</a>
         </div>
         <div
                 class="lg:flex flex-grow items-center bg-white lg:bg-transparent lg:shadow-none hidden"
-                id="example-collapse-navbar"
-        >
+                id="example-collapse-navbar">
             <ul class="flex flex-col lg:flex-row list-none mr-auto">
                 <li class="flex items-center">
                     <a
-                            class="lg:text-white lg:hover:text-gray-300 text-gray-800 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                            href="/"
+                        class="lg:text-white lg:hover:text-gray-300 text-gray-800 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+                        href="/"
                     >Docs</a>
                 </li>
             </ul>
             <ul class="flex flex-col lg:flex-row list-none lg:ml-auto">
                 <li class="flex items-center">
                     <a
-                            class="lg:text-white lg:hover:text-gray-300 text-gray-800 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                            href="/"
+                        class="lg:text-white lg:hover:text-gray-300 text-gray-800 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+                        href="/contact"
                     ><span class="inline-block ml-2">Contact</span></a>
                 </li>
                 <li class="flex items-center">
                     <a
-                            class="lg:text-white lg:hover:text-gray-300 text-gray-800 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
-                            href="http://git.jordson.fr"
+                        class="lg:text-white lg:hover:text-gray-300 text-gray-800 px-3 py-4 lg:py-2 flex items-center text-xs uppercase font-bold"
+                        href="http://git.jordson.fr"
                     ><span class="inline-block ml-2">Sources</span></a>
                 </li>
                 <li class="flex items-center">
                     <button
-                            class="bg-white text-gray-800 active:bg-gray-100 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3"
-                            type="button"
-                            style="transition: all 0.15s ease 0s;"
+                        class="bg-white text-gray-800 active:bg-gray-100 text-xs font-bold uppercase px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none lg:mr-1 lg:mb-0 ml-3 mb-3"
+                        style="transition: all 0.15s ease 0s;"
+                        type="button"
                     > DEMO
                     </button>
                 </li>
@@ -63,50 +56,42 @@ background-size: 100%;
     </div>
 </nav>
 
-<div id="content" class="flex-grow">
+<div class="flex-grow" id="content">
 
 </div>
 
-<footer class="w-full bg-gray-900 pb-6 bottom-0 ">
+<footer class="w-full bg-gray-900 pb-6 z-50 bottom-0 ">
     <div class="container mx-auto px-4">
-        <hr class="mb-6 border-b-1 border-gray-700" />
-        <div
-                class="flex flex-wrap items-center md:justify-between justify-center"
-        >
+        <hr class="mb-6 border-b-1 border-gray-700"/>
+        <div class="flex flex-wrap items-center md:justify-between justify-center">
             <div class="w-full md:w-4/12 px-4">
                 <div class="text-sm text-white font-semibold py-1">
                     Copyright © 2021
                     <a
-                            href="https://www.jordson.fr"
-                            class="text-white hover:text-gray-400 text-sm font-semibold py-1"
-                    >JORDSON.FR</a
-                    >
+                        class="text-white hover:text-gray-400 text-sm font-semibold py-1"
+                        href="https://www.jordson.fr"
+                    >JORDSON.FR</a>
                 </div>
             </div>
             <div class="w-full md:w-8/12 px-4">
-                <ul
-                        class="flex flex-wrap list-none md:justify-end  justify-center"
-                >
+                <ul class="flex flex-wrap list-none md:justify-end  justify-center">
                     <li>
                         <a
-                                href="/a-propos"
-                                class="text-white hover:text-gray-400 text-sm font-semibold block py-1 px-3"
-                        >À propos</a
-                        >
+                            class="text-white hover:text-gray-400 text-sm font-semibold block py-1 px-3"
+                            href="/a-propos"
+                        >À propos</a>
                     </li>
                     <li>
                         <a
-                                href="/licence"
-                                class="text-white hover:text-gray-400 text-sm font-semibold block py-1 px-3"
-                        >Licence</a
-                        >
+                            class="text-white hover:text-gray-400 text-sm font-semibold block py-1 px-3"
+                            href="/licence"
+                        >Licence</a>
                     </li>
                     <li>
                         <a
-                                href="/"
-                                class="text-white hover:text-gray-400 text-sm font-semibold block py-1 px-3"
-                        >Accès</a
-                        >
+                            class="text-white hover:text-gray-400 text-sm font-semibold block py-1 px-3"
+                            href="/"
+                        >Accès</a>
                     </li>
                 </ul>
             </div>
