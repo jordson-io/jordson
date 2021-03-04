@@ -11,3 +11,4 @@
 - [ ] HTML Terser ?
 - [x] Voir pour supprimer les classes CSS non utilisées.
 - [ ] Dans le bundler ajouter la réécriture des balises images (webp) en picture avec un format alternatif.
+- [ ] Ajouter page 404
