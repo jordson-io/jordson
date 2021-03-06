@@ -12,8 +12,8 @@ export const gConfig = {
   mail: {
     host: "smtp.mailtrap.io",
     port: 2525,
-    user: "9304b0fd880a2d",
-    pass: "928ca8573fb3c5",
+    user: "0b9dfe8ea837d1",
+    pass: "c890421a8e87e1",
   },
   mimeTypes: {
     html: "text/html",

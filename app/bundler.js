@@ -8,7 +8,8 @@ const directoryHTMLPath = path.join("public/assets/structures.html");
 let watching = false;
 const scripts = [
   "app/client/_router.js",
-  "app/client/events.js"
+  "app/client/events.js",
+  "app/client/email.js"
 ];
 scripts.push("components/ressources/js/script.js");
 

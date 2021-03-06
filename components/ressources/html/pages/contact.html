@@ -48,6 +48,30 @@
                                                class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                                                   placeholder="Votre message"></textarea>
                                     </div>
+                                    <div class="h-0 opacity-0">
+                                        <label for="data1" class="sr-only">Votre prénom</label>
+                                        <input id="data1" name="data1" required value="Robert"
+                                                  class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                  placeholder="Votre prénom">
+                                    </div>
+                                    <div class="h-0 opacity-0">
+                                        <label for="data2" class="sr-only">Votre truc</label>
+                                        <input id="data2" name="data2"
+                                                  class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                                  placeholder="Votre machin">
+                                    </div>
+                                    <div class="h-0 opacity-0">
+                                        <label for="data3" class="sr-only">Votre machin</label>
+                                        <input id="data3" name="data3" value="chemin des ours"
+                                               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                               placeholder="Votre truc">
+                                    </div>
+                                    <div class="h-0 opacity-0">
+                                        <label for="data4" class="sr-only">Votre muche</label>
+                                        <input id="data4" name="data4" required
+                                               class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                                               placeholder="Votre muche">
+                                    </div>
                                 </div>
 
                                 <div class="text-sm">
@@ -63,13 +87,14 @@
                                         <input id="rgpd" name="rgpd" type="checkbox"
                                                class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
                                         <label for="rgpd" class="ml-2 block text-sm text-gray-900">
-                                            En cochant cette case j'accepte d'être recontacté via les informations communiqué.
+                                            En cochant cette case j'accepte d'être recontacté via les informations communiquées.
                                         </label>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                                    <button type="submit" data-action="sendEmail"
+                                            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                               <span class="absolute left-0 inset-y-0 flex items-center pl-3">
                                   <svg class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" style="--darkreader-inline-fill:none; --darkreader-inline-stroke:currentColor;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
