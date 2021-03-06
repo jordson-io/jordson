@@ -3,6 +3,7 @@
  * Do not add new elements in this Function, use "customEvents" to add new click event matches
  */
 document.addEventListener("click", (e) => {
+
   /**
    * Manage internal Links
    * Link like "/my-link" doesn't reload page, just the body content.
@@ -36,4 +37,15 @@ document.addEventListener("click", (e) => {
  * Manage Custom Events
  * @param e Event from eventListenner
  */
-function customEvents(e) {}
+function customEvents(e) {
+
+  if(e.target.hasAttribute('data-action')){
+
+    if( e.target.getAttribute('data-action') === 'sendEmail' ){
+      e.preventDefault();
+      sendEmail(e.target.closest('form'))
+    }
+
+  }
+
+}

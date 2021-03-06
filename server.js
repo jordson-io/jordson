@@ -1,6 +1,17 @@
 logSys("-----------------------------------------------");
 logSys("---------------- SERVER STARTS ----------------");
 
+/**
+ * TODO:
+ *  - Créer système auth + token
+ *  - Créer api email
+ *    - Créer un honeypot
+ *    - Créer un captcha
+ *    - Requete au serveur
+ *    - Envoie de l'email
+ *    - Reponse au client
+ */
+
 import http2 from "http2";
 import fs from "fs";
 import path from "path";
@@ -11,58 +22,75 @@ import { gConfig } from "./app/config.js";
 let db = new Database();
 const port = gConfig.global.port;
 const mimeTypes = gConfig.mimeTypes;
-const enableCollection = gConfig.db.publicCollections;
+const publicCollection = gConfig.db.publicCollections;
 
 async function parseRequest(stream, headers, req) {
+
   req.url = new URL(headers[":path"], `https://localhost:${port}`);
-  req.param = await Object.fromEntries(req.url.searchParams.entries());
+  req.param = Object.fromEntries(req.url.searchParams.entries());
   req.path = req.url.pathname.split("/");
-  req.path.shift();
+
+  await req.path.shift();
+
   stream.setEncoding("utf8");
   req.body = "";
+
   for await (const chunk of stream) req.body += chunk;
 }
 
 async function readFile(req, res) {
+
   const fileName = req.path.join(path.sep);
   let filePath = "public/" + (fileName === "" ? "index.html" : fileName);
   const ext = path.extname(filePath).substring(1);
   res.headers["content-type"] = ext in mimeTypes ? mimeTypes[ext] : "text/plain";
+
   try {
+
     res.data = await fs.promises.readFile(filePath);
+
   } catch (e) {
+
     if (e.code === "ENOENT") throw new Error("404 Not Found");
     throw e;
+
   }
 }
 
-async function prepareResponse(res, resp) {
+async function prepareResponse(res, data) {
+
   res.headers["content-type"] = "application/json";
-  res.data = JSON.stringify(resp);
+  res.data = JSON.stringify(data);
+
 }
 
 async function handleRequest(req, res) {
+
   if (req.url.pathname.startsWith("/api")) {
-    if (req.param.action === "get" && enableCollection.some((elt) => elt === req.param.name)) {
+
+    if (req.param.action === "get" && publicCollection.some((elt) => elt === req.param.name)){
       await prepareResponse(res, await db.getCollection(req.param.name));
     }
+
   } else if (path.extname(String(req.url)) === "") {
-    let p = "?";
+
+    let params = "";
     if (Object.keys(req.param).length >= 1) {
-      for (const k in req.param) {
-        let v = req.param[k];
-        let s = p === "?" ? "" : "&";
-        p += `${k}=${v}${s}`;
-      }
+      params = "?" + Object.entries(req.param).map(([key,value]) => `${key}=${value}`).join("&")
     }
-    p = p === "?" ? "" : p;
+
     if (String(req.url.pathname) !== "/") {
-      res.headers["Location"] = "/#" + String(req.url.pathname).replace("/", "") + p;
+
+      res.headers["Location"] = "/#" + String(req.url.pathname).replace("/", "") + params;
       res.headers[":status"] = 302;
+
     } else {
-      res.headers["Location"] = "/#" + p;
+
+      res.headers["Location"] = "/#" + params;
       await readFile(req, res);
+
     }
+
   } else {
     await readFile(req, res);
   }
@@ -78,7 +106,7 @@ async function executeRequest(stream, headers) {
     data: "",
     compress: false,
     headers: {
-      server: "Server FRIGG Made with NodeJS by aLeclercq",
+      server: "Server JORDSON Made with NodeJS by aLeclercq",
       ":status": 200,
     },
   };
@@ -103,8 +131,10 @@ async function executeRequest(stream, headers) {
 }
 
 const server = http2.createSecureServer({
+
   key: fs.readFileSync("./app/server/certSSL/localhost-privkey.pem"),
   cert: fs.readFileSync("./app/server/certSSL/localhost-cert.pem"),
+
 });
 
 server.on("error", (err) => logSys(err, "error"));

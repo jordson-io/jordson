@@ -5,10 +5,7 @@ let routes = {};
 let route;
 let currentParam = "";
 let htmlData = document.createElement("html");
-const gAnalytics = {
-  enable: false,
-  UAid: "UA-xxxxxxxxx-x",
-};
+let collections = ["pages"];
 
 /**
  * Init website
@@ -17,7 +14,7 @@ const gAnalytics = {
 (async () => {
   let getHtmlData = await fetch("assets/structures.html");
   htmlData.innerHTML = await getHtmlData.text();
-  let collections = ["pages"];
+
   for (let i = 0; i < collections.length; i++) {
     let fetchRes = await fetch(`/api?action=get&name=${collections[i]}`);
     let routes = await fetchRes.json();
@@ -36,27 +33,13 @@ const gAnalytics = {
 })();
 
 /**
- * Google Analytics script for page change tracking
- */
-if (gAnalytics.enable) {
-  (async () => {
-    window.ga =
-      window.ga ||
-      function () {
-        (ga.q = ga.q || []).push(arguments);
-      };
-    ga.l = +new Date();
-    ga("create", gAnalytics.enable, "auto");
-  })(window, document, "script", "https://www.google-analytics.com/analytics.js", "ga");
-}
-
-/**
  * Manage history and back to prev page
  */
 window.onpopstate = () => {
   let dataID = "";
-  routeList.forEach((p) => {
-    p.slug === document.location.pathname.replace("/", "") ? (dataID = p.fileName) : null;
+  routeList.forEach((route) => {
+    if( route.slug === document.location.pathname.replace("/", "") )
+      dataID = route.fileName;
   });
   document.getElementById("content").innerHTML = htmlData.querySelector(`[data-id='${dataID}']`).innerHTML;
   setTimeout(() => {
@@ -91,7 +74,8 @@ class _router {
     if (param) {
       let thisParam = param[0].replace("#", "");
       if (thisParam !== currentParam) {
-        if (location.hash === "") route += thisParam;
+        if (location.hash === "")
+          route += thisParam;
         currentParam = thisParam;
       }
     }
@@ -103,10 +87,9 @@ class _router {
     if (this.currentPage === undefined) {
       route = "#404";
       this.currentPage = Object.values(this.routes).find((elt) => `#${elt.slug}` === "#404");
-      await this.showPage();
-    } else {
-      await this.showPage();
     }
+
+    await this.showPage();
   }
 
   /**
@@ -115,10 +98,6 @@ class _router {
    * @returns {Promise<void>}
    */
   async showPage() {
-    if (gAnalytics.enable) {
-      ga("set", "page", `/${this.currentPage.slug}`);
-      ga("send", "pageview");
-    }
     this.currentHTML = htmlData.querySelector(`[data-id='${this.currentPage.fileName}']`).innerHTML;
     history.replaceState(this.currentHTML, this.currentPage.title, route.replace("#", "/"));
     document.getElementById("content").classList.remove("show");

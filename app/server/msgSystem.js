@@ -7,7 +7,7 @@ import dateTime from "./dateTime.js";
  * @param msg {string}
  * @param type {string}
  */
-export default function logSys(msg, type) {
+export default function logSys(msg, type = "") {
   let style;
   switch (type) {
     case "success":

@@ -19,3 +19,6 @@
 /node_modules/
 /.idea/
 /public/app.css.map
+/public/assets/images/*
+/public/tailwind.css
+/public/tailwind.css.map

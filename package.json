@@ -1,13 +1,13 @@
 {
   "name": "jordson",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Single Page Application with NodeJS server",
   "main": "server.js",
   "type": "module",
   "scripts": {
     "cwebp": "cp components/assets/images/*.* public/assets/images && find public/assets/images -type f \\( -iname \"*.jpg\" -o -iname \"*.jpeg\" -o -iname \"*.png\" \\) -exec cwebp {} -o {}.webp \\;",
-    "watch": "./app/bundler.js --watch public/app.js & sass --watch components/ressources/sass:public/",
-    "prod": "./app/bundler.js --compress public/app.js; sass components/ressources/sass:public/ --style=compressed",
+    "watch": "./app/bundler.js --watch & sass --watch components/ressources/sass:public/",
+    "prod": "./app/bundler.js --compress ; sass components/ressources/sass:public/ --style=compressed",
     "fonts": "./app/bundler.js --fonts",
     "mexp": "mongoexport --collection=pages --db=jrd --out=components/database/pages.json",
     "start": "node --experimental-modules --trace-warnings ./server.js"
