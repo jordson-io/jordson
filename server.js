@@ -5,9 +5,9 @@ logSys("---------------- SERVER STARTS ----------------");
  * TODO:
  *  - Créer système auth + token
  *  - Créer api email
- *    - Créer un honeypot
+ *    X Créer un honeypot
  *    - Créer un captcha
- *    - Requete au serveur
+ *    o Requete au serveur
  *    - Envoie de l'email
  *    - Reponse au client
  */
@@ -69,7 +69,15 @@ async function handleRequest(req, res) {
   if (req.url.pathname.startsWith("/api")) {
 
     if (req.param.action === "get" && publicCollection.some((elt) => elt === req.param.name)){
+
       await prepareResponse(res, await db.getCollection(req.param.name));
+
+    } else if (req.param.action === "emailsend"){
+      // TODO: Terminer le traitement de la requete
+      // logSys(JSON.stringify(req), 'debug')
+      let formData = JSON.parse(req.body)
+      logSys(formData.email, 'debug')
+
     }
 
   } else if (path.extname(String(req.url)) === "") {

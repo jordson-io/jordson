@@ -1,45 +1,51 @@
 async function sendEmail( form ){
 
-    // TODO: Terminer la vérification avant envoi de l'email
+    // TODO: Terminer la vérification des champs avant envoi de l'email
 
     console.log('send email function')
     let formData = new FormData(form)
+
     console.log(Array.from(formData.entries()))
 
-    let data1 = formData.get('data1') === "Robert";
-    let data2 = formData.get('data2') === "";
-    let data3 = formData.get('data3') === "chemin des ours";
-    let data4 = formData.get('data4') === "";
+    let hnpt1 = formData.get('hnpt1') === "Robert";
+    let hnpt2 = formData.get('hnpt2') === "";
+    let hnpt3 = formData.get('hnpt3') === "chemin des ours";
+    let hnpt4 = formData.get('hnpt4') === "";
+    let rgpd = formData.get('rgpd');
 
-    if( data1 && data2 && data3 && data4 ){
+    if( hnpt1 && hnpt2 && hnpt3 && hnpt4 ){
 
       if(!rgpd){
+
         console.log('ERREUR RGPD NON VALIDÉ');
+
       } else {
 
-        console.log('SEND EMAIL REQUEST');
-        let resp = await fetch('/api?action=emailsend', {
-          method: form.method,
-          body: formData
+        let dataFormSorted = []
+
+        Array.from(formData.entries()).forEach(formEntry => {
+            if( !formEntry[0].startsWith('hnpt') && formEntry[0] !== 'rgpd' )
+                dataFormSorted[`${formEntry[0]}`] = `${formEntry[1]}`
         });
+
+        dataFormSorted = Object.assign({}, dataFormSorted)
+
+        let resp = await fetch('/api?action=emailsend', {
+            method: "POST",
+            body: JSON.stringify(dataFormSorted)
+        });
+
+        //TODO: Traiter la réponse du serveur
         console.log(await resp.json())
+
+
+        let formDataJson = {
+            "email" : "monemail@email.com",
+            "message" : "Mon message complet et bien structuré"
+        }
 
       }
 
-
-
     }
-
-    let rgpd = formData.get('rgpd') === 'on';
-
-    if(!rgpd){
-        console.log('ERREUR RGPD NON COCHÉ')
-    }
-
-    console.log(data1)
-    console.log(data2)
-    console.log(data3)
-    console.log(data4)
-    console.log(rgpd)
 
 }
