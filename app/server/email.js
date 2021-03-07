@@ -30,8 +30,8 @@ export default class Email {
       from: "ne-pas-repondre@jord.com",
       to: data.email,
       subject: data.subject,
-      text: { path: `./public/assets/views/email/${data.textFile}.txt` },
-      html: { path: `./public/assets/views/email/${data.textFile}.html` },
+      text: `${data.message}`,
+      html: `${data.message}`,
     };
 
     await this.transporter.sendMail(this.message, function (err, res) {
