@@ -1,4 +1,4 @@
-function sendEmail( form ){
+async function sendEmail( form ){
 
     // TODO: Terminer la vérification avant envoi de l'email
 
@@ -10,6 +10,26 @@ function sendEmail( form ){
     let data2 = formData.get('data2') === "";
     let data3 = formData.get('data3') === "chemin des ours";
     let data4 = formData.get('data4') === "";
+
+    if( data1 && data2 && data3 && data4 ){
+
+      if(!rgpd){
+        console.log('ERREUR RGPD NON VALIDÉ');
+      } else {
+
+        console.log('SEND EMAIL REQUEST');
+        let resp = await fetch('/api?action=emailsend', {
+          method: form.method,
+          body: formData
+        });
+        console.log(await resp.json())
+
+      }
+
+
+
+    }
+
     let rgpd = formData.get('rgpd') === 'on';
 
     if(!rgpd){
