@@ -1,7 +1,7 @@
 export const gConfig = {
   global: {
     siteName: "JORDSON",
-    domain: "https//www.jordson.fr",
+    domain: "jordson.fr",
     email_admin: "andreleclercqpro@gmail.com",
     port: 4002,
   },
@@ -14,6 +14,12 @@ export const gConfig = {
     port: 2525,
     user: "0b9dfe8ea837d1",
     pass: "c890421a8e87e1",
+    address : {
+      noreply: "ne-pas-repondre@jordson.fr",    // Adresse pour indiquer qu'il n'y a pas de réponse possible à l'email
+      site: "site@jordson.fr",                  // Adresse pour définir la provenance de l'email
+      contact: "contact@jordson.fr",            // Adresse de contact général du site pour l'entreprise
+      support: "support@jordson.fr",            // Adresse de support technique
+    }
   },
   mimeTypes: {
     html: "text/html",

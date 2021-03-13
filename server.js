@@ -7,9 +7,9 @@ logSys("---------------- SERVER STARTS ----------------");
  *  - Créer api email
  *    X Créer un honeypot
  *    - Créer un captcha
- *    o Requete au serveur
- *    - Envoie de l'email
- *    - Reponse au client
+ *    X Requete au serveur
+ *    X Envoie de l'email
+ *    o Reponse au client
  */
 
 import http2 from "http2";
@@ -61,7 +61,7 @@ async function readFile(req, res) {
 async function prepareResponse(res, data) {
 
   res.headers["content-type"] = "application/json";
-  res.data = JSON.stringify(data);
+  res.data = typeof data === "object" ? JSON.stringify(data) : data;
 
 }
 
@@ -69,17 +69,22 @@ async function handleRequest(req, res) {
 
   if (req.url.pathname.startsWith("/api")) {
 
+    /**
+     * Get public collection
+     */
     if (req.param.action === "get" && publicCollection.some((elt) => elt === req.param.name)){
 
       await prepareResponse(res, await db.getCollection(req.param.name));
 
+    /**
+     * Send email
+     */
     } else if (req.param.action === "emailsend"){
-      // TODO: Terminer le traitement de la requete
-      // logSys(JSON.stringify(req), 'debug')
+
       let formData = JSON.parse(req.body)
-      formData.subject = "contact";
       let email = new Email();
-      await email.send(formData);
+      await prepareResponse(res, await email.send(formData));
+
     }
 
   } else if (path.extname(String(req.url)) === "") {

@@ -42,8 +42,15 @@ function customEvents(e) {
   if(e.target.hasAttribute('data-action')){
 
     if( e.target.getAttribute('data-action') === 'sendEmail' ){
+
       e.preventDefault();
-      sendEmail(e.target.closest('form'))
+
+      let to = e.target.hasAttribute('data-to') ? e.target.getAttribute('data-to') : null;
+      let from = e.target.hasAttribute('data-from') ? e.target.getAttribute('data-from') : null;
+      let subject = e.target.hasAttribute('data-subject') ? e.target.getAttribute('data-subject') : null;
+
+      sendEmail(e.target.closest('form'), from, to, subject);
+
     }
 
   }

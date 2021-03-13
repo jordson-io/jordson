@@ -6,9 +6,10 @@
 
 ### Current
 - [ ] **Réécrire le Serveur de A à Z afin qu'il soit sécurisé au maximum.**
-- [ ] **Envoie d'email de contact**
+- [ ] **Envoie d'email transactionnels**
   
 ### ToDo
+- [ ] Écrire la doc de la gestion d'envoi d'email.
 - [ ] Création du système de notification "erreur", "succes", "info"
 - [ ] Ajouter page 404
 - [ ] Dans le bundler ajouter la réécriture des balises images (webp) en picture avec un format alternatif.
