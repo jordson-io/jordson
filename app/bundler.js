@@ -10,7 +10,8 @@ let htmlFiles = []
 const scripts = [
   "app/client/_router.js",
   "app/client/events.js",
-  "app/client/email.js"
+  "app/client/email.js",
+  "app/client/notification.js"
 ];
 scripts.push("components/ressources/js/script.js");
 

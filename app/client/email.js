@@ -58,6 +58,8 @@ async function sendEmail( data, from, to, subject, honeypots ){
             body: JSON.stringify(dataFormSorted)
         });
 
+        showNotification('Votre email à bien été envoyé !', 'success')
+
         //TODO: Traiter la réponse du serveur
         console.log(await resp.json())
 

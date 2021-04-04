@@ -100,9 +100,11 @@ class _router {
   async showPage() {
     this.currentHTML = htmlData.querySelector(`[data-id='${this.currentPage.fileName}']`).innerHTML;
     history.replaceState(this.currentHTML, this.currentPage.title, route.replace("#", "/"));
-    document.getElementById("content").classList.remove("show");
+    document.getElementById("content").classList.remove("fade-in");
+    setTimeout(() => document.getElementById("content").classList.add("fade-out"));
     setTimeout(() => (document.getElementById("content").innerHTML = this.currentHTML), 400);
-    setTimeout(() => document.getElementById("content").classList.add("show"), 400);
+    setTimeout(() => document.getElementById("content").classList.remove("fade-out"), 400);
+    setTimeout(() => document.getElementById("content").classList.add("fade-in"), 400);
     document.querySelector("title").innerHTML = this.currentPage.title;
     if (this.event.type === "dbReady") document.dispatchEvent(pageChange);
   }

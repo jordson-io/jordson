@@ -1,6 +1,6 @@
 /**
  * Manage ALL click events
- * Do not add new elements in this Function, use "customEvents" to add new click event matches
+ * Do not add new elements in this Function, use "customClickEvents" to add new click event matches
  */
 document.addEventListener("click", (e) => {
 
@@ -29,6 +29,13 @@ document.addEventListener("click", (e) => {
   }
 
   /**
+   * Manage Notifications
+   */
+  if( e.target.closest("[data-notification]")){
+    hideNotification(e.target.closest("[data-notification]").attributes["data-notification"].value)
+  }
+
+  /**
    * Manage Data-Actions
    * Management of scripts triggered by "data-action" html tags
    */
@@ -53,18 +60,22 @@ document.addEventListener("click", (e) => {
 
     }
 
-  };
+  }
 
   /**
    * Manage Custom Events
    */
-  customEvents(e);
+  customClickEvents(e);
 });
+
+document.addEventListener('dbReady', () => {
+  loadNotifications()
+})
 
 /**
  * Manage Custom Events
  * @param e Event from eventListenner
  */
-function customEvents(e) {
+function customClickEvents(e) {
 
 }
