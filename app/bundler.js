@@ -6,6 +6,7 @@ import path from "path";
 
 const directoryHTMLPath = path.join("public/assets/structures.html");
 let watching = false;
+let htmlFiles = []
 const scripts = [
   "app/client/_router.js",
   "app/client/events.js",
@@ -19,7 +20,7 @@ scripts.push("components/ressources/js/script.js");
  * @param {string} [pathOrigin] Folder in "components/ressources/html/"
  * @returns {Promise<void>}
  */
-async function compileHTMLFiles(pathOrigin = path.join("components/ressources/html/")) {
+function compileHTMLFiles(pathOrigin = path.join("components/ressources/html/")) {
 // TODO : Créer une variable structure et la remplir avec le html puis tout envoyer en un bloc sur le fichier
 //  structure.html
   fs.readdir(pathOrigin, (e, files) => {
@@ -35,8 +36,9 @@ async function compileHTMLFiles(pathOrigin = path.join("components/ressources/ht
           `<div data-id="${file.replace(path.extname(file), "")}">${fs
             .readFileSync(pathOrigin + file)
             .toString()}</div>`,
-          (err) => {
-            logSys(err, "error");
+          (error) => {
+            logSys(error.message, 'error')
+            logSys(error.stack, 'error')
           }
         );
 
@@ -44,21 +46,17 @@ async function compileHTMLFiles(pathOrigin = path.join("components/ressources/ht
 
           fs.watch(pathOrigin + file, watchHTMLFiles);
           logSys(`${pathOrigin}${file}`, 'info');
+          htmlFiles[file] = `${pathOrigin}${file}`;
 
         }
 
       } else if (path.extname(file) === "") {
 
-        compileHTMLFiles(`${pathOrigin}${file}/`);
+        return compileHTMLFiles(`${pathOrigin}${file}/`);
 
       }
-
     })
-
-    fs.appendFileSync(directoryHTMLPath, '<div data-id="dummy"></div>')
-
   })
-
 }
 
 /**
@@ -68,6 +66,7 @@ async function compileHTMLFiles(pathOrigin = path.join("components/ressources/ht
  * @param {string} [filename]
  */
 function watchHTMLFiles(eventType, filename){
+
   try {
 
     if(!watching){
@@ -75,11 +74,19 @@ function watchHTMLFiles(eventType, filename){
       watching = true;
 
       let structure = fs.readFileSync(directoryHTMLPath, "utf-8");
+      let filePath
+
+      for (const key in htmlFiles) {
+        if(key === filename) {
+          filePath = htmlFiles[key];
+          break;
+        }
+      }
 
       let fileName = filename.replace('.html', '');
 
-      let newFileData = `<div data-id="${filename.replace(path.extname(filename), "")}">${fs
-          .readFileSync(getHTMLFilesPath(fileName))
+      let newFileData = `<div data-id="${fileName}">${fs
+          .readFileSync(filePath)
           .toString()}</div>`;
 
       let regex = new RegExp(`<div data-id="${fileName}">(.*?)(?=<div data-id)`, 's');
@@ -94,33 +101,9 @@ function watchHTMLFiles(eventType, filename){
 
     }
 
-  } catch (e){
-
-    logSys(e, 'error')
-
-  }
-}
-
-/**
- * Create and return the path of the current change file.
- * @function
- * @param {string} [fileSearch]
- * @param {string} [currentPath]
- * @returns {string|*}
- */
-function getHTMLFilesPath(fileSearch, currentPath= path.join("components/ressources/html/")) {
-
-  let files = fs.readdirSync(currentPath);
-
-  for (let i in files) {
-
-    let curFile = path.join(currentPath, files[i]);
-
-    if (fs.statSync(curFile).isFile() && curFile === `${currentPath}/${fileSearch}.html`)
-      return curFile;
-    else if (fs.statSync(curFile).isDirectory())
-      return getHTMLFilesPath(fileSearch, curFile);
-
+  } catch (error){
+    logSys(error.message, 'error')
+    logSys(error.stack, 'error')
   }
 }
 
@@ -141,9 +124,7 @@ async function compileJSFiles() {
       logSys(file, "info");
 
     });
-
   }
-
 }
 
 /**
@@ -198,7 +179,6 @@ async function compile(arg){
   await compileHTMLFiles();
 }
 
-
 if (process.argv.includes("--watch")) {
 
   await compile('WATCH');
@@ -208,14 +188,19 @@ if (process.argv.includes("--watch")) {
   // TODO: Sortir ce code dans une fonction dédiée au fonts
   logSys("Import FONTS files", "info");
 
-  fs.readdir("./components/assets/fonts", (e, files) => {
+  fs.readdir("./components/assets/fonts", (error, files) => {
 
-    if (e) logSys(e, "error");
+    if (error) {
+      logSys(error.message, 'error')
+      logSys(error.stack, 'error')
+    };
 
     files.forEach((file) => {
 
-      fs.copyFile(`./components/assets/fonts/${file}`, `./public/assets/fonts/${file}`, (err) => {
-        err ? logSys(err, "error") : logSys(`${file} was copied into public/assets/fonts`, "info");
+      fs.copyFile(`./components/assets/fonts/${file}`, `./public/assets/fonts/${file}`, (error) => {
+        err
+            ? (logSys(error.message, 'error'), logSys(error.stack, 'error'))
+            : logSys(`${file} was copied into public/assets/fonts`, "info");
       })
 
     })
