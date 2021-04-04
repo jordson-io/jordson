@@ -5,41 +5,48 @@
  * @param {string} [from]
  * @param {string} [to]
  * @param {string} [subject]
+ * @param {nodeList} [honeypots]
  * @returns {Promise<void>}
  */
-async function sendEmail( data, from, to, subject ){
+async function sendEmail( data, from, to, subject, honeypots ){
 
     // TODO: Ajouter la gestion des erreurs/success
+    // TODO: Gérer le bouton d'envoi après clic
+    // TODO: Créer une fonction pour vérifier les types des champs (email, textes...)
 
     let formData = new FormData(data);
+    let honeypotCheck = true;
+    let dataFormRemove = [];
 
     /**
      * HoneyPot Check
      */
-    let hnpt1 = formData.get('hnpt1') === "Robert";
-    let hnpt2 = formData.get('hnpt2') === "";
-    let hnpt3 = formData.get('hnpt3') === "chemin des ours";
-    let hnpt4 = formData.get('hnpt4') === "";
+    if(honeypots !== null){
+        Array.prototype.forEach.call(honeypots, honeypot => {
+            dataFormRemove.push(honeypot.name)
+            if(honeypot.value !== honeypot.getAttribute('data-hnpt'))
+                honeypotCheck = false
+        });
+    }
 
-    /**
-     * RGPD Check
-     */
-    let rgpd = formData.get('rgpd');
+    if( honeypotCheck === true ){
 
-    if( hnpt1 && hnpt2 && hnpt3 && hnpt4 ){
-
-      if(!rgpd){
+        /**
+         * Check RGPD
+         */
+        if(!formData.get('rgpd')){
 
         console.log('ERREUR RGPD NON VALIDÉ');
 
       } else {
 
-        let dataFormSorted = []
+        let dataFormSorted = Array.from(formData);
+        dataFormRemove.push('rgpd');
 
-        Array.from(formData.entries()).forEach(formEntry => {
-            if( !formEntry[0].startsWith('hnpt') && formEntry[0] !== 'rgpd' )
-                dataFormSorted[`${formEntry[0]}`] = `${formEntry[1]}`
-        });
+        for (let i in dataFormRemove) {
+            let ItemIndex = dataFormSorted.findIndex(dataFormSorted => dataFormSorted[0] === dataFormRemove[i]);
+            dataFormSorted.splice(ItemIndex, 1)
+        }
 
         dataFormSorted = Object.assign({}, dataFormSorted);
         dataFormSorted.from = from;
@@ -55,7 +62,5 @@ async function sendEmail( data, from, to, subject ){
         console.log(await resp.json())
 
       }
-
     }
-
 }

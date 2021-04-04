@@ -27,6 +27,34 @@ document.addEventListener("click", (e) => {
       .getElementById(e.target.closest("[data-anchor]").attributes["data-anchor"].value)
       .scrollIntoView({ behavior: "smooth" });
   }
+
+  /**
+   * Manage Data-Actions
+   * Management of scripts triggered by "data-action" html tags
+   */
+  if(e.target.hasAttribute('data-action')){
+
+    /**
+     * Send Mail
+     * Sending an email from a form
+     */
+    if( e.target.getAttribute('data-action') === 'sendEmail' ){
+
+      e.preventDefault();
+
+      let to = e.target.hasAttribute('data-to') ? e.target.getAttribute('data-to') : null;
+      let from = e.target.hasAttribute('data-from') ? e.target.getAttribute('data-from') : null;
+      let subject = e.target.hasAttribute('data-subject') ? e.target.getAttribute('data-subject') : null;
+      let honeypots = e.target.closest('form').querySelectorAll('[data-hnpt]').length !== 0
+          ? e.target.closest('form').querySelectorAll('[data-hnpt]')
+          : null;
+
+      sendEmail(e.target.closest('form'), from, to, subject, honeypots);
+
+    }
+
+  };
+
   /**
    * Manage Custom Events
    */
@@ -38,21 +66,5 @@ document.addEventListener("click", (e) => {
  * @param e Event from eventListenner
  */
 function customEvents(e) {
-
-  if(e.target.hasAttribute('data-action')){
-
-    if( e.target.getAttribute('data-action') === 'sendEmail' ){
-
-      e.preventDefault();
-
-      let to = e.target.hasAttribute('data-to') ? e.target.getAttribute('data-to') : null;
-      let from = e.target.hasAttribute('data-from') ? e.target.getAttribute('data-from') : null;
-      let subject = e.target.hasAttribute('data-subject') ? e.target.getAttribute('data-subject') : null;
-
-      sendEmail(e.target.closest('form'), from, to, subject);
-
-    }
-
-  }
 
 }
