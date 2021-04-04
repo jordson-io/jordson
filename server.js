@@ -50,10 +50,10 @@ async function readFile(req, res) {
 
     res.data = await fs.promises.readFile(filePath);
 
-  } catch (e) {
+  } catch (error) {
 
-    if (e.code === "ENOENT") throw new Error("404 Not Found");
-    throw e;
+    if (error.code === "ENOENT") throw new Error("404 Not Found");
+    throw error;
 
   }
 }
@@ -113,7 +113,10 @@ async function handleRequest(req, res) {
 
 async function executeRequest(stream, headers) {
   // logSys( JSON.stringify(stream.session.socket.remoteAddress), 'debug' )
-  stream.on("error", (err) => logSys(err, "error"));
+  stream.on("error", (error) => {
+    logSys(error.message, 'error')
+    logSys(error.stack, 'error')
+  });
   const req = {
     headers: headers,
   };
