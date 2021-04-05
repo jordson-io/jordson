@@ -11,7 +11,8 @@ const scripts = [
   "app/client/_router.js",
   "app/client/events.js",
   "app/client/email.js",
-  "app/client/notification.js"
+  "app/client/notification.js",
+  "app/client/form_rules.js"
 ];
 scripts.push("components/ressources/js/script.js");
 

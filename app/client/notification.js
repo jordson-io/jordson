@@ -1,38 +1,18 @@
-
+/**
+ * Load Notifications into index.html
+ * @function
+ */
 function loadNotifications(){
-
-    // TODO: Créer une boucle pour charger toutes les notifications
-
-    let successNotification = document.createElement('div');
-    successNotification.innerHTML = htmlData.querySelector('[data-id="notif_success"]').innerHTML;
-    successNotification.setAttribute('data-notification', 'success');
-    successNotification.classList.add('fade-out');
-    document.body.appendChild(successNotification);
-
-    let infoNotification = document.createElement('div');
-    infoNotification.innerHTML = htmlData.querySelector('[data-id="notif_info"]').innerHTML;
-    infoNotification.setAttribute('data-notification', 'info');
-    infoNotification.classList.add('fade-out');
-    document.body.appendChild(infoNotification);
-
-    let warningNotification = document.createElement('div');
-    warningNotification.innerHTML = htmlData.querySelector('[data-id="notif_warning"]').innerHTML;
-    warningNotification.setAttribute('data-notification', 'warning');
-    warningNotification.classList.add('fade-out');
-    document.body.appendChild(warningNotification);
-
-    let errorNotification = document.createElement('div');
-    errorNotification.innerHTML = htmlData.querySelector('[data-id="notif_error"]').innerHTML;
-    errorNotification.setAttribute('data-notification', 'error');
-    errorNotification.classList.add('fade-out');
-    document.body.appendChild(errorNotification);
-
-    let defaultNotification = document.createElement('div');
-    defaultNotification.innerHTML = htmlData.querySelector('[data-id="notif_default"]').innerHTML;
-    defaultNotification.setAttribute('data-notification', 'default');
-    defaultNotification.classList.add('fade-out');
-    document.body.appendChild(defaultNotification);
-
+    htmlData.querySelectorAll('[data-id]').forEach( element => {
+        if( element.getAttribute('data-id').endsWith('.notif')){
+            let name = element.getAttribute('data-id').replace('.notif', '');
+            let notification = document.createElement('div');
+            notification.innerHTML = htmlData.querySelector(`[data-id="${name}.notif"]`).innerHTML;
+            notification.setAttribute('data-notification', name);
+            notification.classList.add('fade-out');
+            document.body.appendChild(notification);
+        }
+    })
 }
 
 /**
@@ -67,7 +47,7 @@ function showNotification( message = "", type= 'default', title = "default", aut
 
     let notif = document.querySelector(`[data-notification="${type}"]`)
     notif.querySelector('[data-title]').innerText = dataTitle;
-    notif.querySelector('[data-content]').innerText = message;
+    notif.querySelector('[data-message]').innerText = message;
     notif.classList.remove('fade-out');
     notif.classList.add('fade-in');
 
@@ -75,7 +55,13 @@ function showNotification( message = "", type= 'default', title = "default", aut
 
 }
 
-function hideNotification( type ){
+/**
+ * Hide notification
+ * @function
+ * @param {string} [type] Leave empty (or 'default') for default display or choose between 'info', 'success', 'warning', 'error'.
+ * @example hideNotification('success');
+ */
+function hideNotification( type = 'default' ){
 
     document.querySelector(`[data-notification="${type}"]`).classList.remove('fade-in');
     document.querySelector(`[data-notification="${type}"]`).classList.add('fade-out');
