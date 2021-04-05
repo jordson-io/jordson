@@ -1,4 +1,9 @@
 /**
+ * MANAGE NOTIFICATIONS
+ * @link Read Documentation https://github.com/AndreLeclercq/jordson/blob/v0.1/doc/notifications.md
+ */
+
+/**
  * Load Notifications into index.html
  * @function
  */

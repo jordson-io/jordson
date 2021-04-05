@@ -27,7 +27,10 @@ function compileHTMLFiles(pathOrigin = path.join("components/ressources/html/"))
 //  structure.html
   fs.readdir(pathOrigin, (e, files) => {
 
-    if (e) logSys(e, "error");
+    if (e){
+      logSys(e.message, 'error')
+      logSys(e.stack, 'error')
+    }
 
     files.forEach((file) => {
 
