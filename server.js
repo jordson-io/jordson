@@ -18,6 +18,7 @@ import path from "path";
 import logSys from "./app/server/msgSystem.js";
 import Database from "./app/server/database.js";
 import Email from "./app/server/email.js";
+import Form from "./app/server/forms.js";
 import { gConfig } from "./app/config.js";
 
 let db = new Database();
@@ -72,9 +73,17 @@ async function handleRequest(req, res) {
     /**
      * Get public collection
      */
-    if (req.param.action === "get" && publicCollection.some((elt) => elt === req.param.name)){
+    if (req.param.action === "get" && publicCollection.some((elt) => elt === req.param.name)) {
 
       await prepareResponse(res, await db.getCollection(req.param.name));
+
+    /**
+     * Check Form Integrity
+     */
+    } else if(req.param.action === "cfi"){
+
+      let form = new Form();
+      await prepareResponse(res, await form.cfi(req.body))
 
     /**
      * Send email

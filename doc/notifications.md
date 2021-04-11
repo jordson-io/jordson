@@ -3,11 +3,11 @@ Système de notification automatisé, utilisez les notifications par défaut de 
 
 ## Sommaire
  - [Localisation des fichiers](#localisation-des-fichiers)
- - [Créer une nouvelle notification](#crer-une-nouvelle-notification)
- - [Éditer les notification de bases](#diter-les-notification-de-bases)
+ - [Créer une nouvelle notification](#créer-une-nouvelle-notification)
+ - [Éditer les notification de bases](#éditer-les-notification-de-bases)
  - [Afficher une notification](#afficher-une-notification)
  - [Cacher une notification](#cacher-une-notification)
- - [Problèmes & Questions](#problmes--questions)
+ - [Problèmes & Questions](#problèmes-&-questions)
 
 ---
 ## Localisation des fichiers

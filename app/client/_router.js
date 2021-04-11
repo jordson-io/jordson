@@ -35,17 +35,19 @@ let collections = ["pages"];
 /**
  * Manage history and back to prev page
  */
-window.onpopstate = () => {
+window.onpopstate = e => {
   let dataID = "";
   routeList.forEach((route) => {
     if( route.slug === document.location.pathname.replace("/", "") )
       dataID = route.fileName;
   });
-  document.getElementById("content").innerHTML = htmlData.querySelector(`[data-id='${dataID}']`).innerHTML;
-  setTimeout(() => {
-    window.scrollTo(0, 0);
-    document.dispatchEvent(pageChange);
-  }, 100);
+  if(e.state !== null){
+    document.getElementById("content").innerHTML = htmlData.querySelector(`[data-id='${dataID}']`).innerHTML;
+    setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.dispatchEvent(pageChange);
+    }, 100);
+  }
 };
 
 /**
@@ -101,12 +103,21 @@ class _router {
     this.currentHTML = htmlData.querySelector(`[data-id='${this.currentPage.fileName}']`).innerHTML;
     history.replaceState(this.currentHTML, this.currentPage.title, route.replace("#", "/"));
     document.getElementById("content").classList.remove("fade-in");
-    setTimeout(() => document.getElementById("content").classList.add("fade-out"));
-    setTimeout(() => (document.getElementById("content").innerHTML = this.currentHTML), 400);
-    setTimeout(() => document.getElementById("content").classList.remove("fade-out"), 400);
-    setTimeout(() => document.getElementById("content").classList.add("fade-in"), 400);
-    document.querySelector("title").innerHTML = this.currentPage.title;
-    if (this.event.type === "dbReady") document.dispatchEvent(pageChange);
+    document.getElementById("content").classList.add("fade-out");
+
+    setTimeout(() => {
+
+      document.getElementById("content").innerHTML = this.currentHTML;
+      document.querySelector("title").innerHTML = this.currentPage.title;
+      window.scrollTo(0, 0);
+
+      document.getElementById("content").classList.remove("fade-out")
+      document.getElementById("content").classList.add("fade-in")
+
+      document.dispatchEvent(pageChange);
+
+    }, 400);
+
   }
 }
 let pagesRoutes = new _router(routes);

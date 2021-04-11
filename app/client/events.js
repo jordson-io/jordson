@@ -1,4 +1,18 @@
 /**
+ *
+ */
+document.addEventListener('dbReady', () => {
+  loadNotifications()
+})
+
+/**
+ *
+ */
+document.addEventListener('pageChange', () => {
+  setCFIListeners()
+})
+
+/**
  * Manage ALL click events
  * Do not add new elements in this Function, use "customClickEvents" to add new click event matches
  */
@@ -68,9 +82,6 @@ document.addEventListener("click", (e) => {
   customClickEvents(e);
 });
 
-document.addEventListener('dbReady', () => {
-  loadNotifications()
-})
 
 /**
  * Manage Custom Events
