@@ -1,31 +1,35 @@
 
 function setCFIListeners(){
     document.querySelectorAll('[data-cfi]').forEach(target => {
-        target.addEventListener('click', e => {
+        target.addEventListener('click', async e => {
             e.preventDefault();
             e.stopPropagation();
-            checkFormIntegrity(target.closest('form').outerHTML)
+            if(await checkFormIntegrity(target.closest('form').outerHTML)){
+                console.log('CFI IS OK !')
+                // TODO: Send form
+            }
         })
-    });
+    })
 }
 
 async function checkFormIntegrity(form){
 
-    console.log(await digestMessage(form))
     let resp = await fetch('/api?action=cfi', {
         method: "POST",
         body: JSON.stringify({
             dataId: document.location.pathname.replace('/', ''),
-            hashForm: await digestMessage(form),
+            hashForm: sha256(form.split(' ').join('')
+                .replace(/\n/g, '')
+                .replace(/\b/g, '')
+                .replace(/\f/g, '')
+                .replace(/\r/g, '')
+                .replace(/\v/g, '')
+                .replace(/\s/g, '')
+                .replace(/\t/g, '')
+                .replace(/\\/g, '')
+                .replace(/=""/g, '')),
         })
-    });
-    console.log(resp);
-}
+    })
 
-async function digestMessage(message) {
-    const msgUint8 = new TextEncoder().encode(message);                           // encode as (utf-8) Uint8Array
-    const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);           // hash the message
-    const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
-    return hashHex;
+    return await resp.text();
 }
