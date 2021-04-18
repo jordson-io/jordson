@@ -9,14 +9,14 @@ document.addEventListener('dbReady', () => {
  *
  */
 document.addEventListener('pageChange', () => {
-  setCFIListeners()
+  // none
 })
 
 /**
  * Manage ALL click events
  * Do not add new elements in this Function, use "customClickEvents" to add new click event matches
  */
-document.addEventListener("click", (e) => {
+document.addEventListener("click", e => {
 
   /**
    * Manage internal Links
@@ -50,6 +50,16 @@ document.addEventListener("click", (e) => {
   }
 
   /**
+   * Manage Forms
+   */
+  if (e.target.closest('[type="submit"]')){
+    e.preventDefault();
+    if(checkFormIntegrity(e.target.closest('form').outerHTML)){
+      console.log(checkFormRules(e.target.closest('form')))
+    }
+  }
+
+  /**
    * Manage Data-Actions
    * Management of scripts triggered by "data-action" html tags
    */
@@ -61,16 +71,16 @@ document.addEventListener("click", (e) => {
      */
     if( e.target.getAttribute('data-action') === 'sendEmail' ){
 
-      e.preventDefault();
-
-      let to = e.target.hasAttribute('data-to') ? e.target.getAttribute('data-to') : null;
-      let from = e.target.hasAttribute('data-from') ? e.target.getAttribute('data-from') : null;
-      let subject = e.target.hasAttribute('data-subject') ? e.target.getAttribute('data-subject') : null;
-      let honeypots = e.target.closest('form').querySelectorAll('[data-hnpt]').length !== 0
-          ? e.target.closest('form').querySelectorAll('[data-hnpt]')
-          : null;
-
-      sendEmail(e.target.closest('form'), from, to, subject, honeypots);
+      // e.preventDefault();
+      //
+      // let to = e.target.hasAttribute('data-to') ? e.target.getAttribute('data-to') : null;
+      // let from = e.target.hasAttribute('data-from') ? e.target.getAttribute('data-from') : null;
+      // let subject = e.target.hasAttribute('data-subject') ? e.target.getAttribute('data-subject') : null;
+      // let honeypots = e.target.closest('form').querySelectorAll('[data-hnpt]').length !== 0
+      //     ? e.target.closest('form').querySelectorAll('[data-hnpt]')
+      //     : null;
+      //
+      // sendEmail(e.target.closest('form'), from, to, subject, honeypots);
 
     }
 

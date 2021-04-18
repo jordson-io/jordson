@@ -12,7 +12,7 @@ let collections = ["pages"];
  * @type {HTMLDivElement}
  */
 (async () => {
-  let getHtmlData = await fetch("assets/structures.html");
+  let getHtmlData = await fetch("assets/app.html");
   htmlData.innerHTML = await getHtmlData.text();
 
   for (let i = 0; i < collections.length; i++) {
@@ -54,7 +54,7 @@ window.onpopstate = e => {
  * Router to manage pages
  * @class
  */
-class _router {
+class Router {
   constructor(routes) {
     this.routes = routes;
     window.addEventListener("hashchange", this.loadPage.bind(this));
@@ -120,4 +120,4 @@ class _router {
 
   }
 }
-let pagesRoutes = new _router(routes);
+let pagesRoutes = new Router(routes);

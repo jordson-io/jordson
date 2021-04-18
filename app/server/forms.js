@@ -1,7 +1,7 @@
 import fs from "fs";
 import sha256 from "./encode.js"
 
-const structureHTML = fs.readFileSync('public/assets/structures.html', 'utf-8');
+const structureHTML = fs.readFileSync('public/assets/app.html', 'utf-8');
 
 /**
  * Manage Forms

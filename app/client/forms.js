@@ -1,17 +1,14 @@
 
-function setCFIListeners(){
-    document.querySelectorAll('[data-cfi]').forEach(target => {
-        target.addEventListener('click', async e => {
-            e.preventDefault();
-            e.stopPropagation();
-            if(await checkFormIntegrity(target.closest('form').outerHTML)){
-                console.log('CFI IS OK !')
-                // TODO: Send form
-            }
-        })
-    })
+function checkFormRules(form){
+
 }
 
+/**
+ * Checks the integrity of the HTML with the server
+ * @function
+ * @param {string} [form] Pass an innerHTML or an outerHTML
+ * @returns {Promise<string>} Returns True or False as a string
+ */
 async function checkFormIntegrity(form){
 
     let resp = await fetch('/api?action=cfi', {

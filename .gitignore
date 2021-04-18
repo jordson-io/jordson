@@ -1,6 +1,4 @@
 /public/app.css
-/public/app.js
-/public/assets/structures.html
 /public/assets/fonts/Epilogue-VariableFont_wght.ttf
 /public/assets/fonts/Rubik-Black.ttf
 /public/assets/fonts/Rubik-BlackItalic.ttf
@@ -22,3 +20,5 @@
 /public/assets/images/*
 /public/tailwind.css
 /public/tailwind.css.map
+/public/assets/app.html
+/public/assets/app.js
