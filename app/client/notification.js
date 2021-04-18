@@ -48,6 +48,8 @@ function showNotification( message = "", type= 'default', title = "default", aut
                 dataTitle = "Erreur";
                 break;
         }
+    } else {
+        dataTitle = title;
     }
 
     let notif = document.querySelector(`[data-notification="${type}"]`)

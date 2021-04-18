@@ -1,15 +1,24 @@
 /**
  *
  */
-document.addEventListener('dbReady', () => {
+document.addEventListener('dbReady', e => {
   loadNotifications()
+
+  /**
+   * Manage Custom Events
+   */
+  customDbReadyEvents(e);
 })
 
 /**
  *
  */
-document.addEventListener('pageChange', () => {
-  // none
+document.addEventListener('pageChange', e => {
+
+  /**
+   * Manage Custom Events
+   */
+  customPageChangeEvents(e);
 })
 
 /**
@@ -92,11 +101,3 @@ document.addEventListener("click", e => {
   customClickEvents(e);
 });
 
-
-/**
- * Manage Custom Events
- * @param e Event from eventListenner
- */
-function customClickEvents(e) {
-
-}

@@ -11,7 +11,7 @@ const directoryJSPath = path.join("app/client/");
 let watching = false;
 let htmlFiles = [];
 let jsFiles = [];
-// TODO: Ajouter dans la liste des fichiers JS "components/ressources/js/script.js"
+
 /**
  * Transpilation HTML structures
  * @function
@@ -38,9 +38,9 @@ function compileFiles(pathOrigin, data = '') {
       }
     } else if (path.extname(file) === '.js'){
 
-      data += `//${file.replace(path.extname(file), "")}\n
+      data += `//${pathOrigin}${file.replace(path.extname(file), "")}\n
       ${fs.readFileSync(pathOrigin + file).toString()}\n
-      //${file.replace(path.extname(file), "")}`;
+      //${pathOrigin}${file.replace(path.extname(file), "")}`;
 
       if (process.argv.includes("--watch")) {
 
@@ -99,11 +99,11 @@ function watchFiles(eventType, filename){
 
       } else if(path.extname(filename) === '.js'){
 
-        newFileData = `\/\/${name}\n
+        newFileData = `\/\/${filePath.replace(path.extname(filename), '')}\n
           ${fs.readFileSync(filePath).toString()}\n
-          \/\/${name}`;
+          \/\/${filePath.replace(path.extname(filename), '')}`;
 
-        regex = new RegExp(`\/\/${name}(.*?)${name}`, 's');
+        regex = new RegExp(`\/\/${filePath.replace(path.extname(filename), '')}(.*?)${filePath.replace(path.extname(filename), '')}`, 's');
       }
 
       appData = appData.replace(regex, newFileData);
@@ -135,6 +135,17 @@ async function compile(arg){
       : compileFiles(directoryJSPath);
 
   fs.writeFile(appJSPath, jsData, 'utf-8', error => {
+    if(error){
+      logSys(error.message, 'error')
+      logSys(error.stack, 'error')
+    }
+  })
+
+  jsData = process.argv.includes('--compress')
+      ? Terser.minify(compileFiles(path.join("components/ressources/js/"))).code
+      : compileFiles(path.join("components/ressources/js/"));
+
+  fs.appendFile(appJSPath, jsData, 'utf-8', error => {
     if(error){
       logSys(error.message, 'error')
       logSys(error.stack, 'error')
