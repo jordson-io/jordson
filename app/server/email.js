@@ -1,6 +1,6 @@
 import nodeMailer from "nodemailer";
-import logSys from "./msgSystem.js";
-import { gConfig } from "../config.js";
+import logSys from "../core/msgSystem.js";
+import { gConfig } from "./config.js";
 
 /**
  * Manage email sending

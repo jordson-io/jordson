@@ -1,5 +1,5 @@
 import argon2 from "argon2";
-import logSys from "../server/msgSystem.js";
+import logSys from "/app/core/msgSystem.js";
 import Database from "./database.js";
 
 let db = new Database();

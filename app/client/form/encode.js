@@ -1,7 +1,7 @@
-let sha256 = function sha256(ascii) {
+function sha256(ascii) {
     function rightRotate(value, amount) {
         return (value>>>amount) | (value<<(32 - amount));
-    };
+    }
 
     let mathPow = Math.pow;
     let maxWord = mathPow(2, 32);

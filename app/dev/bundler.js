@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import logSys from "./server/msgSystem.js";
+import logSys from "../core/msgSystem.js";
 import Terser from "terser";
 import fs from "fs";
 import path from "path";
@@ -11,6 +11,8 @@ const directoryJSPath = path.join("app/client/");
 let watching = false;
 let htmlFiles = [];
 let jsFiles = [];
+
+// TODO: Fix le multiple data
 
 /**
  * Transpilation HTML structures
@@ -40,7 +42,7 @@ function compileFiles(pathOrigin, data = '') {
 
       data += `//${pathOrigin}${file.replace(path.extname(file), "")}\n
       ${fs.readFileSync(pathOrigin + file).toString()}\n
-      //${pathOrigin}${file.replace(path.extname(file), "")}`;
+      //${pathOrigin}${file.replace(path.extname(file), "")}\n`;
 
       if (process.argv.includes("--watch")) {
 
@@ -101,7 +103,7 @@ function watchFiles(eventType, filename){
 
         newFileData = `\/\/${filePath.replace(path.extname(filename), '')}\n
           ${fs.readFileSync(filePath).toString()}\n
-          \/\/${filePath.replace(path.extname(filename), '')}`;
+          \/\/${filePath.replace(path.extname(filename), '')}\n`;
 
         regex = new RegExp(`\/\/${filePath.replace(path.extname(filename), '')}(.*?)${filePath.replace(path.extname(filename), '')}`, 's');
       }
@@ -123,7 +125,8 @@ function watchFiles(eventType, filename){
  * @param {string} [arg] watch or compress
  * @returns {Promise<void>}
  */
-async function compile(arg){
+function compile(arg){
+
   logSys(`-------------------------------------------`, 'success');
   logSys(`---------- START COMPILE (${arg}) ----------`, 'success');
   logSys(`-------------------------------------------`, 'success');
@@ -141,16 +144,16 @@ async function compile(arg){
     }
   })
 
-  jsData = process.argv.includes('--compress')
-      ? Terser.minify(compileFiles(path.join("components/ressources/js/"))).code
-      : compileFiles(path.join("components/ressources/js/"));
-
-  fs.appendFile(appJSPath, jsData, 'utf-8', error => {
-    if(error){
-      logSys(error.message, 'error')
-      logSys(error.stack, 'error')
-    }
-  })
+  // jsData = process.argv.includes('--compress')
+  //     ? Terser.minify(compileFiles(path.join("components/ressources/js/"))).code
+  //     : compileFiles(path.join("components/ressources/js/"));
+  //
+  // fs.appendFile(appJSPath, jsData, 'utf-8', error => {
+  //   if(error){
+  //     logSys(error.message, 'error')
+  //     logSys(error.stack, 'error')
+  //   }
+  // })
 
   console.log();
   logSys(`---------- START ${arg} HTML FILES -----------`, 'success');
@@ -161,11 +164,12 @@ async function compile(arg){
       logSys(error.stack, 'error')
     }
   });
+
 }
 
 if (process.argv.includes("--watch")) {
 
-  await compile('WATCH');
+  compile('WATCH');
 
 } else if (process.argv.includes("--fonts")) {
 

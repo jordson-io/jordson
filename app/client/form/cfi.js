@@ -1,8 +1,4 @@
 
-function checkFormRules(form){
-
-}
-
 /**
  * Checks the integrity of the HTML with the server
  * @function
