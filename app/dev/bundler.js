@@ -12,8 +12,6 @@ let watching = false;
 let htmlFiles = [];
 let jsFiles = [];
 
-// TODO: Fix le multiple data
-
 /**
  * Transpilation HTML structures
  * @function
@@ -27,9 +25,8 @@ function compileFiles(pathOrigin, data = '') {
   files.forEach(file => {
     if (path.extname(file) === ".html") {
 
-      data += `<div data-id="${file.replace(path.extname(file), "")}">${fs
-          .readFileSync(pathOrigin + file)
-          .toString()}</div>`;
+      data += `<div data-id="${file.replace(path.extname(file), "")}">
+        ${fs.readFileSync(pathOrigin + file).toString()}</div>`;
 
       if (process.argv.includes("--watch")) {
 
@@ -52,7 +49,7 @@ function compileFiles(pathOrigin, data = '') {
 
       }
     } else if (path.extname(file) === "") {
-      data += compileFiles(`${pathOrigin}${file}/`, data);
+      data += compileFiles(`${pathOrigin}${file}/`);
     }
   })
   return data
@@ -144,16 +141,16 @@ function compile(arg){
     }
   })
 
-  // jsData = process.argv.includes('--compress')
-  //     ? Terser.minify(compileFiles(path.join("components/ressources/js/"))).code
-  //     : compileFiles(path.join("components/ressources/js/"));
-  //
-  // fs.appendFile(appJSPath, jsData, 'utf-8', error => {
-  //   if(error){
-  //     logSys(error.message, 'error')
-  //     logSys(error.stack, 'error')
-  //   }
-  // })
+  jsData = process.argv.includes('--compress')
+      ? Terser.minify(compileFiles(path.join("components/ressources/js/"))).code
+      : compileFiles(path.join("components/ressources/js/"));
+
+  fs.appendFile(appJSPath, jsData, 'utf-8', error => {
+    if(error){
+      logSys(error.message, 'error')
+      logSys(error.stack, 'error')
+    }
+  })
 
   console.log();
   logSys(`---------- START ${arg} HTML FILES -----------`, 'success');
