@@ -24,5 +24,5 @@ async function checkFormIntegrity(form){
         })
     })
 
-    return await resp.text();
+    return await resp.json();
 }

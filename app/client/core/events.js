@@ -25,7 +25,7 @@ document.addEventListener('pageChange', e => {
  * Manage ALL click events
  * Do not add new elements in this Function, use "customClickEvents" to add new click event matches
  */
-document.addEventListener("click", e => {
+document.addEventListener("click", async e => {
 
   /**
    * Manage internal Links
@@ -63,10 +63,14 @@ document.addEventListener("click", e => {
    */
   if (e.target.closest('[type="submit"]')){
     e.preventDefault();
-    if(checkFormIntegrity(e.target.closest('form').outerHTML)){
-      console.log(checkFormRules(e.target.closest('form')))
+    console.log(await checkFormIntegrity(e.target.closest('form').outerHTML))
+    if(await checkFormIntegrity(e.target.closest('form').outerHTML)){
+      checkFormRules(e.target.closest('form'))
+    } else {
+      showNotification("Une erreur est survenue, veuillez contacter l'administrateur du site.", 'error', 'Erreur !');
     }
   }
+
 
   /**
    * Manage Data-Actions

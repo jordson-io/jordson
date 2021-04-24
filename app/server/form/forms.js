@@ -1,5 +1,6 @@
 import fs from "fs";
 import sha256 from "./encode.js"
+// import logSys from "../../core/msgSystem";
 
 const structureHTML = fs.readFileSync('public/assets/app.html', 'utf-8');
 

@@ -4,7 +4,7 @@
  */
 function customDbReadyEvents(e) {
 
-    console.log('dbREADY');
+    //
 
 }
 
@@ -14,8 +14,7 @@ function customDbReadyEvents(e) {
  */
 function customPageChangeEvents(e) {
 
-    console.log('PageChange');
-
+    //
 }
 
 
@@ -25,6 +24,6 @@ function customPageChangeEvents(e) {
  */
 function customClickEvents(e) {
 
-    console.log('click');
+    //
 
 }
