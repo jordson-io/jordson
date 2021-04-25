@@ -32,7 +32,6 @@
                                     Une question ? Un avis ? Contactez-nous via ce formulaire.
                                 </h2>
                             </div>
-<!--                            TODO: Fixer l'erreur de traitement du fichier html-->
                             <form class="mt-8 space-y-6" action="#" method="POST">
                                 <div class="rounded-md -space-y-px">
 
@@ -70,7 +69,6 @@
                                                   required></textarea>
                                         <span class="text-sm text-red-500" data-error-msg=""></span>
                                     </div>
-
 
                                     <div class="h-0 opacity-0">
                                         <label for="hnpt1" class="sr-only">Votre prénom</label>
@@ -114,9 +112,11 @@
                                 <div class="flex items-center justify-between">
 
                                     <div class="flex items-center">
-
-                                        <input id="rgpd" name="rgpd" type="checkbox"
-                                               class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                                        <input id="rgpd"
+                                               name="rgpd"
+                                               type="checkbox"
+                                               class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                               required>
                                         <label for="rgpd" class="ml-2 block text-sm text-gray-900">
                                             En cochant cette case j'accepte d'être recontacté via les informations communiquées.
                                         </label>

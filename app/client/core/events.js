@@ -63,7 +63,6 @@ document.addEventListener("click", async e => {
    */
   if (e.target.closest('[type="submit"]')){
     e.preventDefault();
-    console.log(await checkFormIntegrity(e.target.closest('form').outerHTML))
     if(await checkFormIntegrity(e.target.closest('form').outerHTML)){
       checkFormRules(e.target.closest('form'))
     } else {

@@ -8,7 +8,9 @@ function checkFormRules(form){
 function checkRequired(form){
 
     form.querySelectorAll('input').forEach( input => {
-        console.log(input)
+        if(!input.hasAttribute('data-hnpt') && input.required && input.value === ''){
+            callFormError(input, 'required');
+        }
     })
 
 }

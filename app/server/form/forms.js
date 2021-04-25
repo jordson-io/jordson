@@ -22,7 +22,24 @@ export default class Form {
 
         forms.forEach(form => {
 
+            // console.log(form.split(' ').join('')
+            //     .replace('/>', '>')
+            //     .replace(/\\n/g, '')
+            //     .replace(/\\b/g, '')
+            //     .replace(/\\f/g, '')
+            //     .replace(/\\r/g, '')
+            //     .replace(/\\v/g, '')
+            //     .replace(/\\s/g, '')
+            //     .replace(/\\t/g, '')
+            //     .replace(/\\/g, '')
+            //     .replace(/=""/g, ''));
+            //
+            // console.log('-------------------------------');
+            // console.log('-------------------------------');
+            // console.log('-------------------------------');
+
             let hashForm = sha256(form.split(' ').join('')
+                .replace('/>', '>')
                 .replace(/\\n/g, '')
                 .replace(/\\b/g, '')
                 .replace(/\\f/g, '')

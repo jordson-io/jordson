@@ -4,7 +4,7 @@ logSys("---------------- JORDSON DOCS STARTS ----------------");
 import http2 from "http2";
 import fs from "fs";
 import path from "path";
-import logSys from "./app/server/msgSystem.js";
+import logSys from "./app/core/msgSystem.js";
 import marked from "marked";
 const gConfig = {
     global: {

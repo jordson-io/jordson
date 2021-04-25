@@ -12,6 +12,8 @@ let watching = false;
 let htmlFiles = [];
 let jsFiles = [];
 
+// TODO: Tester les watch en synchrone
+
 /**
  * Transpilation HTML structures
  * @function
