@@ -18,7 +18,6 @@ import path from "path";
 import logSys from "./app/core/msgSystem.js";
 import Database from "./app/server/database.js";
 import Email from "./app/server/email.js";
-import Form from "./app/server/form/forms.js";
 import { gConfig } from "./app/server/config.js";
 
 let db = new Database();

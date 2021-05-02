@@ -39,22 +39,26 @@ export default class Email {
 
     // TODO: Gérer la réponse au client
 
-    await this.transporter.sendMail(this.message,function (err, res) {
-      if (err) {
-        logSys(err, "error");
-        return err;
-      } else {
+    return new Promise( async resolve => {
+      await this.transporter.sendMail(this.message,function (err, res) {
+        if (err) {
+          logSys(err, "error");
+          return err;
+        } else {
 
-        logSys("EMAIL: Email SEND", "success");
-        logSys(`EMAIL: Response >> ${res.response}`);
-        logSys(`EMAIL: MessageID >> ${res.messageId}`);
+          logSys("EMAIL: Email SEND", "success");
+          logSys(`EMAIL: Response >> ${res.response}`);
+          logSys(`EMAIL: MessageID >> ${res.messageId}`);
 
-        if(res.accepted.length > 0 && res.rejected.length === 0){
-          return "success"
+          if(res.accepted.length > 0 && res.rejected.length === 0){
+            resolve("success")
+          } else {
+            resolve("rejected")
+          }
         }
+      });
 
-      }
-    });
+    })
 
   }
 }

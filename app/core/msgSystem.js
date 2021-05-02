@@ -31,5 +31,5 @@ export default function logSys(msg, type = "") {
 
   type = type === undefined ? "" : `[${type}]`;
 
-  console.log(style, `[${dateTime()}]${type} ${msg}`, "\x1b[0m");
+  console.log(style, `[${dateTime()}]${type} ${String(msg)}`, "\x1b[0m");
 }

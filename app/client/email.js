@@ -10,9 +10,9 @@
  */
 async function sendEmail( data, from, to, subject, honeypots ){
 
-    // TODO: Ajouter la gestion des erreurs/success
-    // TODO: Gérer le bouton d'envoi après clic
-    // TODO: Créer une fonction pour vérifier les types des champs (email, textes...)
+    // TODO: Au clic passer le bouton en "Envoie en cours..."
+    // TODO: Si erreur repasser le bouton en status initial (Envoyer)
+    // TODO: Si envoie de l'email ok, réinitialiser le formulaire.
 
     let formData = new FormData(data);
     let honeypotCheck = true;
@@ -24,21 +24,10 @@ async function sendEmail( data, from, to, subject, honeypots ){
     if(honeypots !== null){
         Array.prototype.forEach.call(honeypots, honeypot => {
             dataFormRemove.push(honeypot.name)
-            if(honeypot.value !== honeypot.getAttribute('data-hnpt'))
-                honeypotCheck = false
         });
     }
 
     if( honeypotCheck === true ){
-
-        /**
-         * Check RGPD
-         */
-        if(!formData.get('rgpd')){
-
-        console.log('ERREUR RGPD NON VALIDÉ');
-
-      } else {
 
         let dataFormSorted = Array.from(formData);
         dataFormRemove.push('rgpd');
@@ -48,21 +37,24 @@ async function sendEmail( data, from, to, subject, honeypots ){
             dataFormSorted.splice(ItemIndex, 1)
         }
 
-        dataFormSorted = Object.assign({}, dataFormSorted);
-        dataFormSorted.from = from;
-        dataFormSorted.to = to;
-        dataFormSorted.subject = subject;
+        let data = {}
+        dataFormSorted.forEach(elements => {
+            data[`${elements[0]}`] = elements[1];
+        })
+        data.from = from;
+        data.to = to;
+        data.subject = subject;
 
         let resp = await fetch('/api?action=emailsend', {
             method: "POST",
-            body: JSON.stringify(dataFormSorted)
+            body: JSON.stringify(data)
         });
 
-        showNotification('Votre email à bien été envoyé !', 'success')
+        if(await resp.text() === 'success'){
+            showNotification('Votre email à bien été envoyé !', 'success')
+        } else {
+            showNotification("Veuillez contacter l'administrateur du site", 'error', 'Une erreur est survenue')
+        }
 
-        //TODO: Traiter la réponse du serveur
-        console.log(await resp.json())
-
-      }
     }
 }

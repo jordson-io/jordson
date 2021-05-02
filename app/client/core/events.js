@@ -31,7 +31,7 @@ document.addEventListener("click", async e => {
    * Manage internal Links
    * Link like "/my-link" doesn't reload page, just the body content.
    */
-  if (
+  if(
     e.target.closest("A") &&
     e.target.closest("A").hostname === location.hostname &&
     !e.target.closest("A").href.includes("#")
@@ -73,24 +73,7 @@ document.addEventListener("click", async e => {
    */
   if(e.target.hasAttribute('data-action')){
 
-    /**
-     * Send Mail
-     * Sending an email from a form
-     */
-    if( e.target.getAttribute('data-action') === 'sendEmail' ){
-
-      // e.preventDefault();
-      //
-      // let to = e.target.hasAttribute('data-to') ? e.target.getAttribute('data-to') : null;
-      // let from = e.target.hasAttribute('data-from') ? e.target.getAttribute('data-from') : null;
-      // let subject = e.target.hasAttribute('data-subject') ? e.target.getAttribute('data-subject') : null;
-      // let honeypots = e.target.closest('form').querySelectorAll('[data-hnpt]').length !== 0
-      //     ? e.target.closest('form').querySelectorAll('[data-hnpt]')
-      //     : null;
-      //
-      // sendEmail(e.target.closest('form'), from, to, subject, honeypots);
-
-    }
+   //
 
   }
 
