@@ -78,14 +78,6 @@ async function handleRequest(req, res) {
       await prepareResponse(res, await db.getCollection(req.param.name));
 
     /**
-     * Check Form Integrity
-     */
-    } else if(req.param.action === "cfi"){
-
-      let form = new Form();
-      await prepareResponse(res, await form.cfi(req.body))
-
-    /**
      * Send email
      */
     } else if (req.param.action === "emailsend"){

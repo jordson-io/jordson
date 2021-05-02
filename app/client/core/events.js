@@ -63,12 +63,7 @@ document.addEventListener("click", async e => {
    */
   if (e.target.closest('[type="submit"]')){
     e.preventDefault();
-    cleanInputsError(e.target.closest('form'));
-    if(await checkFormIntegrity(e.target.closest('form').outerHTML)){
-      checkFormRules(e.target.closest('form'))
-    } else if(!await checkFormIntegrity(e.target.closest('form').outerHTML)) {
-      showNotification("Une erreur est survenue, veuillez contacter l'administrateur du site.", 'error', 'Erreur !');
-    }
+    checkFormRules(e.target.closest('form'));
   }
 
 

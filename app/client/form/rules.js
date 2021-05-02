@@ -1,10 +1,10 @@
 
 function checkFormRules(form){
+    
+    cleanInputsError(form);
 
     if(checkRequired(form) && checkType(form)){
         console.log('DATA-ACTION')
-    } else {
-        console.log('ERROR')
     }
 
 }
