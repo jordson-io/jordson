@@ -1,4 +1,29 @@
 
+function cleanInputsError(form){
+
+    form.querySelectorAll('input').forEach( input => {
+        if( input.hasAttribute('data-error-class') ){
+            input.getAttribute('data-error-class').split(' ').forEach(errorClass => {
+                input.classList.remove(errorClass);
+            })
+        }
+        let errorMsg = document.querySelector(`[data-error-for="${input.id}"]`)
+        if(errorMsg) errorMsg.textContent = '';
+    })
+
+    form.querySelectorAll('textarea').forEach( textarea => {
+        if( textarea.hasAttribute('data-error-class') ){
+            textarea.getAttribute('data-error-class').split(' ').forEach(errorClass => {
+                textarea.classList.remove(errorClass);
+            })
+        }
+        let errorMsg = document.querySelector(`[data-error-for="${textarea.id}"]`)
+        if(errorMsg) errorMsg.textContent = '';
+    })
+
+
+}
+
 function callFormError(input, type, message = null){
 
     let errorMessage;
@@ -9,6 +34,12 @@ function callFormError(input, type, message = null){
         case 'required':
             errorMessage = 'Ce champ est requis, merci de le remplir';
             notifMessage = 'Un ou plusieurs champ(s) requis invalide(s)';
+            break;
+
+        case 'typeEmail':
+            errorMessage = 'Email incorrect';
+            notifMessage = 'Un ou plusieurs champ(s) sont invalide(s)';
+            break;
 
     }
 
@@ -24,11 +55,5 @@ function callFormError(input, type, message = null){
         })
     }
 
-    console.dir(input.closest('[data-error-msg]'));
-    // TODO: Terminer la selection du data-error-msg
-    if( input.parentElement.closest('[data-error-msg]') ){
-        console.log('data-error-msg')
-        console.log(input.closest('[data-error-msg]'))
-    }
-
+    document.querySelector(`[data-error-for="${input.id}"]`).textContent = errorMessage;
 }
