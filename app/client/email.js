@@ -6,14 +6,9 @@
  * @param {string} [to]
  * @param {string} [subject]
  * @param {nodeList} [honeypots]
- * @returns {Promise<void>}
+ * @returns {Promise<string>}
  */
 async function sendEmail( data, from, to, subject, honeypots ){
-
-    // TODO: Au clic passer le bouton en "Envoie en cours..."
-    // TODO: Si erreur repasser le bouton en status initial (Envoyer)
-    // TODO: Si envoie de l'email ok, réinitialiser le formulaire.
-
     let formData = new FormData(data);
     let honeypotCheck = true;
     let dataFormRemove = [];
@@ -29,6 +24,9 @@ async function sendEmail( data, from, to, subject, honeypots ){
 
     if( honeypotCheck === true ){
 
+        /**
+         * Removal of unnecessary items before sending the request
+         */
         let dataFormSorted = Array.from(formData);
         dataFormRemove.push('rgpd');
 
@@ -37,6 +35,9 @@ async function sendEmail( data, from, to, subject, honeypots ){
             dataFormSorted.splice(ItemIndex, 1)
         }
 
+        /**
+         * Preparing request data
+         */
         let data = {}
         dataFormSorted.forEach(elements => {
             data[`${elements[0]}`] = elements[1];
@@ -45,16 +46,14 @@ async function sendEmail( data, from, to, subject, honeypots ){
         data.to = to;
         data.subject = subject;
 
+        /**
+         * Sending Request
+         */
         let resp = await fetch('/api?action=emailsend', {
             method: "POST",
             body: JSON.stringify(data)
         });
 
-        if(await resp.text() === 'success'){
-            showNotification('Votre email à bien été envoyé !', 'success')
-        } else {
-            showNotification("Veuillez contacter l'administrateur du site", 'error', 'Une erreur est survenue')
-        }
-
+        return await resp.text()
     }
 }

@@ -1,4 +1,8 @@
-
+/**
+ * Errors messages clean-up
+ * @function
+ * @param {object} [form]
+ */
 function cleanInputsError(form){
 
     form.querySelectorAll('input').forEach( input => {
@@ -20,17 +24,20 @@ function cleanInputsError(form){
         let errorMsg = document.querySelector(`[data-error-for="${textarea.id}"]`)
         if(errorMsg) errorMsg.textContent = '';
     })
-
-
 }
 
-function callFormError(input, type, message = null){
-
+/**
+ * Display errors messages
+ * @function
+ * @param {object} [input]
+ * @param {string} [type]
+ * @param {string} [message]
+ */
+function callFormError(input, type, message = ''){
     let errorMessage;
     let notifMessage;
 
     switch (type) {
-
         case 'required':
             errorMessage = 'Ce champ est requis, merci de le remplir';
             notifMessage = 'Un ou plusieurs champ(s) requis invalide(s)';
@@ -40,12 +47,10 @@ function callFormError(input, type, message = null){
             errorMessage = 'Email incorrect';
             notifMessage = 'Un ou plusieurs champ(s) sont invalide(s)';
             break;
-
     }
 
-    if(message !== null){
+    if(message !== '')
         errorMessage = message
-    }
 
     showNotification(notifMessage, 'error', 'Erreur sur le formulaire');
 

@@ -1,4 +1,8 @@
-
+/**
+ * Check Form Rules
+ * @function
+ * @param {object} [form]
+ */
 function checkFormRules(form){
     
     cleanInputsError(form);
@@ -9,6 +13,12 @@ function checkFormRules(form){
 
 }
 
+/**
+ * Check honeypot fields
+ * @function
+ * @param {object} [form]
+ * @returns {boolean}
+ */
 function honeypot(form){
     let status = true;
 
@@ -22,6 +32,12 @@ function honeypot(form){
     return status
 }
 
+/**
+ * Check "required" fields
+ * @function
+ * @param {object} [form]
+ * @returns {boolean}
+ */
 function checkRequired(form){
     let status = true;
 
@@ -42,6 +58,12 @@ function checkRequired(form){
     return status
 }
 
+/**
+ * Check specific "type" of fields
+ * @function
+ * @param {object} [form]
+ * @returns {boolean}
+ */
 function checkType(form){
     let status = true;
     //TODO: Types à vérifier : Password, Tel
@@ -59,12 +81,16 @@ function checkType(form){
     return status
 }
 
+/**
+ * Check specific "rules" (data-rules attributes)
+ * @function
+ * @param {object} [form]
+ * @returns {boolean}
+ */
 function checkRules(form){
     let status = true;
 
     //
 
     return status
-
-
 }

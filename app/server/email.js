@@ -37,7 +37,7 @@ export default class Email {
     this.message.from = gConfig.mail.address[data.from] ? gConfig.mail.address[data.from] : gConfig.mail.address.noreply;
     this.message.replyTo = data.email ? data.email : this.message.from;
 
-    // TODO: Gérer la réponse au client
+    // TODO: Gérer la vérification de formulaires
 
     return new Promise( async resolve => {
       await this.transporter.sendMail(this.message,function (err, res) {
@@ -56,9 +56,7 @@ export default class Email {
             resolve("rejected")
           }
         }
-      });
-
+      })
     })
-
   }
 }
