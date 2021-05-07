@@ -22,7 +22,7 @@ export default class Email {
    * Sending email
    * @method
    * @param {object} [data] to create and send email
-   * @returns {Promise<void>}
+   * @returns {Promise<string>}
    */
   async send(data) {
     await logSys("EMAIL: Generate email");
@@ -33,11 +33,14 @@ export default class Email {
       html: `${data.message}`,
     };
 
+    const regex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i;
+    if(!data.email.match(regex)){
+      return "rejected"
+    }
+
     this.message.to = gConfig.mail.address[data.to] ? gConfig.mail.address[data.to] : gConfig.mail.address.contact;
     this.message.from = gConfig.mail.address[data.from] ? gConfig.mail.address[data.from] : gConfig.mail.address.noreply;
     this.message.replyTo = data.email ? data.email : this.message.from;
-
-    // TODO: Gérer la vérification de formulaires
 
     return new Promise( async resolve => {
       await this.transporter.sendMail(this.message,function (err, res) {

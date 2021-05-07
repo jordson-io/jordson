@@ -5,7 +5,6 @@
 ## v0.1
 
 ### Current
-- [ ] **Réécrire le Serveur de A à Z afin qu'il soit sécurisé au maximum.**
 - [ ] **Envoie d'email transactionnels**
 
   
@@ -18,6 +17,7 @@
 - [ ] Supprimer les commentaires HTML
   
 ### Close
+- [x] Réécrire le Serveur de A à Z afin qu'il soit sécurisé au maximum.
 - [x] Création de la documentation pour les notifications
 - [x] Création du système de notification "erreur", "succes", "info"
 - [x] Voir pour supprimer les classes CSS non utilisées.

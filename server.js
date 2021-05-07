@@ -4,12 +4,12 @@ logSys("---------------- SERVER STARTS ----------------");
 /**
  * TODO:
  *  - Créer système auth + token
- *  - Créer api email
- *    X Créer un honeypot
- *    - Créer un captcha
- *    X Requete au serveur
- *    X Envoie de l'email
- *    o Reponse au client
+ *  - Créer api email:
+ *    - X Créer un honeypot
+ *    - o Créer un captcha
+ *    - X Requete au serveur
+ *    - X Envoie de l'email
+ *    - X Reponse au client
  */
 
 import http2 from "http2";
@@ -72,14 +72,14 @@ async function handleRequest(req, res) {
     /**
      * Get public collection
      */
-    if (req.param.action === "get" && publicCollection.some((elt) => elt === req.param.name)) {
+    if (req.param.action === "get" && publicCollection.some(elt => elt === req.param.name)) {
 
       await prepareResponse(res, await db.getCollection(req.param.name));
 
     /**
      * Send email
      */
-    } else if (req.param.action === "emailsend"){
+    } else if (req.param.formAction === "emailsend"){
 
       let formData = JSON.parse(req.body)
       let email = new Email();

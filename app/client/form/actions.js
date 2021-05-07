@@ -4,7 +4,7 @@
  * @param {object} [form]
  */
 function formActions(form){
-    if(form.querySelector('[data-action]').getAttribute('data-action') === 'sendEmail'){
+    if(form.querySelector('[data-form-action]').getAttribute('data-form-action') === 'sendEmail'){
         actionSendEmail(form)
     }
 }
@@ -16,7 +16,7 @@ function formActions(form){
  * @returns {Promise<void>}
  */
 async function actionSendEmail(form){
-    let dataSend = form.querySelector('[data-action]')
+    let dataSend = form.querySelector('[data-form-action]')
     let to = dataSend.getAttribute('data-to') ? dataSend.getAttribute('data-to') : null;
     let from = dataSend.getAttribute('data-from') ? dataSend.getAttribute('data-from') : null;
     let subject = dataSend.getAttribute('data-subject') ? dataSend.getAttribute('data-subject') : null;

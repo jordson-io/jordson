@@ -38,20 +38,20 @@ async function sendEmail( data, from, to, subject, honeypots ){
         /**
          * Preparing request data
          */
-        let data = {}
+        let sendData = {}
         dataFormSorted.forEach(elements => {
-            data[`${elements[0]}`] = elements[1];
+            sendData[`${elements[0]}`] = elements[1];
         })
-        data.from = from;
-        data.to = to;
-        data.subject = subject;
+        sendData.from = from;
+        sendData.to = to;
+        sendData.subject = subject;
 
         /**
          * Sending Request
          */
-        let resp = await fetch('/api?action=emailsend', {
+        let resp = await fetch('/api?formAction=emailsend', {
             method: "POST",
-            body: JSON.stringify(data)
+            body: JSON.stringify(sendData)
         });
 
         return await resp.text()
