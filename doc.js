@@ -80,26 +80,50 @@ async function handleRequest(req, res) {
     if(req.url.pathname === '/getdata'){
 
         let pathOrigin = path.join("doc/");
+        let collator = new Intl.Collator(undefined, {numeric: true, sensitivity: 'base'});
 
         let docsName = [];
         let docsData = '';
+        let data = {};
 
-        fs.readdirSync(pathOrigin).forEach( file => {
+        fs.readdirSync(pathOrigin).sort(collator.compare).forEach( file => {
             if(path.extname(file) === ".md"){
-                docsName.push(file.replace(path.extname(file), ''));
-                docsData += `<div data-id="${file.replace(path.extname(file), "")}">
+                let fileName = file.replace(path.extname(file), '');
+                fileName = fileName.replace(/^([0-9]*\.)/, '');
+                fileName = fileName.replace(' ', '-');
+                fileName = fileName.replace('.', '-');
+                docsName.push(fileName);
+                docsData += `<div data-id="${fileName}">
                     ${marked(fs.readFileSync(pathOrigin + file).toString())}</div>`
             }
         })
 
-        let data = {
-            docsName: docsName,
-            docsData: docsData
-        }
+        data.mainNavigation = {chapterName: '', docsName: docsName, docsData: docsData };
+
+        fs.readdirSync(pathOrigin).sort(collator.compare).forEach( dir => {
+            let dirPath = path.join(`doc/${dir}`);
+            let dirName = dir.replace(/^([0-9]*\.)/, '')
+
+            if(fs.existsSync(dirPath) && fs.lstatSync(dirPath).isDirectory()){
+                docsName = [];
+                docsData = '';
+
+                fs.readdirSync(dirPath).sort(collator.compare).forEach( file => {
+                    if(path.extname(file) === '.md'){
+                        let fileName = file.replace(path.extname(file), '');
+                        fileName = fileName.replace(/^([0-9]*\.)/, '');
+                        fileName = fileName.replace(' ', '-');
+                        fileName = fileName.replace('.', '-');
+                        docsName.push(`${dirName}_${fileName}`);
+                        docsData += `<div data-id="${dirName}_${fileName}">
+                            ${marked(fs.readFileSync(dirPath + '/' + file).toString())}</div>`
+                    }
+                })
+                data[`${dirName}`] = {chapterName: dirName, docsName: docsName, docsData: docsData };
+            }
+        })
 
         await prepareResponse(res, data);
-
-
 
     } else if (path.extname(String(req.url)) === "") {
 

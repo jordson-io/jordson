@@ -1,11 +1,12 @@
 let htmlData = document.createElement('div');
-let currentPage = "main";
+
+// TODO: Ajouter la redirection si l'url n'est pas sur la homepage
 
 ( async() => {
     let fetchRes = await fetch('/getdata');
     let data = await fetchRes.json();
-    htmlData.innerHTML = data.docsData;
-    changePage(currentPage);
+    buildDoc(data)
+    changePage(data.mainNavigation.docsName[0]);
 })();
 
 document.addEventListener('click', e => {
@@ -19,6 +20,32 @@ document.addEventListener('click', e => {
         })
     }
 })
+
+function buildDoc(data){
+
+    let htmlNav = document.createElement('div');
+
+    for(const dataKey in data) {
+        if( dataKey === 'mainNavigation' ){
+            htmlData.innerHTML += data[dataKey].docsData;
+            data[dataKey].docsName.forEach(name => {
+                htmlNav.innerHTML += `<a href="#${name}" class="sub-menu">${name.charAt(0).toUpperCase() + name.slice(1)}</a><br>`
+            })
+        }
+    }
+
+    for(const dataKey in data) {
+        if(dataKey !== 'mainNavigation') {
+            htmlNav.innerHTML += `<br><div class="menu-title">${dataKey.charAt(0).toUpperCase() + dataKey.slice(1)}</div>`;
+            htmlData.innerHTML += data[dataKey].docsData;
+            data[dataKey].docsName.forEach(name => {
+                let pageName = name.replace(`${dataKey}_`, '')
+                htmlNav.innerHTML += `<a href="#${name}" class="sub-menu">${pageName.charAt(0).toUpperCase() + pageName.slice(1)}</a><br>`
+            })
+        }
+    }
+    document.querySelector('#sidebar .menu').append(htmlNav);
+}
 
 function changePage(pageName){
     document.getElementById('content-main').innerHTML = htmlData.querySelector(`[data-id="${pageName}"]`).innerHTML;

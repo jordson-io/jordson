@@ -6,17 +6,17 @@
 
 ### Current
 - [ ] **Envoie d'email transactionnels**
+- [ ] **Définir un système de documentation (online et offline)**
+- [ ] **Écrire la doc de la gestion d'envoi d'email.**
 
-  
 ### ToDo
-- [ ] Écrire la doc de la gestion d'envoi d'email.
-- [ ] Définir un système de documentation (online et offline)
-- [ ] Ajouter page 404
 - [ ] Dans le bundler ajouter la réécriture des balises images (webp) en picture avec un format alternatif.
 - [ ] HTML Terser ?
 - [ ] Supprimer les commentaires HTML
-  
-### Close
+
+
+### Done
+- [x] Ajouter page 404
 - [x] Réécrire le Serveur de A à Z afin qu'il soit sécurisé au maximum.
 - [x] Création de la documentation pour les notifications
 - [x] Création du système de notification "erreur", "succes", "info"
