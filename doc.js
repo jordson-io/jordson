@@ -92,8 +92,8 @@ async function handleRequest(req, res) {
                 fileName = fileName.replace(/^([0-9]*\.)/, '');
                 fileName = fileName.replace(' ', '-');
                 fileName = fileName.replace('.', '-');
-                docsName.push(fileName);
-                docsData += `<div data-id="${fileName}">
+                docsName.push(fileName.toLowerCase());
+                docsData += `<div data-id="${fileName.toLowerCase()}">
                     ${marked(fs.readFileSync(pathOrigin + file).toString())}</div>`
             }
         })
@@ -114,8 +114,8 @@ async function handleRequest(req, res) {
                         fileName = fileName.replace(/^([0-9]*\.)/, '');
                         fileName = fileName.replace(' ', '-');
                         fileName = fileName.replace('.', '-');
-                        docsName.push(`${dirName}_${fileName}`);
-                        docsData += `<div data-id="${dirName}_${fileName}">
+                        docsName.push(`${dirName.toLowerCase()}_${fileName.toLowerCase()}`);
+                        docsData += `<div data-id="${dirName.toLowerCase()}_${fileName.toLowerCase()}">
                             ${marked(fs.readFileSync(dirPath + '/' + file).toString())}</div>`
                     }
                 })
