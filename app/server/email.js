@@ -48,7 +48,6 @@ export default class Email {
           logSys(err, "error");
           return err;
         } else {
-
           logSys("EMAIL: Email SEND", "success");
           logSys(`EMAIL: Response >> ${res.response}`);
           logSys(`EMAIL: MessageID >> ${res.messageId}`);

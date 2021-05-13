@@ -1,6 +1,7 @@
 let htmlData = document.createElement('div');
 
 // TODO: Gérer les liens vers les ancres depuis l'exterieur
+// TODO: Gérer les accents dans les liens
 
 ;( async() => {
     let fetchRes = await fetch('/getdata');

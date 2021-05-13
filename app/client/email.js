@@ -1,7 +1,7 @@
 /**
  * Send email
  * @function
- * @param {formData} [data]
+ * @param {formHTML} [data]
  * @param {string} [from]
  * @param {string} [to]
  * @param {string} [subject]

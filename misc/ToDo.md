@@ -5,17 +5,18 @@
 ## v0.1
 
 ### Current
-- [ ] **Envoie d'email transactionnels**
-- [ ] **Définir un système de documentation (online et offline)**
 - [ ] **Écrire la doc de la gestion d'envoi d'email.**
 
 ### ToDo
+- [ ] Créer le système de règles pour les formulaires (utiliser une collection mongoDB)
 - [ ] Dans le bundler ajouter la réécriture des balises images (webp) en picture avec un format alternatif.
 - [ ] HTML Terser ?
-- [ ] Supprimer les commentaires HTML
+    - [ ] Supprimer les commentaires HTML
 
 
 ### Done
+- [x] Envoie d'email transactionnels
+- [x] Définir un système de documentation (online et offline)
 - [x] Ajouter page 404
 - [x] Réécrire le Serveur de A à Z afin qu'il soit sécurisé au maximum.
 - [x] Création de la documentation pour les notifications
