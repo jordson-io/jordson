@@ -6,6 +6,7 @@
 
 ### Current
 - [ ] **Écrire la doc de la gestion d'envoi d'email.**
+- [ ] **Vérification côté serveur des formulaires envoyés.**
 
 ### ToDo
 - [ ] Créer le système de règles pour les formulaires (utiliser une collection mongoDB)

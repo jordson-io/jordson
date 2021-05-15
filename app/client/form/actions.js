@@ -16,13 +16,10 @@ function formActions(form){
  * @returns {Promise<void>}
  */
 async function actionSendEmail(form){
-    let dataSend = form.querySelector('[data-form-action]')
-    let to = dataSend.getAttribute('data-to') ? dataSend.getAttribute('data-to') : null;
-    let from = dataSend.getAttribute('data-from') ? dataSend.getAttribute('data-from') : null;
-    let subject = dataSend.getAttribute('data-subject') ? dataSend.getAttribute('data-subject') : null;
-    let honeypots = form.querySelectorAll('[data-hnpt]').length !== 0
-        ? form.querySelectorAll('[data-hnpt]')
-        : null;
+
+    /**
+     * Pre-processing of the form
+     */
     let submit = form.querySelector('button[type="submit"]');
     let submitValue = submit.innerHTML;
 
@@ -31,7 +28,53 @@ async function actionSendEmail(form){
         submit.classList.add(disableClass);
     })
 
-    if(await sendEmail(form, from, to, subject, honeypots) === 'success'){
+    /**
+     * Allocation of variables
+     */
+    const dataSend = form.querySelector('[data-form-action]');
+    let dataFormSorted = Array.from(new FormData(form));
+    let dataFormRemove = [];
+    let sendData = {};
+
+    const to = dataSend.getAttribute('data-to')  || 'contact';
+    const from = dataSend.getAttribute('data-from') || 'site';
+    const subject = dataSend.getAttribute('data-subject') || 'Email';
+    const replyTo = dataSend.getAttribute('data-replyTo') || from;
+
+    const honeypots = form.querySelectorAll('[data-hnpt]');
+    const inputsRemove = form.querySelectorAll('[data-input-remove]');
+
+    /**
+     * Removal of unnecessary items before sending the request
+     */
+    if(honeypots.length !== 0){
+        Array.prototype.forEach.call(honeypots, honeypot => {
+            dataFormRemove.push(honeypot.name)
+        });
+    }
+
+    if(inputsRemove.length !== 0){
+        Array.prototype.forEach.call(inputsRemove, inputRemove => {
+            dataFormRemove.push(inputRemove.name)
+        });
+    }
+
+    for (let i in dataFormRemove) {
+        let ItemIndex = dataFormSorted.findIndex(dataFormSorted => dataFormSorted[0] === dataFormRemove[i]);
+        dataFormSorted.splice(ItemIndex, 1)
+    }
+
+    /**
+     * Preparing request data
+     */
+    dataFormSorted.forEach(elements => {
+        sendData[`${elements[0]}`] = elements[1];
+    })
+
+    /**
+     * Sending request
+     */
+    if(await sendEmail(sendData, from, to, subject, replyTo) === 'success'){
         submit.innerHTML = submitValue;
         submit.getAttribute('data-disable-class').split(' ').forEach(disableClass => {
             submit.classList.remove(disableClass);

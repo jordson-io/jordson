@@ -9,6 +9,7 @@ Le système d'envoi d'email est géré par le packet npm `nodemailer` [voir la d
 - [Localisation des fichiers](#localisation-des-fichiers)
 - [Configuration SMTP & Adresses email](#configuration-smtp--adresses-email)
 - [Utilisation de la fonction sendEmail](#utilisation-de-la-fonction-sendemail)
+- [Création d'un formulaire automatisé](#creation-d-un-formulaire)
 
 ---
 ## Localisation des fichiers
@@ -82,7 +83,7 @@ mail: {
     }
   },
 ```
-Ces adresses sont liés à des clés qui seront utilisés par les fonctions côté client. Cela à pour but de maitriser les email utilisés.
+Ces adresses sont liés à des clés qui seront utilisés par la fonction `sendEmail` côté client. Cela à pour but de maitriser les email utilisés.
 Il est fortement déconseillé de modifier ou supprimer les clés par défaut, à savoir `noreply`, `site`, `contact`, `support`. Vous pouvez 
 néanmoins modifier les adresses liés à ces clés et/ou en créer de nouvelles.
 
@@ -98,8 +99,34 @@ Il s'agit d'un objet type JSON, la syntax est donc strict et nous souffre aucune
 sans accents, et sans guillemets. L'adresse email doit impérativement avoir des guillemets et la ligne doit se terminer par une virgule.
 
 ---
-##Utilisation de la fonction sendEmail
+
+## Utilisation de la fonction sendEmail
 Côté client vous pouvez appeler directement en javascript la fonction `sendEmail` en passant les arguments requis :
 ```javascript
-sendEmail( data, from, to, subject, honeypots )
+sendEmail(data, from, to, subject, replyTo)
 ```
+
+- **data [object]** : (requis) Contenu qui sera affiché dans le corps du message.
+- **from [string]** : (requis) Clé de l'adresse email situé dans le fichier de configuration correspondant au champ "Expéditeur".
+- **to [string]** : (requis) Clé de l'adresse email situé dans le fichier de configuration correspondant au champ "Déstinataire".
+- **subject [string]** : (requis) Sujet de l'email.
+- **replyTo [string]** : (facultatif) clé d'un élément de l'objet "data" correspondant à une adresse email pour le champ "Répondre à:".
+
+Voici un exemple complet :
+```javascript
+sendEmail(
+    {
+        emailreplyto: "email@domaine.fr", 
+        message: "Message complet pour le destinataire"
+    }, 
+    "site", 
+    "contact", 
+    "emailreplyto", 
+    "Sujet de l'email" 
+)
+```
+
+---
+
+## Création d'un formulaire
+...

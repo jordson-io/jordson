@@ -2,6 +2,8 @@ import nodeMailer from "nodemailer";
 import logSys from "../core/msgSystem.js";
 import { gConfig } from "./config.js";
 
+// TODO: Fixer la vulnérabilité du \n dans le subject du message.
+
 /**
  * Manage email sending
  * @class
@@ -38,9 +40,9 @@ export default class Email {
       return "rejected"
     }
 
-    this.message.to = gConfig.mail.address[data.to] ? gConfig.mail.address[data.to] : gConfig.mail.address.contact;
-    this.message.from = gConfig.mail.address[data.from] ? gConfig.mail.address[data.from] : gConfig.mail.address.noreply;
-    this.message.replyTo = data.email ? data.email : this.message.from;
+    this.message.to = gConfig.mail.address[data.to] || gConfig.mail.address.contact;
+    this.message.from = gConfig.mail.address[data.from] || gConfig.mail.address.noreply;
+    this.message.replyTo = data[data.replyTo] || this.message.from;
 
     return new Promise( async resolve => {
       await this.transporter.sendMail(this.message,function (err, res) {
