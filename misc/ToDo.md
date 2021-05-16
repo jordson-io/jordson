@@ -1,11 +1,11 @@
 # ToDo List
 
 ## Global
+- [ ] Créer un système d'alias pour les slugs des pages avec redirection.
 
 ## v0.1
 
 ### Current
-- [ ] **Écrire la doc de la gestion d'envoi d'email.**
 - [ ] **Vérification côté serveur des formulaires envoyés.**
 
 ### ToDo
@@ -16,6 +16,7 @@
 
 
 ### Done
+- [x] Écrire la doc de la gestion d'envoi d'email.
 - [x] Envoie d'email transactionnels
 - [x] Définir un système de documentation (online et offline)
 - [x] Ajouter page 404

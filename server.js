@@ -18,6 +18,7 @@ import path from "path";
 import logSys from "./app/core/msgSystem.js";
 import Database from "./app/server/database.js";
 import Email from "./app/server/email.js";
+import Form from "./app/server/form.js";
 import { gConfig } from "./app/server/config.js";
 
 let db = new Database();
@@ -79,11 +80,20 @@ async function handleRequest(req, res) {
     /**
      * Send email
      */
-    } else if (req.param.formAction === "emailsend"){
+    } else if (req.param.action === "sendEmail") {
+
+      let email = new Email();
+      await prepareResponse(res, await email.send(JSON.parse(req.body)));
+
+    /**
+     * Form Processing
+     */
+    } else if (req.param.action === "formProcessing") {
 
       let formData = JSON.parse(req.body)
-      let email = new Email();
-      await prepareResponse(res, await email.send(formData));
+      let form = new Form(formData.id);
+      await form.check(formData);
+      // await prepareResponse(res, await form.check(JSON.parse(req.body)))
 
     }
 

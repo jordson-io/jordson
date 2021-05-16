@@ -15,6 +15,7 @@ function customDbReadyEvents(e) {
 function customPageChangeEvents(e) {
 
     //
+
 }
 
 

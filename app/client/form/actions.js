@@ -28,6 +28,7 @@ async function actionSendEmail(form){
         submit.classList.add(disableClass);
     })
 
+
     /**
      * Allocation of variables
      */
@@ -71,16 +72,37 @@ async function actionSendEmail(form){
         sendData[`${elements[0]}`] = elements[1];
     })
 
+
+    let formId = '0';
+    if(document.querySelectorAll('form').length > 1){
+        let id = -1;
+        document.querySelectorAll('form').forEach(formNode => {
+            id++;
+            if( formNode.innerHTML === form.innerHTML){
+                formId = id.toString();
+            }
+        })
+    }
+    sendData.id = `${pagesRoutes.currentPage.fileName}|${formId}`
+
     /**
      * Sending request
      */
-    if(await sendEmail(sendData, from, to, subject, replyTo) === 'success'){
-        submit.innerHTML = submitValue;
-        submit.getAttribute('data-disable-class').split(' ').forEach(disableClass => {
-            submit.classList.remove(disableClass);
-        })
-        showNotification('Message envoyé avec succès !', 'success')
-    } else {
-        showNotification("Erreur lors de l'envoie de votre message !", 'error')
-    }
+    let resp = await fetch('/api?action=formProcessing', {
+        method: "POST",
+        body: JSON.stringify(sendData)
+    });
+
+    let response = await resp.text();
+    console.log(response);
+
+    // if(await sendEmail(sendData, from, to, subject, replyTo) === 'success'){
+    //     submit.innerHTML = submitValue;
+    //     submit.getAttribute('data-disable-class').split(' ').forEach(disableClass => {
+    //         submit.classList.remove(disableClass);
+    //     })
+    //     showNotification('Message envoyé avec succès !', 'success')
+    // } else {
+    //     showNotification("Erreur lors de l'envoie de votre message !", 'error')
+    // }
 }

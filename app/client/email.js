@@ -19,7 +19,7 @@ async function sendEmail( data, from, to, subject, replyTo = null ){
         /**
          * Sending Request
          */
-        let resp = await fetch('/api?formAction=emailsend', {
+        let resp = await fetch('/api?action=sendEmail', {
             method: "POST",
             body: JSON.stringify(sendData)
         });
