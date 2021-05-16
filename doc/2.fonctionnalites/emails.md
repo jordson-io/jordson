@@ -1,5 +1,6 @@
 # Gestion d'envoi d'email transactionnel
-Il est possible d'envoyer un email transactionnel depuis un formulaire ou en direct via la fonction `sendEmail()`. Pour bien appréhender l'envoie d'email depuis un formulaire il est indispensable de bien connaitre le fonctionnement de ces derniers 
+Il est possible d'envoyer un email transactionnel depuis un formulaire ou en direct via la fonction `sendEmail()`. Pour bien appréhender 
+l'envoie d'email depuis un formulaire il est indispensable de bien connaitre le fonctionnement de ces derniers, voir la
 [documentation sur les formulaire](/#fonctionnalites_formulaires).
 
 Le système d'envoi d'email est géré par le packet npm `nodemailer` [voir la documentation](https://nodemailer.com/about/).
@@ -10,6 +11,8 @@ Le système d'envoi d'email est géré par le packet npm `nodemailer` [voir la d
 - [Configuration SMTP & Adresses email](#configuration-smtp--adresses-email)
 - [Utilisation de la fonction sendEmail](#utilisation-de-la-fonction-sendemail)
 - [Création d'un formulaire automatisé](#creation-d-un-formulaire)
+- [Requête & Réponse du server](#requete-&-reponse-du-server)
+- [Problèmes & Questions](#problèmes-&-questions)
 
 ---
 ## Localisation des fichiers
@@ -72,7 +75,7 @@ mail: {
 ```
 Tous les champs sont obligatoires, ils sont utiles pour le packet npm `nodemailer` [voir la doc](https://nodemailer.com/about/).
 
-La seconde partie est dédiés aux adresses email utilisé par la methode `sendEmail` :
+La seconde partie est dédiés aux adresses email utilisées par la methode `sendEmail` :
 ```javascript
 mail: {
     address : {
@@ -95,8 +98,10 @@ Pour créer une nouvelle clé, il vous suffit de l'ajouter après `support` :
     nouvellecle: "nouvel.email@domaine.fr",
 }
 ```
-Il s'agit d'un objet type JSON, la syntax est donc strict et nous souffre aucune erreur. La clé doit être écrite en minuscule, sans espace, 
-sans accents, et sans guillemets. L'adresse email doit impérativement avoir des guillemets et la ligne doit se terminer par une virgule.
+Il s'agit d'un objet type JSON, la syntax est donc strict et nous souffre aucune erreur. 
+- La clé doit être écrite en minuscule, sans espace, 
+sans accents, et sans guillemets. 
+- L'adresse email doit impérativement avoir des guillemets et la ligne doit se terminer par une virgule.
 
 ---
 
@@ -129,4 +134,53 @@ sendEmail(
 ---
 
 ## Création d'un formulaire
-...
+
+En suivant ce chapitre vous allez pouvoir créer un formulaire totalement automatisé, vous n'aurez pas besoin de vous soucier de la 
+gestion de la fonction `sendEmail()`.
+
+Il est fortement conseillé de lire le chapitre sur les formulaires pour bien comprendre toutes les fonctionnalités disponibles. Cependant 
+elles ne sont pas obligatoires pour le bon fonctionnement de l'envoi par email.
+
+Gardez à l'esprit que vous devez respecter les standards HTML5 pour éviter tout soucis.
+
+Votre formulaire doit être composer d'une balise `<form></form>` et contenir un bouton de type `submit` avec les attributs suivants :
+
+```html
+<button type="submit"
+        data-form-action="sendEmail"
+        data-to="contact"
+        data-from="site"
+        data-replyTo="email"
+        data-subject="[Formulaire de Contact]"
+        class=""
+        data-disable-class="">Envoyer</button>
+```
+
+- **data-form-action** : (requis) doit impérativement porter la valeur "sendEmail".
+- **data-to** : Clé de l'email correspondant au destinataire (1)
+- **data-from** : Clé de l'email correspondant à l'expéditeur (1)
+- **data-replyTo** : (facultatif) Valeur `name` du champ (input) contenant l'email à utiliser pour répondre, dans cet exemple il s'agit du 
+  champ `name="email"`. Si vous n'utilisez pas cet attribut il utilisera par défaut la valeur de `data-from`.
+- **data-subject** : Le sujet de l'email.
+- **data-disable-class** : Précisez les class CSS pour passer le bouton en mode "désactivé" le temps du traitement de l'email.
+
+(1) : Vous pouvez trouver et/ou editer les clés d'email dans le fichier `/app/server/config.js`, voir également [Configuration SMTP & 
+Adresses 
+email](#configuration-smtp--adresses-email).
+
+---
+
+## Requête et Réponse du server
+
+Lors de l'utilisation de la fonction `sendEmail()` une requête est effectué au serveur. Voici quelques précisions sur son fonctionnement.
+
+Avant tout il est recommandé d'utiliser la fonction `sendEmail()` uniquement pour un traitement depuis votre javascript. Si vous 
+souhaitez passer par un formulaire, veuillez utiliser la [création d'un formulaire automatisé](#creation-d-un-formulaire) pour des 
+raisons de sécurité.
+
+La fonction `sendEmail()` est asynchrone et retourne une chaine de caractères, soit 'success' soit 'rejected'.
+
+---
+
+## Problèmes & Questions
+Si vous rencontrez un problème ou si vous avez une question sur les emails vous pouvez le utiliser notre [système de ticket]().
