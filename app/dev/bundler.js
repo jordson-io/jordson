@@ -7,6 +7,7 @@ import path from "path";
 const appHTMLPath = path.join("public/assets/app.html");
 const directoryHTMLPath = path.join("components/ressources/html/");
 const appJSPath = path.join("public/assets/app.js");
+const appTSPath = path.join("public/assets/app-uncompiled.ts");
 const directoryJSPath = path.join("app/client/");
 let watching = false;
 let htmlFiles = [];
@@ -37,7 +38,7 @@ function compileFiles(pathOrigin, data = '') {
         htmlFiles[file] = `${pathOrigin}${file}`;
 
       }
-    } else if (path.extname(file) === '.js'){
+    } else if (path.extname(file) === '.js' || path.extname(file) === '.ts'){
 
       data += `//${pathOrigin}${file.replace(path.extname(file), "")}\n
       ${fs.readFileSync(pathOrigin + file).toString()}\n
@@ -73,8 +74,8 @@ function watchFiles(eventType, filename){
       let newFileData;
       let regex;
 
-      if(path.extname(filename) === '.js'){
-        appPath = appJSPath;
+      if(path.extname(filename) === '.js' || path.extname(filename) === '.js'){
+        appPath = appTSPath;
         files = jsFiles;
       }
 
@@ -98,7 +99,7 @@ function watchFiles(eventType, filename){
 
         regex = new RegExp(`<div data-id="${name}">(.*?)(?=<div data-id)`, 's');
 
-      } else if(path.extname(filename) === '.js'){
+      } else if(path.extname(filename) === '.js' || path.extname(filename) === '.ts'){
 
         newFileData = `\/\/${filePath.replace(path.extname(filename), '')}\n
           ${fs.readFileSync(filePath).toString()}\n
@@ -136,7 +137,7 @@ function compile(arg){
       ? Terser.minify(compileFiles(directoryJSPath)).code
       : compileFiles(directoryJSPath);
 
-  fs.writeFile(appJSPath, jsData, 'utf-8', error => {
+  fs.writeFile(appTSPath, jsData, 'utf-8', error => {
     if(error){
       logSys(error.message, 'error')
       logSys(error.stack, 'error')
@@ -147,7 +148,7 @@ function compile(arg){
       ? Terser.minify(compileFiles(path.join("components/ressources/js/"))).code
       : compileFiles(path.join("components/ressources/js/"));
 
-  fs.appendFile(appJSPath, jsData, 'utf-8', error => {
+  fs.appendFile(appTSPath, jsData, 'utf-8', error => {
     if(error){
       logSys(error.message, 'error')
       logSys(error.stack, 'error')

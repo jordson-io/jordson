@@ -9,6 +9,9 @@
 - [ ] **Vérification côté serveur des formulaires envoyés.**
 
 ### ToDo
+- [ ] Activer la compression gzip/brotli
+- [ ] Commencer le refacto en TS
+- [ ] Se renseigner sur Assemblyscript et les avantages de performance .wasm
 - [ ] Créer le système de règles pour les formulaires (utiliser une collection mongoDB)
 - [ ] Dans le bundler ajouter la réécriture des balises images (webp) en picture avec un format alternatif.
 - [ ] HTML Terser ?

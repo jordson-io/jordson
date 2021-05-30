@@ -7,3 +7,5 @@
 /.idea/
 /public/assets/app.css.map
 jsconfig.json
+/public/assets/app-uncompiled.ts
+/tsconfig.json

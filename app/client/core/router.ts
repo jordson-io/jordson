@@ -1,54 +1,71 @@
-let dbReady = new CustomEvent("dbReady", { bubbles: true });
-let pageChange = new CustomEvent("pageChange", { bubbles: true });
-let routeList = [];
-let routes = {};
-let route;
-let currentParam = "";
-let htmlData = document.createElement("html");
-let collections = ["pages"];
+const dbReady = new CustomEvent("dbReady", { bubbles: true });
+const pageChange = new CustomEvent("pageChange", { bubbles: true });
+
+let route:string;
+let currentParam:string;
+let htmlData:HTMLElement = document.createElement("html");
+let collections:string[] = ["pages"];
 
 /**
  * Init website
  * @type {HTMLDivElement}
  */
 (async () => {
-  let getHtmlData = await fetch("assets/app.html");
+
+  type Route = {
+    slug: string;
+    fileName: string;
+    title: string;
+  }
+
+  type RoutesList = {
+    [key: string]: Route;
+  }
+
+  let routesList:RoutesList = {};
+
+  const getHtmlData:any = await fetch("assets/app.html");
   htmlData.innerHTML = await getHtmlData.text();
 
   for (let i = 0; i < collections.length; i++) {
-    let fetchRes = await fetch(`/api?action=get&name=${collections[i]}`);
-    let routes = await fetchRes.json();
-    routes.forEach((e) => {
-      let newPage = {
-        slug: e.slug,
-        fileName: e.fileName,
-        title: e.title,
-        access: e.access,
-      };
-      routeList.push(newPage);
-    });
+    const fetchRes:any = await fetch(`/api?action=get&name=${collections[i]}`);
+    const result:any = await fetchRes.json();
+
+    for (let y = 0; y < result.length; y++){
+      routesList[(i * result.length + y).toString()] = {
+        slug: result[y].slug,
+        fileName: result[y].fileName,
+        title: result[y].title
+      }
+    }
   }
-  Object.assign(routes, routeList);
   document.dispatchEvent(dbReady);
+
+
+  /**
+   * Manage history and back to prev page
+   */
+  window.onpopstate = e => {
+    let dataID:string = "";
+
+    for (const [key, value] of Object.entries(routesList)) {
+      if(value.slug === document.location.pathname.replace("/", ""))
+        dataID = value.fileName;
+    }
+
+    if(e.state !== null){
+      document.getElementById("content")!.innerHTML = htmlData.querySelector(`[data-id='${dataID}']`)!.innerHTML;
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        document.dispatchEvent(pageChange);
+      }, 100);
+    }
+  };
+
+  let pagesRoutes = new Router(routesList);
+
 })();
 
-/**
- * Manage history and back to prev page
- */
-window.onpopstate = e => {
-  let dataID = "";
-  routeList.forEach((route) => {
-    if( route.slug === document.location.pathname.replace("/", "") )
-      dataID = route.fileName;
-  });
-  if(e.state !== null){
-    document.getElementById("content").innerHTML = htmlData.querySelector(`[data-id='${dataID}']`).innerHTML;
-    setTimeout(() => {
-      window.scrollTo(0, 0);
-      document.dispatchEvent(pageChange);
-    }, 100);
-  }
-};
 
 /**
  * Router to manage pages
@@ -120,4 +137,4 @@ class Router {
 
   }
 }
-let pagesRoutes = new Router(routes);
+
