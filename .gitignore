@@ -3,9 +3,10 @@
 /public/assets/app.html
 /public/assets/app.js
 /public/assets/app.css
+/public/assets/app.css.map
+/public/assets/app-uncompiled.ts
 /node_modules/
 /.idea/
-/public/assets/app.css.map
 jsconfig.json
-/public/assets/app-uncompiled.ts
 /tsconfig.json
+/package-lock.json
