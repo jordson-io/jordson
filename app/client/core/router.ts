@@ -27,18 +27,27 @@ let collections:string[] = ["pages"];
   const getHtmlData:any = await fetch("assets/app.html");
   htmlData.innerHTML = await getHtmlData.text();
 
+  let promises = [];
   for (let i = 0; i < collections.length; i++) {
-    const fetchRes:any = await fetch(`/api?action=get&name=${collections[i]}`);
-    const result:any = await fetchRes.json();
+    promises[i] = new Promise<unknown>( async resolve => {
+      const fetchRes:any = await fetch(`/api?action=get&name=${collections[i]}`);
+      const result:any = fetchRes.json();
+      resolve(result);
+    })
+  }
 
-    for (let y = 0; y < result.length; y++){
-      routesList[(i * result.length + y).toString()] = {
-        slug: result[y].slug,
-        fileName: result[y].fileName,
-        title: result[y].title
+  let promiseResult:any = await Promise.all(promises);
+
+  for (let i = 0; i < promiseResult.length; i++) {
+    for (let y = 0; y < promiseResult[i].length; y++){
+      routesList[(i * promiseResult[i].length + y).toString()] = {
+        slug: promiseResult[i][y].slug,
+        fileName: promiseResult[i][y].fileName,
+        title: promiseResult[i][y].title
       }
     }
   }
+
   document.dispatchEvent(dbReady);
 
 
