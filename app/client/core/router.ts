@@ -6,29 +6,31 @@ let currentParam:string;
 let htmlData:HTMLElement = document.createElement("html");
 let collections:string[] = ["pages"];
 
+type Route = {
+  slug: string;
+  fileName: string;
+  title: string;
+}
+
+type RoutesList = {
+  [key: string]: Route;
+}
+
 /**
  * Init website
  * @type {HTMLDivElement}
  */
 (async () => {
 
-  type Route = {
-    slug: string;
-    fileName: string;
-    title: string;
-  }
-
-  type RoutesList = {
-    [key: string]: Route;
-  }
-
   let routesList:RoutesList = {};
+  let promises:any[] = [];
 
-  const getHtmlData:any = await fetch("assets/app.html");
-  htmlData.innerHTML = await getHtmlData.text();
+  const getHtml:any = new Promise( async resolve => {
+    const getHtmlData:any = await fetch("assets/app.html");
+    resolve(getHtmlData.text());
+  })
 
-  let promises = [];
-  for (let i = 0; i < collections.length; i++) {
+  for (let i:number = 0; i < collections.length; i++) {
     promises[i] = new Promise<unknown>( async resolve => {
       const fetchRes:any = await fetch(`/api?action=get&name=${collections[i]}`);
       const result:any = fetchRes.json();
@@ -36,10 +38,11 @@ let collections:string[] = ["pages"];
     })
   }
 
+  htmlData.innerHTML = await getHtml;
   let promiseResult:any = await Promise.all(promises);
 
-  for (let i = 0; i < promiseResult.length; i++) {
-    for (let y = 0; y < promiseResult[i].length; y++){
+  for (let i:number = 0; i < promiseResult.length; i++) {
+    for (let y:number = 0; y < promiseResult[i].length; y++){
       routesList[(i * promiseResult[i].length + y).toString()] = {
         slug: promiseResult[i][y].slug,
         fileName: promiseResult[i][y].fileName,
@@ -54,7 +57,7 @@ let collections:string[] = ["pages"];
   /**
    * Manage history and back to prev page
    */
-  window.onpopstate = e => {
+  window.onpopstate = event => {
     let dataID:string = "";
 
     for (const [key, value] of Object.entries(routesList)) {
@@ -62,7 +65,7 @@ let collections:string[] = ["pages"];
         dataID = value.fileName;
     }
 
-    if(e.state !== null){
+    if(event.state !== null){
       document.getElementById("content")!.innerHTML = htmlData.querySelector(`[data-id='${dataID}']`)!.innerHTML;
       setTimeout(() => {
         window.scrollTo(0, 0);
@@ -81,7 +84,11 @@ let collections:string[] = ["pages"];
  * @class
  */
 class Router {
-  constructor(routes) {
+
+  routes:RoutesList;
+  private event: object | undefined;
+
+  constructor(routes:RoutesList) {
     this.routes = routes;
     window.addEventListener("hashchange", this.loadPage.bind(this));
     document.addEventListener("dbReady", this.loadPage.bind(this));
@@ -90,17 +97,23 @@ class Router {
   /**
    * Load Page before showing
    * @method
-   * @param {string} [event] Event trigger
+   * @param {object} [event] Event trigger
    * @returns {Promise<void>}
    */
-  async loadPage(event) {
+  async loadPage(event:object) {
     this.event = event;
+
     route = location.hash || "#";
-    if (route.endsWith("/")) route = route.slice(0, -1);
-    let regex = /(\?|\&)([^=]+)\=([^&]+)/;
-    let param = regex.exec(location.href);
-    if (param) {
-      let thisParam = param[0].replace("#", "");
+    if (route.endsWith("/"))
+      route = route.slice(0, -1);
+
+    const regex:any = /(\?|\&)([^=]+)\=([^&]+)/;
+    console.log(location)
+    // TODO: Trouver le type de params
+    const params:any = regex.exec(location.href);
+
+    if(params !== null) {
+      let thisParam = params[0].replace("#", "");
       if (thisParam !== currentParam) {
         if (location.hash === "")
           route += thisParam;

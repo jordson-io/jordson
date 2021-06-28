@@ -6,8 +6,9 @@
   "type": "module",
   "scripts": {
     "cwebp": "cp components/assets/images/*.* public/assets/images && find public/assets/images -type f \\( -iname \"*.jpg\" -o -iname \"*.jpeg\" -o -iname \"*.png\" \\) -exec cwebp {} -o {}.webp \\;",
-    "watch": "./app/dev/bundler.js --watch & sass --watch components/ressources/sass:public/assets/ & tsc --allowJs --out public/assets/app.js public/assets/app-uncompiled.ts",
+    "watch": "sass --watch components/ressources/sass:public/assets/ & ./app/dev/bundler.js --watch & tsc --allowJs --out public/assets/app.js public/assets/app-uncompiled.ts",
     "prod": "./app/dev/bundler.js --compress ; sass components/ressources/sass:public/assets/ --style=compressed",
+    "dev": "./app/dev/bundler.js; sass components/ressources/sass:public/assets/ & tsc --allowJs --out public/assets/app.js public/assets/app-uncompiled.ts",
     "fonts": "./app/dev/bundler.js --fonts",
     "mexp": "mongoexport --collection=pages --db=jrd --out=components/database/pages.json",
     "start": "node --experimental-modules --trace-warnings ./server.js",
