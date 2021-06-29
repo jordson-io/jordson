@@ -1,7 +1,7 @@
 /**
  *
  */
-document.addEventListener('dbReady', e => {
+document.addEventListener('dbReady', event => {
 
   console.log(
       "  ╔╦═══╦═══╦═══╦═══╦═══╦═╗ ╔╗\n" +
@@ -16,63 +16,63 @@ document.addEventListener('dbReady', e => {
   /**
    * Manage Custom Events
    */
-  customDbReadyEvents(e);
+  customDbReadyEvents(event);
 })
 
 /**
  *
  */
-document.addEventListener('pageChange', e => {
+document.addEventListener('pageChange', event => {
 
   /**
    * Manage Custom Events
    */
-  customPageChangeEvents(e);
+  customPageChangeEvents(event);
 })
 
 /**
  * Manage ALL click events
  * Do not add new elements in this Function, use "customClickEvents" to add new click event matches
  */
-document.addEventListener("click", async e => {
+document.addEventListener("click", async event => {
 
   /**
    * Manage internal Links
    * Link like "/my-link" doesn't reload page, just the body content.
    */
   if(
-    e.target.closest("A") &&
-    e.target.closest("A").hostname === location.hostname &&
-    !e.target.closest("A").href.includes("#")
+    event.target.closest("A") &&
+    event.target.closest("A").hostname === location.hostname &&
+    !event.target.closest("A").href.includes("#")
   ) {
-    e.preventDefault();
-    document.location.href = e.target.closest("A").pathname.replace("/", "#");
+    event.preventDefault();
+    document.location.href = event.target.closest("A").pathname.replace("/", "#");
   }
 
   /**
    * Manage Anchors
    * Create link with this attribute : data-anchor="targetId" (replace targetId by the element ID was targeting)
    */
-  if (e.target.matches("[data-anchor]")) {
-    e.preventDefault();
+  if (event.target.matches("[data-anchor]")) {
+    event.preventDefault();
     document
-      .getElementById(e.target.closest("[data-anchor]").attributes["data-anchor"].value)
+      .getElementById(event.target.closest("[data-anchor]").attributes["data-anchor"].value)
       .scrollIntoView({ behavior: "smooth" });
   }
 
   /**
    * Manage Notifications
    */
-  if( e.target.closest("[data-notification]")){
+  if( event.target.closest("[data-notification]")){
     hideNotification(e.target.closest("[data-notification]").attributes["data-notification"].value)
   }
 
   /**
    * Manage Forms
    */
-  if (e.target.closest('[type="submit"]')){
-    e.preventDefault();
-    checkFormRules(e.target.closest('form'));
+  if (event.target.closest('[type="submit"]')){
+    event.preventDefault();
+    checkFormRules(event.target.closest('form'));
   }
 
 
@@ -80,7 +80,7 @@ document.addEventListener("click", async e => {
    * Manage Data-Actions
    * Management of scripts triggered by "data-action" html tags
    */
-  if(e.target.hasAttribute('data-action')){
+  if(event.target.hasAttribute('data-action')){
 
    //
 
@@ -89,6 +89,6 @@ document.addEventListener("click", async e => {
   /**
    * Manage Custom Events
    */
-  customClickEvents(e);
+  customClickEvents(event);
 });
 

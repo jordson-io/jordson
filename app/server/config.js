@@ -1,41 +1,56 @@
-export const gConfig = {
-  global: {
-    siteName: "JORDSON",
-    domain: "jordson.fr",
-    email_admin: "andreleclercqpro@gmail.com",
-    port: 4002,
-  },
-  db: {
-    dbName: "jrd",
-    publicCollections: ["pages"],
-  },
-  mail: {
-    host: "smtp.mailtrap.io",
-    port: 2525,
-    user: "0b9dfe8ea837d1",
-    pass: "c890421a8e87e1",
-    address : {
-      noreply: "ne-pas-repondre@jordson.fr",    // Adresse pour indiquer qu'il n'y a pas de réponse possible à l'email
-      site: "site@jordson.fr",                  // Adresse pour définir la provenance de l'email
-      contact: "contact@jordson.fr",            // Adresse de contact général du site pour l'entreprise
-      support: "support@jordson.fr",            // Adresse de support technique
-    }
-  },
-  mimeTypes: {
-    html: "text/html",
-    js: "text/javascript",
-    css: "text/css",
-    json: "application/json",
-    png: "image/png",
-    jpg: "image/jpg",
-    gif: "image/gif",
-    svg: "image/svg+xml",
-    wav: "audio/wav",
-    mp4: "video/mp4",
-    woff: "application/font-woff",
-    ttf: "application/font-ttf",
-    eot: "application/vnd.ms-fontobject",
-    otf: "application/font-otf",
-    wasm: "application/wasm",
-  },
+import fs from "fs";
+
+export default function gConfig() {
+
+  const fileName = fs.existsSync('./.env.dev') ? './.env.dev' : './.env';
+
+  const envFile = fs.readFileSync(fileName, "utf-8");
+  const envArray = envFile.split(/\n/);
+  let envData = [];
+
+  envArray.forEach(line => {
+    envData[line.split("=")[0]] = line.split("=")[1]
+  })
+
+  return {
+    global: {
+      siteName: envData.SITE_NAME,
+      domain: envData.SITE_DOMAIN,
+      email_admin: envData.EMAIL_ADDRESS_ADMIN,
+      port: envData.SITE_PORT,
+    },
+    db: {
+      dbName: envData.DB_NAME,
+      publicCollections: envData.DB_PUBLIC_COLLECTION,
+    },
+    mail: {
+      host: envData.EMAIL_HOST,
+      port: envData.EMAIL_PORT,
+      user: envData.EMAIL_USER,
+      pass: envData.EMAIL_PASSWORD,
+      address : {
+        noreply: envData.EMAIL_ADDRESS_NOREPLY,
+        site: envData.EMAIL_ADDRESS_SITE,
+        contact: envData.EMAIL_ADDRESS_CONTACT,
+        support: envData.EMAIL_ADDRESS_SUPPORT,
+      }
+    },
+    mimeTypes: {
+      html: "text/html",
+      js: "text/javascript",
+      css: "text/css",
+      json: "application/json",
+      png: "image/png",
+      jpg: "image/jpg",
+      gif: "image/gif",
+      svg: "image/svg+xml",
+      wav: "audio/wav",
+      mp4: "video/mp4",
+      woff: "application/font-woff",
+      ttf: "application/font-ttf",
+      eot: "application/vnd.ms-fontobject",
+      otf: "application/font-otf",
+      wasm: "application/wasm",
+    },
+  }
 };

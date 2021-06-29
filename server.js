@@ -19,12 +19,12 @@ import logSys from "./app/core/msgSystem.js";
 import Database from "./app/server/database.js";
 import Email from "./app/server/email.js";
 import Form from "./app/server/form.js";
-import { gConfig } from "./app/server/config.js";
+import gConfig from "./app/server/config.js";
 
 let db = new Database();
-const port = gConfig.global.port;
-const mimeTypes = gConfig.mimeTypes;
-const publicCollection = gConfig.db.publicCollections;
+const port = gConfig().global.port;
+const mimeTypes = gConfig().mimeTypes;
+const publicCollection = gConfig().db.publicCollections;
 
 async function parseRequest(stream, headers, req) {
 
