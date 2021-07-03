@@ -12,6 +12,8 @@ export const gConfig = function() {
     envData[line.split("=")[0]] = line.split("=")[1]
   })
 
+  envData.DB_PUBLIC_COLLECTION = envData.DB_PUBLIC_COLLECTION.split(',');
+
   return {
     global: {
       siteName: envData.SITE_NAME,
