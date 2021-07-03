@@ -1,18 +1,18 @@
 /**
- * Manage Custom Events on DB Ready (first load)
- * @param e Event from eventListenner
+ * Manage Custom Events on Data Loaded (first load)
+ * @param event Event from eventListenner
  */
-function customDbReadyEvents(e) {
+function customDataLoadedEvents(event) {
 
     //
 
 }
 
 /**
- * Manage Custom Events on Page Change
- * @param e Event from eventListenner
+ * Manage Custom Events on Page Html Loaded (every page change)
+ * @param event Event from eventListenner
  */
-function customPageChangeEvents(e) {
+function customHtmlLoadedEvents(event) {
 
     //
 
@@ -21,9 +21,9 @@ function customPageChangeEvents(e) {
 
 /**
  * Manage Custom Events on click document
- * @param e Event from eventListenner
+ * @param event Event from eventListenner
  */
-function customClickEvents(e) {
+function customClickEvents(event) {
 
     //
 

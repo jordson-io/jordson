@@ -1,7 +1,7 @@
 /**
  *
  */
-document.addEventListener('dbReady', event => {
+document.addEventListener('dataLoaded', event => {
 
   console.log(
       "  ╔╦═══╦═══╦═══╦═══╦═══╦═╗ ╔╗\n" +
@@ -16,18 +16,18 @@ document.addEventListener('dbReady', event => {
   /**
    * Manage Custom Events
    */
-  customDbReadyEvents(event);
+  customDataLoadedEvents(event);
 })
 
 /**
  *
  */
-document.addEventListener('pageChange', event => {
+document.addEventListener('htmlLoaded', event => {
 
   /**
    * Manage Custom Events
    */
-  customPageChangeEvents(event);
+  customHtmlLoadedEvents(event);
 })
 
 /**
