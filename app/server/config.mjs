@@ -1,6 +1,6 @@
 import fs from "fs";
 
-export default function gConfig() {
+export const gConfig = function() {
 
   const fileName = fs.existsSync('./.env.dev') ? './.env.dev' : './.env';
 
@@ -54,3 +54,5 @@ export default function gConfig() {
     },
   }
 };
+
+export default gConfig;

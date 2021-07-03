@@ -1,6 +1,8 @@
 import mongodb from "mongodb";
 import logSys from "../core/msgSystem.js";
-import gConfig from "./config.js";
+import gConfig from "./config.mjs";
+
+let gConf = new gConfig();
 
 /**
  * Manage mongoDB database
@@ -13,8 +15,8 @@ export default class Database {
    */
   constructor() {
     try {
-      this.uri = `mongodb://127.0.0.1:27017/?authSource=${gConfig().db.dbName}&readPreference=primary&ssl=false`;
-      this.name = gConfig().db.dbName;
+      this.uri = `mongodb://127.0.0.1:27017/?authSource=${gConf.db.dbName}&readPreference=primary&ssl=false`;
+      this.name = gConf.db.dbName;
       this.connection().then();
     } catch (error) {
       logSys(error, "error");

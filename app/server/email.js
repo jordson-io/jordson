@@ -1,6 +1,8 @@
 import nodeMailer from "nodemailer";
 import logSys from "../core/msgSystem.js";
-import gConfig from "./config.js";
+import gConfig from "./config.mjs";
+
+let gConf = new gConfig();
 
 // TODO: Fixer la vulnérabilité du \n dans le subject du message.
 
@@ -11,11 +13,11 @@ import gConfig from "./config.js";
 export default class Email {
   constructor() {
     this.transporter = nodeMailer.createTransport({
-      host: gConfig().mail.host,
-      port: gConfig().mail.port,
+      host: gConf.mail.host,
+      port: gConf.mail.port,
       auth: {
-        user: gConfig().mail.user,
-        pass: gConfig().mail.pass,
+        user: gConf.mail.user,
+        pass: gConf.mail.pass,
       },
     });
   }
@@ -41,8 +43,8 @@ export default class Email {
       return "rejected"
     }
 
-    this.message.to = gConfig().mail.address[data.to] || gConfig().mail.address.contact;
-    this.message.from = gConfig().mail.address[data.from] || gConfig().mail.address.noreply;
+    this.message.to = gConf.mail.address[data.to] || gConf.mail.address.contact;
+    this.message.from = gConf.mail.address[data.from] || gConf.mail.address.noreply;
     this.message.replyTo = data[data.replyTo] || this.message.from;
 
     return new Promise( async resolve => {
