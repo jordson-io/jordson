@@ -16,17 +16,17 @@ import http2 from "http2";
 import fs from "fs";
 import path from "path";
 import logSys from "./app/core/msgSystem.js";
+import loadConfig from "./app/server/loadConfig.mjs";
 import Database from "./app/server/database.js";
 import Email from "./app/server/email.js";
 import Form from "./app/server/form.js";
-import gConfig from "./app/server/config.mjs";
 
-const gConf = new gConfig();
+const gConfig = new loadConfig();
 let db = new Database();
 
-const port = gConf.global.port;
-const mimeTypes = gConf.mimeTypes;
-const publicCollection = gConf.db.publicCollections;
+const port = gConfig.global.port;
+const mimeTypes = gConfig.mimeTypes;
+const publicCollection = gConfig.db.publicCollections;
 
 async function parseRequest(stream, headers, req) {
 
