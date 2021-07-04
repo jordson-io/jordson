@@ -7,6 +7,4 @@
 /public/assets/app-uncompiled.ts
 /node_modules/
 /.idea/
-jsconfig.json
-/tsconfig.json
 /package-lock.json

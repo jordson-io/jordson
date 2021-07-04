@@ -1,17 +1,6 @@
 logSys("-----------------------------------------------");
 logSys("---------------- SERVER STARTS ----------------");
 
-/**
- * TODO:
- *  - Créer système auth + token
- *  - Créer api email:
- *    - X Créer un honeypot
- *    - o Créer un captcha
- *    - X Requete au serveur
- *    - X Envoie de l'email
- *    - X Reponse au client
- */
-
 import http2 from "http2";
 import fs from "fs";
 import path from "path";
