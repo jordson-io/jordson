@@ -3,8 +3,9 @@
  * @function
  * @param {object} [form]
  */
-function formActions(form){
+function formActions(form: HTMLFormElement){
     if(form.querySelector('[data-form-action]').getAttribute('data-form-action') === 'sendEmail'){
+        // TODO: Terminer le retour de la requete sendEmail
         actionSendEmail(form)
     }
 }
@@ -15,56 +16,57 @@ function formActions(form){
  * @param {object} [form]
  * @returns {Promise<void>}
  */
-async function actionSendEmail(form){
+async function actionSendEmail(form: HTMLFormElement){
 
     /**
      * Pre-processing of the form
      */
-    let submit = form.querySelector('button[type="submit"]');
-    let submitValue = submit.innerHTML;
+    let submit:HTMLElement | null = form.querySelector('button[type="submit"]');
+    let submitValue: string | undefined = submit?.innerHTML;
 
-    submit.innerHTML = "Envoie en cours..."
-    submit.getAttribute('data-disable-class').split(' ').forEach(disableClass => {
-        submit.classList.add(disableClass);
+    submit?.innerHTML = "Envoie en cours..."
+    submit?.getAttribute('data-disable-class').split(/ /g).forEach((disableClass: string) => {
+        submit?.classList.add(disableClass);
     })
 
 
     /**
      * Allocation of variables
      */
-    const dataSend = form.querySelector('[data-form-action]');
-    let dataFormSorted = Array.from(new FormData(form));
-    let dataFormRemove = [];
-    let sendData = {};
+    const dataSend: HTMLElement | null = form.querySelector('[data-form-action]');
+    let dataFormSorted: [string, (File | string)][] = Array.from(new FormData(form));
+    let dataFormRemove: string[] = [];
+    let sendData: object = {};
 
-    const to = dataSend.getAttribute('data-to')  || 'contact';
-    const from = dataSend.getAttribute('data-from') || 'site';
-    const subject = dataSend.getAttribute('data-subject') || 'Email';
-    const replyTo = dataSend.getAttribute('data-replyTo') || from;
+    const to = dataSend?.getAttribute('data-to')  || 'contact';
+    const from = dataSend?.getAttribute('data-from') || 'site';
+    const subject = dataSend?.getAttribute('data-subject') || 'Email';
+    const replyTo = dataSend?.getAttribute('data-replyTo') || from;
 
-    const honeypots = form.querySelectorAll('[data-hnpt]');
-    const inputsRemove = form.querySelectorAll('[data-input-remove]');
+    const honeypots: NodeListOf<HTMLElement> = form.querySelectorAll('[data-hnpt]');
+    const inputsRemove: NodeListOf<HTMLElement> = form.querySelectorAll('[data-input-remove]');
 
     /**
      * Removal of unnecessary items before sending the request
      */
     if(honeypots.length !== 0){
         Array.prototype.forEach.call(honeypots, honeypot => {
-            dataFormRemove.push(honeypot.name)
+            dataFormRemove?.push(honeypot.name)
         });
     }
 
     if(inputsRemove.length !== 0){
         Array.prototype.forEach.call(inputsRemove, inputRemove => {
-            dataFormRemove.push(inputRemove.name)
+            dataFormRemove?.push(inputRemove.name)
         });
     }
 
-    for (let i in dataFormRemove) {
-        let ItemIndex = dataFormSorted.findIndex(dataFormSorted => dataFormSorted[0] === dataFormRemove[i]);
+    for (let i: number in dataFormRemove) {
+        let ItemIndex: number = dataFormSorted.findIndex((dataFormSorted: string[]) => dataFormSorted[0] === dataFormRemove[i]);
         dataFormSorted.splice(ItemIndex, 1)
     }
 
+    // TODO: Reprendre le refcto à partir d'ici (voir comment est structuré le dataFormSorted et définir le type element
     /**
      * Preparing request data
      */

@@ -1,7 +1,7 @@
 /**
  *
  */
-document.addEventListener('dataLoaded', event => {
+document.addEventListener('dataLoaded', (event: Event) => {
 
   console.log(
       "  ╔╦═══╦═══╦═══╦═══╦═══╦═╗ ╔╗\n" +
@@ -22,57 +22,60 @@ document.addEventListener('dataLoaded', event => {
 /**
  *
  */
-document.addEventListener('htmlLoaded', event => {
+document.addEventListener('htmlLoaded', (event: Event) => {
 
   /**
    * Manage Custom Events
    */
   customHtmlLoadedEvents(event);
+
 })
 
 /**
  * Manage ALL click events
  * Do not add new elements in this Function, use "customClickEvents" to add new click event matches
  */
-document.addEventListener("click", async event => {
+document.addEventListener("click", async (event: Event) => {
+
+  let elementTarget:Element = event.target as Element;
+  let HyperlinkElement:HTMLHyperlinkElementUtils = elementTarget.closest("A") as HTMLHyperlinkElementUtils;
 
   /**
    * Manage internal Links
    * Link like "/my-link" doesn't reload page, just the body content.
    */
-  if(
-    event.target.closest("A") &&
-    event.target.closest("A").hostname === location.hostname &&
-    !event.target.closest("A").href.includes("#")
+  if( elementTarget.closest("A") &&
+      HyperlinkElement.hostname === location.hostname &&
+      !HyperlinkElement.href.includes("#")
   ) {
     event.preventDefault();
-    document.location.href = event.target.closest("A").pathname.replace("/", "#");
+    document.location.href = HyperlinkElement.pathname.replace("/", "#");
   }
 
   /**
    * Manage Anchors
    * Create link with this attribute : data-anchor="targetId" (replace targetId by the element ID was targeting)
    */
-  if (event.target.matches("[data-anchor]")) {
+  if (elementTarget.matches("[data-anchor]")) {
     event.preventDefault();
     document
-      .getElementById(event.target.closest("[data-anchor]").attributes["data-anchor"].value)
+      .getElementById(elementTarget.closest("[data-anchor]").attributes["data-anchor"].value)
       .scrollIntoView({ behavior: "smooth" });
   }
 
   /**
    * Manage Notifications
    */
-  if( event.target.closest("[data-notification]")){
-    hideNotification(e.target.closest("[data-notification]").attributes["data-notification"].value)
+  if(elementTarget.closest("[data-notification]")){
+    hideNotification(elementTarget.closest("[data-notification]").attributes["data-notification"].value)
   }
 
   /**
    * Manage Forms
    */
-  if (event.target.closest('[type="submit"]')){
+  if (elementTarget.closest('[type="submit"]')){
     event.preventDefault();
-    checkFormRules(event.target.closest('form'));
+    checkFormRules(elementTarget.closest('form'));
   }
 
 
@@ -80,7 +83,7 @@ document.addEventListener("click", async event => {
    * Manage Data-Actions
    * Management of scripts triggered by "data-action" html tags
    */
-  if(event.target.hasAttribute('data-action')){
+  if(elementTarget.hasAttribute('data-action')){
 
    //
 

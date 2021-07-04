@@ -8,13 +8,16 @@
  * @function
  */
 function loadNotifications(){
-    htmlData.querySelectorAll('[data-id]').forEach( element => {
+    htmlData.querySelectorAll('[data-id]').forEach( (element: HTMLElement) => {
         if( element.getAttribute('data-id').endsWith('.notif')){
-            let name = element.getAttribute('data-id').replace('.notif', '');
-            let notification = document.createElement('div');
+
+            let name:string = element.getAttribute('data-id').replace(/.notif/g, '');
+            let notification:HTMLElement = document.createElement('div');
+
             notification.innerHTML = htmlData.querySelector(`[data-id="${name}.notif"]`).innerHTML;
             notification.setAttribute('data-notification', name);
             notification.classList.add('fade-out');
+
             document.body.appendChild(notification);
         }
     })
@@ -29,9 +32,9 @@ function loadNotifications(){
  * @param {boolean} [autoHide] True by default, hide notification after 5 seconds.
  * @example showNotification("Message sent successfully !", "success");
  */
-function showNotification( message = "", type= 'default', title = "default", autoHide = true ){
+function showNotification( message: string = "", type: string= 'default', title: string = "default", autoHide: boolean = true ){
 
-    let dataTitle = '';
+    let dataTitle:string = '';
 
     if(title === 'default'){
         switch (type) {
@@ -52,14 +55,16 @@ function showNotification( message = "", type= 'default', title = "default", aut
         dataTitle = title;
     }
 
-    let notif = document.querySelector(`[data-notification="${type}"]`)
-    notif.querySelector('[data-title]').innerText = dataTitle;
-    notif.querySelector('[data-message]').innerText = message;
-    notif.classList.remove('fade-out');
-    notif.classList.add('fade-in');
+    let notification:HTMLElement | null = document.querySelector(`[data-notification="${type}"]`)
+    if(notification){
+        (<HTMLElement>notification.querySelector('[data-title]')).innerText = dataTitle;
+        (<HTMLElement>notification.querySelector('[data-message]')).innerText = message;
+    }
 
-    if( autoHide ) setTimeout( () => hideNotification(type), 5000 );
+    notification?.classList.remove('fade-out');
+    notification?.classList.add('fade-in');
 
+    if(autoHide) setTimeout( () => hideNotification(type), 5000 );
 }
 
 /**
@@ -68,9 +73,7 @@ function showNotification( message = "", type= 'default', title = "default", aut
  * @param {string} [type] Leave empty (or 'default') for default display or choose between 'info', 'success', 'warning', 'error'.
  * @example hideNotification('success');
  */
-function hideNotification( type = 'default' ){
-
+function hideNotification( type: string = 'default' ){
     document.querySelector(`[data-notification="${type}"]`).classList.remove('fade-in');
     document.querySelector(`[data-notification="${type}"]`).classList.add('fade-out');
-
 }

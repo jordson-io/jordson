@@ -21,28 +21,28 @@ type RoutesList = {
     /**
      * Load Routes List and app.html
      */
-    let collections:string[] = ["pages"];
-    let routesList:RoutesList = {};
-    let promises:unknown[] = [];
+    let collections: string[] = ["pages"];
+    let routesList: RoutesList = {};
+    let promises: unknown[] = [];
 
-    const getHtml:unknown = new Promise<string>( async resolve => {
-        const getHtmlData:unknown = await fetch("assets/app.html");
+    const getHtml: unknown = new Promise<string>( async (resolve: (value: (PromiseLike<string> | string)) => void) => {
+        const getHtmlData: unknown = await fetch("assets/app.html");
         resolve(getHtmlData.text());
     })
 
     for (let i:number = 0; i < collections.length; i++) {
-        promises[i] = new Promise<object>( async resolve => {
-            const fetchRes:unknown = await fetch(`/api?action=get&name=${collections[i]}`);
-            const result:object = fetchRes.json();
+        promises[i] = new Promise<object>( async (resolve: (value: (PromiseLike<object> | object)) => void) => {
+            const fetchRes: unknown = await fetch(`/api?action=get&name=${collections[i]}`);
+            const result: object = fetchRes.json();
             resolve(result);
         })
     }
 
     htmlData.innerHTML = await getHtml;
-    let promiseResult:object[] = await Promise.all(promises);
+    let promiseResult: object[] = await Promise.all(promises);
 
-    for (let i:number = 0; i < promiseResult.length; i++) {
-        for (let y:number = 0; y < promiseResult[i].length; y++){
+    for (let i: number = 0; i < promiseResult.length; i++) {
+        for (let y: number = 0; y < promiseResult[i].length; y++){
             routesList[(i * promiseResult[i].length + y).toString()] = {
                 slug: promiseResult[i][y].slug,
                 fileName: promiseResult[i][y].fileName,

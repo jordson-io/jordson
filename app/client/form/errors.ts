@@ -3,39 +3,43 @@
  * @function
  * @param {object} [form]
  */
-function cleanInputsError(form){
+function cleanInputsError(form: HTMLFormElement){
 
-    form.querySelectorAll('input').forEach( input => {
+    form.querySelectorAll('input').forEach( (input: HTMLInputElement) => {
         if( input.hasAttribute('data-error-class') ){
-            input.getAttribute('data-error-class').split(' ').forEach(errorClass => {
+            input.getAttribute('data-error-class').split(/ /g).forEach((errorClass: string) => {
                 input.classList.remove(errorClass);
             })
         }
-        let errorMsg = document.querySelector(`[data-error-for="${input.id}"]`)
-        if(errorMsg) errorMsg.textContent = '';
+        cleanTextContent(input.id);
     })
 
-    form.querySelectorAll('textarea').forEach( textarea => {
+    form.querySelectorAll('textarea').forEach( (textarea: HTMLTextAreaElement) => {
         if( textarea.hasAttribute('data-error-class') ){
-            textarea.getAttribute('data-error-class').split(' ').forEach(errorClass => {
+            textarea.getAttribute('data-error-class').split(/ /g).forEach((errorClass: string) => {
                 textarea.classList.remove(errorClass);
             })
         }
-        let errorMsg = document.querySelector(`[data-error-for="${textarea.id}"]`)
-        if(errorMsg) errorMsg.textContent = '';
+        cleanTextContent(textarea.id);
     })
+
+    let cleanTextContent = (elementId: string) => {
+        let errorMsg:HTMLElement | null = document.querySelector(`[data-error-for="${elementId}"]`)
+        errorMsg?.textContent = '';
+    }
+
 }
 
 /**
  * Display errors messages
  * @function
- * @param {object} [input]
+ * @param {HTMLInputElement | HTMLTextAreaElement} [input]
  * @param {string} [type]
  * @param {string} [message]
  */
-function callFormError(input, type, message = ''){
-    let errorMessage;
-    let notifMessage;
+function callFormError(input: HTMLInputElement | HTMLTextAreaElement, type: string, message: string = ''){
+    let errorMessage: string | null;
+    let notifMessage: string | null;
 
     switch (type) {
         case 'required':
@@ -52,10 +56,10 @@ function callFormError(input, type, message = ''){
     if(message !== '')
         errorMessage = message
 
-    showNotification(notifMessage, 'error', 'Erreur sur le formulaire');
+    showNotification(notifMessage || '', 'error', 'Erreur sur le formulaire');
 
     if( input.hasAttribute('data-error-class') ){
-        input.getAttribute('data-error-class').split(' ').forEach(errorClass => {
+        input.getAttribute('data-error-class').split(/ /g).forEach((errorClass: string) => {
             input.classList.add(errorClass);
         })
     }
