@@ -139,7 +139,9 @@ hr {
 
 
 #sidebar .sub-menu {
+    display: inline-block;
     padding-left:.5em;
+    padding-bottom: .25em;
 }
 
 #sidebar.collapsed {

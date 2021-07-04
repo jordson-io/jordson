@@ -67,17 +67,20 @@ function buildDoc(data){
         htmlNav.innerHTML += `<a href="#${name}" class="sub-menu">${pageName.charAt(0).toUpperCase() + pageName.slice(1)}</a><br>`
     })
 
+    console.log(data)
+
     /**
      * Creation of sub-menus from sub-folders
      */
     for(const dataKey in data) {
         if(dataKey !== 'mainNavigation') {
-            htmlNav.innerHTML += `<br><div class="menu-title">${dataKey.charAt(0).toUpperCase() + dataKey.slice(1)}</div>`;
+            let chapterName = data[dataKey].chapterName
+            htmlNav.innerHTML += `<br><div class="menu-title">${chapterName.charAt(0).toUpperCase() + chapterName.slice(1)}</div>`;
             htmlData.innerHTML += data[dataKey].docsData;
             data[dataKey].docsName.forEach(name => {
                 let pageName = name.replace(`${dataKey}_`, '');
-                pageName = pageName.replace('-', ' ');
-                htmlNav.innerHTML += `<a href="#${name}" class="sub-menu">${pageName.charAt(0).toUpperCase() + pageName.slice(1)}</a><br>`
+                pageName = pageName.replace(/-/g, ' ');
+                htmlNav.innerHTML += `<span class="sub-menu">• <a href="#${name}">${pageName.charAt(0).toUpperCase() + pageName.slice(1)}</a></span><br>`
             })
         }
     }

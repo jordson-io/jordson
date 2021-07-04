@@ -103,6 +103,7 @@ async function handleRequest(req, res) {
         fs.readdirSync(pathOrigin).sort(collator.compare).forEach( dir => {
             let dirPath = path.join(`doc/${dir}`);
             let dirName = dir.replace(/^([0-9]*\.)/, '')
+            let chapterName = dirName.replace(/-/g, ' ');
 
             if(fs.existsSync(dirPath) && fs.lstatSync(dirPath).isDirectory()){
                 docsName = [];
@@ -119,7 +120,7 @@ async function handleRequest(req, res) {
                             ${marked(fs.readFileSync(dirPath + '/' + file).toString())}</div>`
                     }
                 })
-                data[`${dirName}`] = {chapterName: dirName, docsName: docsName, docsData: docsData };
+                data[`${dirName}`] = {chapterName: chapterName, docsName: docsName, docsData: docsData };
             }
         })
 
