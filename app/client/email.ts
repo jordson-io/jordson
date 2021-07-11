@@ -16,10 +16,12 @@ async function sendEmail( data: object, from: string, to: string, subject: strin
         sendData.replyTo = replyTo || from;
         sendData.subject = subject;
 
+        console.log(sendData);
+
         /**
          * Sending Request
          */
-        let resp: unknown = await fetch('/api?action=sendEmail', {
+        const resp: Response = await fetch('/api?action=sendEmail', {
             method: "POST",
             body: JSON.stringify(sendData)
         });

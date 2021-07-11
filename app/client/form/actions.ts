@@ -5,7 +5,6 @@
  */
 function formActions(form: HTMLFormElement){
     if(form.querySelector('[data-form-action]').getAttribute('data-form-action') === 'sendEmail'){
-        // TODO: Terminer le retour de la requete sendEmail
         actionSendEmail(form)
     }
 }
@@ -66,21 +65,21 @@ async function actionSendEmail(form: HTMLFormElement){
         dataFormSorted.splice(ItemIndex, 1)
     }
 
-    // TODO: Reprendre le refcto à partir d'ici (voir comment est structuré le dataFormSorted et définir le type element
     /**
      * Preparing request data
      */
-    dataFormSorted.forEach(elements => {
+    dataFormSorted.forEach((elements:string[]) => {
         sendData[`${elements[0]}`] = elements[1];
     })
 
 
-    let formId = '0';
-    if(document.querySelectorAll('form').length > 1){
-        let id = -1;
-        document.querySelectorAll('form').forEach(formNode => {
+    let formId:string = '0';
+    const forms:NodeListOf<HTMLElementTagNameMap[string]> = document.querySelectorAll('form');
+    if(forms.length > 1){
+        let id:number = -1;
+        forms.forEach((formNode:HTMLElement) => {
             id++;
-            if( formNode.innerHTML === form.innerHTML){
+            if(formNode.innerHTML === form.innerHTML){
                 formId = id.toString();
             }
         })
@@ -90,21 +89,23 @@ async function actionSendEmail(form: HTMLFormElement){
     /**
      * Sending request
      */
-    let resp = await fetch('/api?action=formProcessing', {
+    const resp:Response = await fetch('/api?action=formProcessing', {
         method: "POST",
         body: JSON.stringify(sendData)
     });
 
-    let response = await resp.text();
-    console.log(response);
+    const response:string = await resp.text();
 
-    // if(await sendEmail(sendData, from, to, subject, replyTo) === 'success'){
-    //     submit.innerHTML = submitValue;
-    //     submit.getAttribute('data-disable-class').split(' ').forEach(disableClass => {
-    //         submit.classList.remove(disableClass);
-    //     })
-    //     showNotification('Message envoyé avec succès !', 'success')
-    // } else {
-    //     showNotification("Erreur lors de l'envoie de votre message !", 'error')
-    // }
+    if(response === "true"){
+        submit?.innerHTML = submitValue;
+        let classes:string | null | undefined = submit?.getAttribute('data-disable-class');
+        if(classes){
+            classes.split(' ').forEach(disableClass => {
+                submit?.classList.remove(disableClass);
+            })
+        }
+        showNotification('Message envoyé avec succès !', 'success')
+    } else {
+        showNotification("Erreur lors de l'envoie de votre message !", 'error')
+    }
 }

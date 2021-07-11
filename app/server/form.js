@@ -1,12 +1,11 @@
 import fs from "fs";
+import Email from "./email.js";
 import logSys from "../core/msgSystem.js";
 
 const structureHTML = fs.readFileSync('public/assets/app.html', 'utf-8');
 
 /**
- * TODO: Vérifier sur toutes les entitées précédement récupérées le type et les rules
  * TODO: Vérifier toutes les vulnérabilités possible sur TOUS les champs
- * TODO: Si tout est OK lancer la fonction relative à l'action du formulaire
  */
 
 /**
@@ -19,71 +18,60 @@ export default class Form {
         this.filename = id.split('|')[0];
         this.formId = Number(id.split('|')[1]);
         let regexPage = new RegExp(`<div data-id="${this.filename}">(.*?)(?=<div data-id)`, 's');
-        let regexForm = new RegExp(`<form(.*?)(</form>)`, 'gs');
         this.structurePage = structureHTML.match(regexPage)[0];
-        this.structureForm = this.structurePage.match(regexForm)[this.formId];
+        this.structureForm = this.structurePage.match(/<form(.*?)(<\/form>)/gs)[this.formId];
     }
 
     check(data){
-
-        let regexInput = new RegExp('<input(.*?)(>)', 'gs');
-        let regexTextarea = new RegExp('<textarea(.*?)(</textarea>)', 'gs');
-        let regexHoneypot = new RegExp('data-hnpt=', 'gs');
-		let regexRemoveInput = new RegExp('data-input-remove', 'gs');
-		let regexInputType = new RegExp('type="(.*?)(")', 'gs');
-		let regexInputId = new RegExp('(id=")(.*?)(?=")');
-		// let removeInputsId = [];
-				
-        this.inputs = this.structureForm.match(regexInput);
-        this.textareas = this.structureForm.match(regexTextarea);
+        this.inputs = this.structureForm.match(/<input(.*?)(>)/gs);
+        this.textareas = this.structureForm.match(/<textarea(.*?)(<\/textarea>)/gs);
         
         for( let inputKey in this.inputs ){
-            if(!this.inputs[inputKey].match(regexHoneypot) && !this.inputs[inputKey].match(regexRemoveInput)){
+            if(!this.inputs[inputKey].match(/data-hnpt=/gs) && !this.inputs[inputKey].match(/data-input-remove/gs)){
 				let input = this.inputs[inputKey];
-				console.log(input);
-				if(input.match(regexInputType)){
-                    let id = input.match(regexInputId)[2];
-                    console.log(id);
-					// this.checkTypeEmail(input, input.match(regexInputType)[0].replace('type="', '').replace('"', ''));
+				let inputType = input.match(/(?<=type=(['"])).*(?=\1)/gs)?.[0];
+				if(inputType){
+                    let id = input.match(/(?<=id=(['"])).*(?=\1)/)[0];
+                    switch (inputType) {
+                        case "email":
+                            if(!this.checkTypeEmail(data[id]))
+                                return false;
+                            break;
+                    }
 				}
             }
         }
 
-		this.inputs = this.inputs.filter( (value, index) => {
-			return removeInputsId.indexOf(index) == -1;
-		});
-
-		//TODO: Vérifier les vulnérabilités
-		//TODO: Vérifier les types (email)
-
-		// this.inputs.forEarch(input => {
-		//   	console.log(input);
-		// 	if(input.match(regexInputType) !== null){
-		// 	    let id = input.match(regexInputId);
-		// 	    console.log(id);
-		// 		// console.log(this.checkTypeEmail(input, input.match(regexInputType)));
-		// 	}
-		// });
-
         this.textareas.forEach(textarea => {
-            console.log(textarea);
+            // console.log(textarea);
         })
 
+        return this.action(this.structureForm.match(/(?<=data-form-action=(['"])).*?(?=\1)/g)[0], data);
     }
 
 	checkTypeEmail(inputData){
-    	const regex = /(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i;
-		if(inputData.match(regex)){
+		if(inputData.match(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i)){
 		    return true;
         }else {
 		    return false;
         }
 	}
 
-    action(type){
+    async action(type, data){
 
-        //
+        switch (type) {
+            case "sendEmail":
+                data.from =  this.structureForm.match(/(?<=data-from=)(['"]).*1/)?.[0];
+                data.to = this.structureForm.match(/(?<=data-to=(['"])).*(?=\1)/)?.[0];
+                data.replyto = this.structureForm.match(/(?<=data-replyto=(['"])).*(?=\1)/)?.[0];
+                data.subject = this.structureForm.match(/(?<=data-subject=(['"])).*(?=\1)/)?.[0];
 
+                const email = new Email();
+                if(await email.send(data) === 'success'){
+                    return true
+                } else {
+                    return false
+                }
+        }
     }
-
 }

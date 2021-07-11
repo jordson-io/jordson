@@ -1,6 +1,7 @@
-const dataLoaded:Event = new CustomEvent("dataLoaded", { bubbles: true });
-const htmlLoaded:Event = new CustomEvent("htmlLoaded", { bubbles: true });
-let htmlData:HTMLElement = document.createElement("html");
+const dataLoaded: Event = new CustomEvent("dataLoaded", {bubbles: true});
+const htmlLoaded: Event = new CustomEvent("htmlLoaded", {bubbles: true});
+let htmlData: HTMLElement = document.createElement("html");
+let pagesRoutes: unknown;
 
 type Route = {
     slug: string;
@@ -25,14 +26,14 @@ type RoutesList = {
     let routesList: RoutesList = {};
     let promises: unknown[] = [];
 
-    const getHtml: unknown = new Promise<string>( async (resolve: (value: (PromiseLike<string> | string)) => void) => {
-        const getHtmlData: unknown = await fetch("assets/app.html");
+    const getHtml: unknown = new Promise<string>(async (resolve: (value: (PromiseLike<string> | string)) => void) => {
+        const getHtmlData: Response = await fetch("assets/app.html");
         resolve(getHtmlData.text());
     })
 
-    for (let i:number = 0; i < collections.length; i++) {
-        promises[i] = new Promise<object>( async (resolve: (value: (PromiseLike<object> | object)) => void) => {
-            const fetchRes: unknown = await fetch(`/api?action=get&name=${collections[i]}`);
+    for (let i: number = 0; i < collections.length; i++) {
+        promises[i] = new Promise<object>(async (resolve: (value: (PromiseLike<object> | object)) => void) => {
+            const fetchRes: Response = await fetch(`/api?action=get&name=${collections[i]}`);
             const result: object = fetchRes.json();
             resolve(result);
         })
@@ -42,7 +43,7 @@ type RoutesList = {
     let promiseResult: object[] = await Promise.all(promises);
 
     for (let i: number = 0; i < promiseResult.length; i++) {
-        for (let y: number = 0; y < promiseResult[i].length; y++){
+        for (let y: number = 0; y < promiseResult[i].length; y++) {
             routesList[(i * promiseResult[i].length + y).toString()] = {
                 slug: promiseResult[i][y].slug,
                 fileName: promiseResult[i][y].fileName,
@@ -51,21 +52,21 @@ type RoutesList = {
         }
     }
 
-    new Router(routesList);
+    pagesRoutes = new Router(routesList);
     document.dispatchEvent(dataLoaded);
 
     /**
      * Manage history and back to prev page
      */
     window.onpopstate = event => {
-        let dataID:string = "";
+        let dataID: string = "";
 
         for (const [key, value] of Object.entries(routesList)) {
-            if(value.slug === document.location.pathname.replace("/", ""))
+            if (value.slug === document.location.pathname.replace("/", ""))
                 dataID = value.fileName;
         }
 
-        if(event.state !== null){
+        if (event.state !== null) {
             document.getElementById("content")!.innerHTML = htmlData.querySelector(`[data-id='${dataID}']`)!.innerHTML;
             setTimeout(() => {
                 window.scrollTo(0, 0);

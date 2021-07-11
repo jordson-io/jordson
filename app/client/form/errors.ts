@@ -23,7 +23,7 @@ function cleanInputsError(form: HTMLFormElement){
         cleanTextContent(textarea.id);
     })
 
-    let cleanTextContent = (elementId: string) => {
+    function cleanTextContent(elementId: string) {
         let errorMsg:HTMLElement | null = document.querySelector(`[data-error-for="${elementId}"]`)
         errorMsg?.textContent = '';
     }

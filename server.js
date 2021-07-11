@@ -74,6 +74,7 @@ async function handleRequest(req, res) {
     } else if (req.param.action === "sendEmail") {
 
       let email = new Email();
+      console.log(JSON.parse(req.body))
       await prepareResponse(res, await email.send(JSON.parse(req.body)));
 
     /**
@@ -83,8 +84,7 @@ async function handleRequest(req, res) {
 
       let formData = JSON.parse(req.body)
       let form = new Form(formData.id);
-      await form.check(formData);
-      // await prepareResponse(res, await form.check(JSON.parse(req.body)))
+      await prepareResponse(res, JSON.stringify(await form.check(formData)))
 
     }
 

@@ -67,7 +67,6 @@ function checkRequired(form:HTMLFormElement): boolean{
 function checkType(form: HTMLFormElement): boolean{
     let status: boolean = true;
 
-    //TODO: Types à vérifier : Password, Tel
     form.querySelectorAll('input').forEach((input: HTMLInputElement) => {
         if(input.type === 'email'){
             input.value = input.value.trim();
