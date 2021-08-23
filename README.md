@@ -1,10 +1,5 @@
 # JORDSON
 
-## Structure du projet
+Jordson is a Javascript Framework for eCommerce Single Page Application.
 
-### APP
-#### Client
-Il s'agit du dossier contenant le Javascript utile pour faire tourner la base de JORDSON.
-Le fichier `_router.js` doit toujours être le permier dans le dossier.
-
-Les variables globales doivent être déclarer au début du fichier `_router.js`
+You can checkout the aegir-unstable branch.
