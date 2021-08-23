@@ -13,13 +13,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
  **/
 
-import fs from "fs";
-
-export const loadConfig = function() {
-
-  const fileName = fs.existsSync('./jordson.local.json') ? './jordson.local.json' : './jordson.json'
-  return JSON.parse(fs.readFileSync(fileName, "utf-8"))
-
-};
-
-export default loadConfig;
+/**
+ * Create TimeCode
+ * @function
+ * @returns {string}
+ */
+export default function dateTime() {
+  let today = new Date();
+  let addZero = (e) => (e >= 10 ? e : `0${e}`);
+  return `${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())} ${addZero(
+    today.getHours()
+  )}:${addZero(today.getMinutes())}:${addZero(today.getSeconds())}`;
+}

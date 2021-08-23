@@ -1,26 +1,27 @@
 #!/usr/bin/env node
 
 /** Copyright © 2021 André LECLERCQ
+ * 
+ * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
+ * (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
+ * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished
+ * to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
+ * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+ * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+ **/
 
- Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
- (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
- publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished
- to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
- BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. **/
-
-import logSys from "../core/msgSystem.js";
-import Terser from "terser";
 import fs from "fs";
 import path from "path";
+import Terser from "terser";
+import logSys from "./msgSystem.js";
 
 const appHTMLPath = path.join("public/assets/app.html");
-const directoryHTMLPath = path.join("components/ressources/html/");
+const directoryHTMLPath = path.join("src/components/");
 const appJSPath = path.join("public/assets/app.js");
 const appTSPath = path.join("public/assets/app-uncompiled.ts");
 const directoryJSPath = path.join("app/client/");
@@ -160,8 +161,8 @@ function compile(arg){
   })
 
   jsData = process.argv.includes('--compress')
-      ? Terser.minify(compileFiles(path.join("components/ressources/js/"))).code
-      : compileFiles(path.join("components/ressources/js/"));
+      ? Terser.minify(compileFiles(path.join("src/js/"))).code
+      : compileFiles(path.join("src/js/"));
 
   fs.appendFile(appTSPath, jsData, 'utf-8', error => {
     if(error){
@@ -190,14 +191,14 @@ if (process.argv.includes("--watch")) {
 
   // TODO: Sortir ce code dans une fonction dédiée au fonts
   logSys("Import FONTS files", "info");
-  fs.readdir("./components/assets/fonts", (error, files) => {
+  fs.readdir("./src/assets/fonts", (error, files) => {
     if (error) {
       logSys(error.message, 'error')
       logSys(error.stack, 'error')
     }
     files.forEach((file) => {
 
-      fs.copyFile(`./components/assets/fonts/${file}`, `./public/assets/fonts/${file}`, (error) => {
+      fs.copyFile(`./src/assets/fonts/${file}`, `./public/assets/fonts/${file}`, (error) => {
         err
             ? (logSys(error.message, 'error'), logSys(error.stack, 'error'))
             : logSys(`${file} was copied into public/assets/fonts`, "info");

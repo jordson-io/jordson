@@ -13,13 +13,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
  **/
 
-import fs from "fs";
+// Find colors in https://en.wikipedia.org/wiki/ANSI_escape_code#Colors
 
-export const loadConfig = function() {
+import dateTime from "./dateTime.js";
 
-  const fileName = fs.existsSync('./jordson.local.json') ? './jordson.local.json' : './jordson.json'
-  return JSON.parse(fs.readFileSync(fileName, "utf-8"))
-
-};
-
-export default loadConfig;
+/**
+ * @function
+ * @param msg {string}
+ * @param type {string}
+ */
+export default function logSys(msg, type = "") {
+  const styles = {
+    "success": "\x1b[32m",
+    "error": "\x1b[31m",
+    "warning": "\x1b[33m",
+    "info": "\x1b[34m",
+    "debug": "\x1b[46;30m",
+    "": "\x1b[0m"
+  }
+  
+  console.log(styles[type], `[${dateTime()}][${type}] ${String(msg)}`, "\x1b[0m");
+}
