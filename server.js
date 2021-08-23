@@ -22,16 +22,12 @@ import fs from "fs";
 import path from "path";
 import logSys from "./app/env/msgSystem.js";
 import loadConfig from "./app/server/loadConfig.mjs";
-import Database from "./app/server/database.js";
-import Email from "./app/server/email.js";
-import Form from "./app/server/form.js";
+import { apiRoutes } from "./app/server/apiRequests.js";
 
 const gConfig = new loadConfig();
-let db = new Database();
 
 const port = gConfig.global.port;
 const mimeTypes = gConfig.mimeTypes;
-const publicCollection = gConfig.db.publicCollections;
 
 async function parseRequest(stream, headers, req) {
 
@@ -77,32 +73,7 @@ async function handleRequest(req, res) {
 
   if (req.url.pathname.startsWith("/api")) {
 
-    /**
-     * Get public collection
-     */
-    if (req.param.action === "get" && publicCollection.some(elt => elt === req.param.name)) {
-
-      await prepareResponse(res, await db.getCollection(req.param.name));
-
-    /**
-     * Send email
-     */
-    } else if (req.param.action === "sendEmail") {
-
-      let email = new Email();
-      console.log(JSON.parse(req.body))
-      await prepareResponse(res, await email.send(JSON.parse(req.body)));
-
-    /**
-     * Form Processing
-     */
-    } else if (req.param.action === "formProcessing") {
-
-      let formData = JSON.parse(req.body)
-      let form = new Form(formData.id);
-      await prepareResponse(res, JSON.stringify(await form.check(formData)))
-
-    }
+    eval(apiRoutes[req.param.action])(req, res);
 
   } else if (path.extname(String(req.url)) === "") {
 

@@ -1,15 +1,15 @@
 {
   "name": "jordson",
   "version": "0.1.0",
-  "description": "Single Page Application with NodeJS server",
+  "description": "Javascript Framework for eCommerce",
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "cwebp": "cp components/assets/images/*.* public/assets/images && find public/assets/images -type f \\( -iname \"*.jpg\" -o -iname \"*.jpeg\" -o -iname \"*.png\" \\) -exec cwebp {} -o {}.webp \\;",
-    "watch": "sass --watch components/ressources/sass:public/assets/ & ./app/dev/bundler.js --watch & tsc --allowJs --out public/assets/app.js public/assets/app-uncompiled.ts",
-    "prod": "./app/dev/bundler.js --compress ; sass components/ressources/sass:public/assets/ --style=compressed",
-    "dev": "./app/dev/bundler.js; sass components/ressources/sass:public/assets/ & tsc --allowJs --out public/assets/app.js public/assets/app-uncompiled.ts",
-    "fonts": "./app/dev/bundler.js --fonts",
+    "cwebp": "cp src/assets/images/*.* public/assets/images && find public/assets/images -type f \\( -iname \"*.jpg\" -o -iname \"*.jpeg\" -o -iname \"*.png\" \\) -exec cwebp {} -o {}.webp \\;",
+    "watch": "sass --watch src/sass:public/assets/ & ./app/env/bundler.js --watch & tsc --allowJs --out public/assets/app.js public/assets/app-uncompiled.ts",
+    "prod": "./app/env/bundler.js --compress ; sass src/sass:public/assets/ --style=compressed",
+    "dev": "./app/env/bundler.js; sass src/sass:public/assets/ & tsc --allowJs --out public/assets/app.js public/assets/app-uncompiled.ts",
+    "fonts": "./app/env/bundler.js --fonts",
     "mexp": "mongoexport --collection=pages --db=jrd --out=components/database/pages.json",
     "start": "node --experimental-modules --trace-warnings ./server.js",
     "doc": "node --experimental-modules --trace-warnings ./doc.js",
@@ -19,11 +19,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AndreLeclercq/jordson.git"
+    "url": "git+https://github.com/jordson-io/jordson.git"
   },
   "author": "Andre LECLERCQ",
-  "license": "CC-BY-NC-SA-4.0",
-  "homepage": "https://github.com/AndreLeclercq/jordson#readme",
+  "license": "MIT",
+  "homepage": "https://github.com/jordson-io/jordson#readme",
   "devDependencies": {
     "argon2": "^0.27.0",
     "assemblyscript": "^0.19.0",
@@ -36,11 +36,15 @@
     "typescript": "^4.3.2"
   },
   "keywords": [
-    "SPA",
-    "nodejs",
-    "javascript"
+    "javascript",
+    "typescript",
+    "framework",
+    "javascript-framework",
+    "ecommerce-framework",
+    "ecommerce",
+    "nodejs"
   ],
   "bugs": {
-    "url": "https://github.com/AndreLeclercq/jordson/issues"
+    "url": "https://github.com/jordson-io/jordson/issues"
   }
 }
