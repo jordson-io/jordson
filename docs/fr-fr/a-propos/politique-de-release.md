@@ -2,7 +2,8 @@
 
 Jordson est en perpetuelle évolution, afin de pouvoir suivre le développement de ces versions ce document vous explique la politique de 
 release.
----
+
+
 ## Les Versions
 
 De manière classique l'utilisation d'un règle numérique existe, par exemple `1.4.21` qui correspond aux versions `majeur.mineur.patch`.
@@ -14,7 +15,8 @@ l'ordre des version nominative la première lettre de ce nom sera classé par or
 | Nom   | Numéro | État     | Date de Release |
 |-------|--------|----------|-----------------|
 | Aegir | v1.x.x | Unstable | prévu pour Janvier 2022 |
----
+
+
 ## États des versions
 
 Les versions majeurs sont accompagnées d'un "état" qui permet de savoir ou en est le développement. Le système est assez classique, 
@@ -36,15 +38,16 @@ de cette version.
 ## Les "Branch" sur le git
 Afin de pouvoir rester à jour sur la version de votre choix, les branches sont nommé par le nom de la version et son état actuel. Par 
 exemple `aegir-unstable` ou `aegir-testing`.
----
+
+
 ## La Documentation
 
 La documentation est toujours à jour sur la version lié au projet. Aussi d'une version majeur à l'autre la documentation 
 pourra être différente. N'hésitez pas à la consulter lors de mise à jour majeur afin de voir et comprendre les modifications apportés au
 projet.
----
+
+
 ## Les contributions
 
 Actuellement le projet n'accèpte aucune contribution de code, cependant les avis et critiques constructives sont toujours appréciés. 
 Vous pouvez également ouvrir des tickets si vous découvrer un bug ou un soucis sur le projet et/ou la documentation.
----

@@ -9,7 +9,7 @@ Système de notification automatisé, utilisez les notifications par défaut de 
  - [Cacher une notification](#cacher-une-notification)
  - [Problèmes & Questions](#problèmes-&-questions)
 
----
+
 ## Localisation des fichiers
 
 Fonctions JS relatives aux notifications :
@@ -22,7 +22,7 @@ Structures HTML des notifications par défaut :
 /components/ressources/html/parts/notifications
 ```
 
----
+
 ## Créer une nouvelle notification
 
 Pour créer une nouvelle notification il vous suffit de créer un nouveau fichier `.html` avec la nomenclature suivante :
@@ -66,7 +66,7 @@ Par exemple dans ce code à la ligne 5 et 6 :
 ```
 Vous pouvez désormais [Afficher votre notification](#afficher-une-notification)
 
----
+
 ## Éditer les notification de bases
 Pour éditer les notifications de bases de Jordson, rendez-vous dans le dossier :
 ```
@@ -140,7 +140,7 @@ vous pourrez afficher votre notification avec la fonction suivante :
 showNotification('Message de la notif', 'download', 'Titre de la notif');
 ```
 
----
+
 
 ## Cacher une notification
 Dans le cas ou vous souhaiteriez cacher une notification il suffit d'utiliser la fonction javascript suivante :
@@ -149,7 +149,7 @@ hideNotification('info');
 ```
 Cette fonction ne dispose que d'un seul paramètre qui est le type de notification à masque.
 
----
+
 
 ## Problèmes & Questions
 Si vous rencontrez un problème ou si vous avez une question sur les notifications vous pouvez le utiliser notre [système de ticket]().

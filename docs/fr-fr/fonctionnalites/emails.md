@@ -1,12 +1,11 @@
 # Gestion d'envoi d'email transactionnel
 Il est possible d'envoyer un email transactionnel depuis un formulaire ou en direct via la fonction `sendEmail()`. Pour bien appréhender 
 l'envoie d'email depuis un formulaire il est indispensable de bien connaitre le fonctionnement de ces derniers, voir la
-[documentation sur les formulaire](/#fonctionnalites_formulaires).
+[documentation sur les formulaire](fr-fr/fonctionnalites/formulaires.md).
 
 Le système d'envoi d'email est géré par le packet npm `nodemailer` [voir la documentation](https://nodemailer.com/about/).
 
----
-## Sommaire
+# Sommaire
 - [Localisation des fichiers](#localisation-des-fichiers)
 - [Configuration SMTP & Adresses email](#configuration-smtp--adresses-email)
 - [Utilisation de la fonction sendEmail](#utilisation-de-la-fonction-sendemail)
@@ -14,7 +13,7 @@ Le système d'envoi d'email est géré par le packet npm `nodemailer` [voir la d
 - [Requête & Réponse du server](#requete-&-reponse-du-server)
 - [Problèmes & Questions](#problèmes-&-questions)
 
----
+
 ## Localisation des fichiers
 
 ### Côté client
@@ -41,7 +40,7 @@ Gestion et reponse de la requête `sendEmail` :
 /app/server/email.js
 ```
 
----
+
 ## Configuration SMTP & Adresses email
 Vous pouvez éditer la configuration email sur le fichier :
 ```
@@ -103,7 +102,6 @@ Il s'agit d'un objet type JSON, la syntax est donc strict et nous souffre aucune
 sans accents, et sans guillemets. 
 - L'adresse email doit impérativement avoir des guillemets et la ligne doit se terminer par une virgule.
 
----
 
 ## Utilisation de la fonction sendEmail
 Côté client vous pouvez appeler directement en javascript la fonction `sendEmail` en passant les arguments requis :
@@ -131,7 +129,6 @@ sendEmail(
 )
 ```
 
----
 
 ## Création d'un formulaire
 
@@ -168,7 +165,6 @@ Votre formulaire doit être composer d'une balise `<form></form>` et contenir un
 Adresses 
 email](#configuration-smtp--adresses-email).
 
----
 
 ## Requête et Réponse du server
 
@@ -180,7 +176,6 @@ raisons de sécurité.
 
 La fonction `sendEmail()` est asynchrone et retourne une chaine de caractères, soit 'success' soit 'rejected'.
 
----
 
 ## Problèmes & Questions
 Si vous rencontrez un problème ou si vous avez une question sur les emails vous pouvez le utiliser notre [système de ticket]().

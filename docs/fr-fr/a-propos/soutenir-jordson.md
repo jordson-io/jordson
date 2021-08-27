@@ -22,5 +22,4 @@ Jordson et que vous aimeriez avoir certaines fonctionnalités complémentaire na
 Tout comme les bugs et erreurs vous pouvez créer un ticket afin de laisser un message à ce sujet.
 
 ## Soutenir financièrement
-Vous utilisez Jordson et vous voulez que le développement continue et s'améliore alors vous pouvez faire un "don" qui permettra de 
-débloquer plus de temps pour travailler sur le projet.
+Ce n'est pour le moment pas possible de réaliser des dons, mais si le projet prend de l'ampleur il est possible que Jordson s'ouvre au "sponsoring".
