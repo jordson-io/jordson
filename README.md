@@ -8,6 +8,44 @@ Jordson is a Javascript Framework for eCommerce Single Page Application.
 ![GitHub](https://img.shields.io/github/license/jordson-io/jordson)
 ![GitHub last commit (branch)](https://img.shields.io/github/last-commit/jordson-io/jordson/aegir-unstable)
 
-- Visit the website : [https://www.jordson.io](jordson.io)
-- Follow the twitter : [https://twitter.com/JORDSONoff](JORDSONoff)
-- Join the Discord : [https://discord.gg/zTucuMucwG](Discord)
+- Visit the website : [jordson.io](https://www.jordson.io)
+- Follow the twitter : [@JORDSONoff](https://twitter.com/JORDSONoff)
+- Join the Discord : [Discord](https://discord.gg/zTucuMucwG)
+
+## Documentation
+
+**The online documentation is not yet available**, you can find all readme files in the `/docs` folder. You can also run the offline version.
+
+### Offline documentation
+
+`npm i docsify-cli -g`
+
+`docsify serve docs`
+
+Follow the link in the console.
+
+## NPM Commands
+
+**# Install requires packages**
+
+`npm install`
+
+**# Start server**
+
+`npm run start`
+
+**# Watch JS and HTML files**
+
+`npm run watch`
+
+**# Compil all sources without compression**
+
+`npm run dev`
+
+**# Compil all sources for production (with compression)**
+
+`npm run prod`
+
+**# Create webp files from images**
+
+`npm run cwebp`
