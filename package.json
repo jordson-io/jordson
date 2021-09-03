@@ -10,12 +10,9 @@
     "prod": "./app/env/bundler.js --compress ; sass src/sass:public/assets/ --style=compressed",
     "dev": "./app/env/bundler.js; sass src/sass:public/assets/ & tsc --allowJs --out public/assets/app.js public/assets/app-uncompiled.ts",
     "fonts": "./app/env/bundler.js --fonts",
-    "mexp": "mongoexport --collection=pages --db=jrd --out=components/database/pages.json",
     "start": "node --experimental-modules --trace-warnings ./server.js",
-    "doc": "node --experimental-modules --trace-warnings ./doc.js",
     "ts": "tsc --allowJs --out public/assets/app.js public/assets/app-uncompiled.ts",
-    "tsProd": "terser --output public/assets/app.js public/assets/app.js",
-    "wasm": "asc public/assets/app.js -b public/assets/app.wasm"
+    "tsProd": "terser --output public/assets/app.js public/assets/app.js"
   },
   "repository": {
     "type": "git",
