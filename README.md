@@ -43,4 +43,4 @@ Jordson is a Javascript Framework for eCommerce Single Page Application.
 
 `docsify serve docs`
 
-Follow the link in the console.
+Use the link in the console.
