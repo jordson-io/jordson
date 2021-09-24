@@ -29,12 +29,10 @@ let watching = false;
 let htmlFiles = [];
 let jsFiles = [];
 
-// TODO: Tester les watch en synchrone
-
 /**
  * Transpilation HTML structures
  * @function
- * @param {string} [pathOrigin] Root folder for HTML files. Default value "components/ressources/html/"
+ * @param {string} [pathOrigin] Root folder for HTML files. Default value "src/components/"
  * @param data
  */
 function compileFiles(pathOrigin, data = '') {
@@ -90,7 +88,7 @@ function watchFiles(eventType, filename){
       let newFileData;
       let regex;
 
-      if(path.extname(filename) === '.js' || path.extname(filename) === '.js'){
+      if(path.extname(filename) === '.js' || path.extname(filename) === '.ts'){
         appPath = appTSPath;
         files = jsFiles;
       }
@@ -144,7 +142,7 @@ function watchFiles(eventType, filename){
 function compile(arg){
 
   logSys(`-------------------------------------------`, 'success');
-  logSys(`---------- START COMPILE (${arg}) ----------`, 'success');
+  logSys(`---------- START BUILD (${arg}) ----------`, 'success');
   logSys(`-------------------------------------------`, 'success');
   console.log();
   logSys(`---------- START ${arg} JS FILES -----------`, 'success');
