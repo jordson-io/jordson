@@ -6,7 +6,10 @@
     "port": 4003
   },
   "db": {
-    "dbName": "jrd",
+    "uri": "couchbase://127.0.0.1",
+    "bucket": "jordson",
+    "username": "jordson",
+    "password": "jordson",
     "publicCollections": ["pages"]
   },
   "mail": {

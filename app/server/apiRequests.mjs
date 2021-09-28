@@ -17,15 +17,17 @@ import Form from "./form.js";
 import Email from "./email.js";
 import Database from "./database.js";
 import loadConfig from "./loadConfig.mjs";
+import logSys from "../env/msgSystem.js";
 
 export const apiRoutes = {
-    "get": "(await import('./app/server/apiRequests')).get",
-    "sendEmail": "(await import('./app/server/apiRequests')).sendEmail",
-    "formProcessing": "(await import('./app/server/apiRequests')).formProcessing"
+    "get": "./app/server/apiRequests.mjs",
+    "sendEmail": "(await import('./app/server/apiRequests.mjs')).sendEmail",
+    "formProcessing": "(await import('./app/server/apiRequests.mjs')).formProcessing"
 }
 
 const db = new Database();
 const gConfig = new loadConfig();
+
 
 /**
  * Get public collection
@@ -33,10 +35,10 @@ const gConfig = new loadConfig();
  * @param {*} req 
  * @param {*} res 
  */
-async function get(req, res){
+export async function get(req) {
 
     if(gConfig.db.publicCollections.some(elt => elt === req.param.name))
-    await prepareResponse(res, await db.getCollection(req.param.name));
+        return await db.getCollection(req.param.name)
 
 }
 
@@ -46,12 +48,11 @@ async function get(req, res){
  * @param {*} req 
  * @param {*} res 
  */
-async function sendEmail(req, res){
+export async function sendEmail(req, res) {
 
     let email = new Email();
     console.log(JSON.parse(req.body))
-    await prepareResponse(res, await email.send(JSON.parse(req.body)));
-
+    return await email.send(JSON.parse(req.body))
 }
 
 /**
@@ -60,10 +61,10 @@ async function sendEmail(req, res){
  * @param {*} req 
  * @param {*} res 
  */
-async function formProcessing(req, res){
+export async function formProcessing(req, res) {
 
     let formData = JSON.parse(req.body)
     let form = new Form(formData.id);
-    await prepareResponse(res, JSON.stringify(await form.check(formData)));
+    return JSON.stringify(await form.check(formData))
 
 }

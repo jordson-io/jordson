@@ -1,16 +1,16 @@
 {
   "name": "jordson",
   "version": "0.1.0",
+  "type": "module",
   "description": "Javascript Framework for eCommerce",
   "main": "server.js",
-  "type": "module",
   "scripts": {
     "cwebp": "cp src/assets/images/*.* public/assets/images && find public/assets/images -type f \\( -iname \"*.jpg\" -o -iname \"*.jpeg\" -o -iname \"*.png\" \\) -exec cwebp {} -o {}.webp \\;",
     "watch": "sass --watch src/sass:public/assets/ & ./app/env/bundler.js --watch & tsc --allowJs --out public/assets/app.js public/assets/app-uncompiled.ts",
     "prod": "./app/env/bundler.js --compress ; sass src/sass:public/assets/ --style=compressed",
     "dev": "./app/env/bundler.js; sass src/sass:public/assets/ & tsc --allowJs --out public/assets/app.js public/assets/app-uncompiled.ts",
     "fonts": "./app/env/bundler.js --fonts",
-    "start": "node --experimental-modules --trace-warnings ./server.js",
+    "start": "node --experimental-modules --trace-warnings ./server.mjs",
     "ts": "tsc --allowJs --out public/assets/app.js public/assets/app-uncompiled.ts",
     "tsProd": "terser --output public/assets/app.js public/assets/app.js"
   },
@@ -23,6 +23,7 @@
   "homepage": "https://github.com/jordson-io/jordson#readme",
   "devDependencies": {
     "argon2": "^0.27.0",
+    "couchbase": "^3.2.2",
     "nodemailer": "^6.4.11",
     "sass": "^1.26.11",
     "terser": "^4.8.0",
