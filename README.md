@@ -20,9 +20,10 @@ Jordson is a Javascript Framework for eCommerce Single Page Application.
 ## Prerequisites
 
 - Javascript <small>(latest version)</small>
-- NodeJS <small>(v15.10.0)</small>
-- CouchDB <small>(v3.1.1)</small>
-- Cup of Coffee **~D)** 
+- NodeJS <small>(v16.10.0)</small>
+- CouchBase <small>(v7.0)</small>
+- Libwebp <small>(v1.2.1)</small>
+- Cup of Coffee <small>**~D)**</small> 
 
 ## NPM Commands
 
