@@ -21,7 +21,7 @@ import Terser from "terser";
 import logSys from "./msgSystem.js";
 
 const appHTMLPath = path.join("public/assets/app.html");
-const directoryHTMLPath = path.join("src/components/");
+const directoryHTMLPath = path.join("src/");
 const appJSPath = path.join("public/assets/app.js");
 const appTSPath = path.join("public/assets/app-uncompiled.ts");
 const directoryJSPath = path.join("app/client/");
@@ -29,10 +29,12 @@ let watching = false;
 let htmlFiles = [];
 let jsFiles = [];
 
+// FIXME: Fixer le changement de la const directoryHTMLPath
+
 /**
  * Transpilation HTML structures
  * @function
- * @param {string} [pathOrigin] Root folder for HTML files. Default value "src/components/"
+ * @param {string} [pathOrigin] Root folder for HTML files. Default value "src/"
  * @param data
  */
 function compileFiles(pathOrigin, data = '') {
