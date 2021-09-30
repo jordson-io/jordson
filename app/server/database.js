@@ -13,25 +13,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
  **/
 
-import mongodb from "mongodb";
+import crypto from "crypto";
+import couchbase from "couchbase";
 import logSys from "../env/msgSystem.js";
 import loadConfig from "./loadConfig.mjs";
 
 let gConfig = new loadConfig();
 
 /**
- * Manage mongoDB database
+ * Manage Couchbase database
  * @class
  */
 export default class Database {
   /**
-   * Prepare mongoDB instance
+   * Prepare Couchbase instance
    * @constructor
    */
   constructor() {
     try {
-      this.uri = `mongodb://127.0.0.1:27017/?authSource=${gConfig.db.dbName}&readPreference=primary&ssl=false`;
-      this.name = gConfig.db.dbName;
+      this.dbUri = gConfig.db.uri;
+      this.dbBucket = gConfig.db.bucket;
+      this.dbUsername = gConfig.db.username;
+      this.dbPassword = gConfig.db.password;
       this.connection().then();
     } catch (error) {
       logSys(error, "error");
@@ -40,19 +43,25 @@ export default class Database {
   }
 
   /**
-   * Connection to mongoDB
+   * Connection to Couchbase
    * @method
-   * @returns {Promise<void>} a MongoClient instance
+   * @returns {Promise<void>} a Couchbase instance
    */
   async connection() {
     try {
-      let MongoClient = mongodb.MongoClient;
-      this.client = new MongoClient(this.uri, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-      });
-      await this.client.connect();
-      this.db = this.client.db(this.name);
+      couchbase.connect(
+        this.dbUri,
+        {
+          username: this.dbUsername,
+          password: this.dbPassword,
+        },
+        async (err, cluster) => {
+
+          if(err) logSys(err, "error")
+          this.db = cluster.bucket(this.dbBucket).scope('_default')
+      
+        }
+      )
     } catch (error) {
       logSys(error, "error");
       return error;
@@ -60,14 +69,18 @@ export default class Database {
   }
 
   /**
-   * Get all documents in targeted collection into Array [MongoDB]
+   * Get all documents in targeted collection into Array [Couchbase]
    * @method
    * @param {string} [collection] targeted
    * @returns {Promise<Array>} Get all documents in collection
    */
   async getCollection(collection) {
+
     try {
-      return await this.db.collection(collection).find().toArray();
+      const coll = await this.db.query(`select * from ${collection}`);
+      let datas = []
+      coll.rows.map((row) => datas.push(row[collection]))
+      return datas
     } catch (error) {
       logSys(error, "error");
       return error;
@@ -75,25 +88,27 @@ export default class Database {
   }
 
   /**
-   * Add new document in specific collection [MongoDB]
+   * Add new document in specific collection [Couchbase]
    * @method
    * @param {string} [collection] targeted
-   * @param {object} [primaryKey] ex: {key: value} to check if document already exist
+   * @param {object} [primaryKeyValue] ex: {key: value} to check if document already exist
    * @param {object} [fields] to create new document
    * @returns {Promise<string>} message for error or success
    */
-  async createDocument(collection, primaryKey, fields) {
+  async createDocument(collection, primaryKeyValue, fields = null) {
     try {
-      this.document = await this.db.collection(collection).find(primaryKey);
-      if (this.document.length !== undefined) {
+      const document = await this.getDocument(collection, primaryKeyValue)
+     
+      if (document) {
         return "already existing document";
       } else {
-        await this.db.collection(collection).insertOne(fields, (error) => {
-          if (error) logSys(error, "error");
+        const result = await this.db.collection(collection).upsert( crypto.randomUUID(), fields );
+        if(result){
           logSys(`Document ADD with success in ${collection}`, "success");
-        });
-        return "create document";
+          return "create document"
+        }
       }
+
     } catch (error) {
       logSys(error, "error");
       return error;
@@ -108,28 +123,41 @@ export default class Database {
    * @param {object} [fields] to edit document
    * @returns {Promise<string>} message for error or success
    */
-  async editDocument(collection, primaryKey, fields) {
+  async editDocument(collection, primaryKeyValue, fields) {
     try {
-      console.log(fields);
-      await this.db.collection(collection).updateOne(primaryKey, { $set: JSON.parse(fields) });
-      await logSys(`Document EDIT with success in ${collection}`, "success");
-      return "edited document";
+      const document = await this.getDocument(collection, primaryKeyValue);
+      if(document){
+        const result = await this.db.collection(collection).upsert( document.id, fields );
+        if(result){
+          logSys(`Document EDIT with success in ${collection}`, "success");
+          return "edited document"
+        }
+      }
     } catch (error) {
       logSys(error, "error");
     }
   }
 
   /**
-   * Get document on specific collection [MongoDB]
+   * Get document on specific collection [Couchbase]
    * @method
    * @param {string} [collection] targeted
-   * @param {object} [primaryKey] ex: {key: value} to find document
+   * @param {object} [primaryKeyValue] ex: {key: value} to find document
    * @returns {Promise<string|*>}
    */
-  async getDocument(collection, primaryKey) {
+  async getDocument(collection, primaryKeyValue) {
     try {
-      this.document = await this.db.collection(collection).find(primaryKey).toArray();
-      return this.document[0] === undefined ? "document not found" : this.document[0];
+      let primKey, primValue
+      for (const key in primaryKeyValue) {
+        if (Object.hasOwnProperty.call(primaryKeyValue, key)) {
+          primValue = primaryKeyValue[key];
+          primKey = key;
+        }
+      }
+
+      this.document = await this.db.query(`SELECT META().id, * FROM ${collection} WHERE ${primKey} = "${primValue}"`);
+      return this.document.meta.metrics.resultCount === 0 ? null : this.document.rows[0];
+
     } catch (error) {
       logSys(error, "error");
     }

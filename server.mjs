@@ -22,7 +22,10 @@ import fs from "fs";
 import path from "path";
 import logSys from "./app/env/msgSystem.js";
 import loadConfig from "./app/server/loadConfig.mjs";
-import { apiRoutes } from "./app/server/apiRequests.js";
+import { apiRoutes } from "./app/server/apiRequests.mjs";
+
+import { Blob } from "buffer";
+
 
 const gConfig = new loadConfig();
 
@@ -73,8 +76,12 @@ async function handleRequest(req, res) {
 
   if (req.url.pathname.startsWith("/api")) {
 
-    eval(apiRoutes[req.param.action])(req, res);
-
+    for (const key in apiRoutes) {
+      if (Object.hasOwnProperty.call(apiRoutes, key) && key === req.param.action) {
+        await prepareResponse(res, await (await import(apiRoutes[key]))[key](req))
+      }
+    }
+    
   } else if (path.extname(String(req.url)) === "") {
 
     let params = "";

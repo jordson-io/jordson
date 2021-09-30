@@ -3,10 +3,13 @@
     "siteName": "JORDSON",
     "domain": "jordson.fr",
     "email_admin": "andreleclercqpro@gmail.com",
-    "port": 4003
+    "port": 4004
   },
   "db": {
-    "dbName": "jrd",
+    "uri": "couchbase://127.0.0.1",
+    "bucket": "jordson",
+    "username": "jordson",
+    "password": "jordson",
     "publicCollections": ["pages"]
   },
   "mail": {
@@ -15,10 +18,9 @@
     "user": "",
     "pass": "",
     "address" : {
-      "noreply": "ne-pas-repondre@jordson.fr",
-      "site": "site@jordson.fr",
-      "contact": "contact@jordson.fr",
-      "support": "support@jordson.fr"
+      "noreply": "ne-pas-repondre@jordson.io",
+      "contact": "contact@jordson.io",
+      "support": "support@jordson.io"
     }
   },
   "mimeTypes": {

@@ -2,7 +2,6 @@
 * **Bien Commencer**
     * [Pré Requis](fr-fr/bien-commencer/prerequis.md)
     * [Installation](fr-fr/bien-commencer/installation.md)
-    * [Base de données](fr-fr/bien-commencer/base-de-donnees.md)
     * [Configuration](fr-fr/bien-commencer/configuration.md)
     * [Premier Pas](fr-fr/bien-commencer/premiers-pas.md)
 * **Fonctionnalités**

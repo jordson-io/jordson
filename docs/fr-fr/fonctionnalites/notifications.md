@@ -1,25 +1,17 @@
 # Notifications
-Système de notification automatisé, utilisez les notifications par défaut de Jordson ou créez vos propres notifs.
 
-## Sommaire
- - [Localisation des fichiers](#localisation-des-fichiers)
- - [Créer une nouvelle notification](#créer-une-nouvelle-notification)
- - [Éditer les notification de bases](#éditer-les-notification-de-bases)
- - [Afficher une notification](#afficher-une-notification)
- - [Cacher une notification](#cacher-une-notification)
- - [Problèmes & Questions](#problèmes-&-questions)
-
+> Système de notification automatisé, utilisez les notifications par défaut de Jordson ou créez vos propres notifs.
 
 ## Localisation des fichiers
 
 Fonctions JS relatives aux notifications :
 ```
-/app/client/notification.js
+app/client/notification.ts
 ```
 
 Structures HTML des notifications par défaut : 
 ```
-/components/ressources/html/parts/notifications
+src/components/notifications
 ```
 
 
@@ -39,18 +31,18 @@ Le nom du fichier à une importance capitale, décomposons l'exemple ci-dessus :
 
 Les notifications par défaut de Jordson sont placées dans le dossier :
 ```
-/components/ressources/html/parts/notifications
+src/components/notifications
 ```
 
 Néanmoins vous pouvez placer vos nouvelles notifications n'importe ou dans le dossier :
 ```
-/components/ressources/html
+src/components
 ```
 (y compris dans des sous dossiers de celui-ci)
 
-La structure du fichier HTML importe peu, néanmoins il doit contenir deux attribues indispensable : 
-- `data-title` : Pour afficher le titre de la notification.
-- `data-message` : Pour afficher le message de la notification.
+> La structure du fichier HTML importe peu, néanmoins il doit contenir deux attribues indispensable : 
+> - `data-title` : Pour afficher le titre de la notification.
+> - `data-message` : Pour afficher le message de la notification.
 
 Par exemple dans ce code à la ligne 5 et 6 :
 ```html
@@ -68,9 +60,10 @@ Vous pouvez désormais [Afficher votre notification](#afficher-une-notification)
 
 
 ## Éditer les notification de bases
+
 Pour éditer les notifications de bases de Jordson, rendez-vous dans le dossier :
 ```
-/components/ressources/html/parts/notifications
+src/components/notifications
 ```
 
 >*Il est fortement déconseillé de modifier le nom de ces fichiers, sans quoi les notifications par défaut ne serai plus accessible pour 
@@ -94,12 +87,14 @@ Par exemple dans ce code à la ligne 5 et 6 :
 ```
 
 ## Afficher une notification
+
 Pour afficher une notification il suffit d'utiliser la fonction Javascript suivante :
 ```javascript
 showNotification('Message envoyé avec succès', 'succes');
 ```
 
 ### Structure de l'appel de notification
+
 `showNotification()` est composé de 4 paramètres maximum, définit dans l'ordre suivant :
 - Message à afficher dans la notification *(chaine de caractères)*.
 - Type de notification, définit par le nom du fichier `.notif.html` correspondant *(chaine de caractères)*.
@@ -109,6 +104,7 @@ showNotification('Message envoyé avec succès', 'succes');
 Si vous ne précisez que le paramètre message, dans ce cas Jordson prendra le type de notification par défaut. Qui est le type `default`.
 
 ### Les notifications de bases de Jordson
+
 Jordson gère automatiquement 5 types de notifications :
  - Default
  - Success
@@ -128,7 +124,8 @@ showNotification('Message informatif', 'info', 'Titre Informatif');
 ```
 
 ### Les notifications personalisées
-Si vous avez créé un nouveau type de notification (voir [Créer une nouvelle notification](#crer-une-nouvelle-notification)) dans ce cas vous pouvez l'afficher en 
+
+Si vous avez créé un nouveau type de notification (voir [Créer une nouvelle notification](#créer-une-nouvelle-notification)) dans ce cas vous pouvez l'afficher en 
 précisant le type qui correspond au nom de votre fichier `.notif.html`.
 
 Par exemple, si votre nouvelle notification est enregistré sous le nom :
@@ -140,16 +137,14 @@ vous pourrez afficher votre notification avec la fonction suivante :
 showNotification('Message de la notif', 'download', 'Titre de la notif');
 ```
 
-
-
 ## Cacher une notification
+
 Dans le cas ou vous souhaiteriez cacher une notification il suffit d'utiliser la fonction javascript suivante :
 ```javascript
 hideNotification('info');
 ```
 Cette fonction ne dispose que d'un seul paramètre qui est le type de notification à masque.
 
-
-
 ## Problèmes & Questions
-Si vous rencontrez un problème ou si vous avez une question sur les notifications vous pouvez le utiliser notre [système de ticket]().
+
+> Si vous rencontrez un problème ou si vous avez une question vous pouvez utiliser notre [système de ticket](https://github.com/jordson-io/jordson/issues).
