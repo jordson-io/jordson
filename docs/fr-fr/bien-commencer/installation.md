@@ -16,6 +16,9 @@ npm install
 
 ## Base de données
 
+- Télécharger Couchbase Server Community Edition : [https://www.couchbase.com/downloads](https://www.couchbase.com/downloads)
+- Documentation : [https://docs.couchbase.com/home/server.html](https://docs.couchbase.com/home/server.html)
+
 > Connectez vous à l'administration et créez un nouveau bucket ainsi qu'un nouvel utilisateur rattaché à ce bucket et conservez les de côté pour la configuration. Laissez le scope par défaut.
 
 > Importer les documents dans les collections correspondantes situés dans `src/data`, par exemple `pages.json` dans la collection `pages`.

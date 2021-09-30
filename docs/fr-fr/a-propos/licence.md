@@ -1,6 +1,6 @@
 # Licence
 
-Le projet Jordson complet est sous licence MIT, hors mis les assets graphiques et noms de marques spécifiquement définit.
+> Le projet Jordson complet est sous licence MIT, hors mis les assets graphiques et noms de marques spécifiquement définit.
 
 ## Résumé de la licence
 

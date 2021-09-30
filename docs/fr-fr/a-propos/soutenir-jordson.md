@@ -1,8 +1,6 @@
 # Soutenir Jordson
 
-Vous souhaiter aider le projet Jordson ? Différents moyens s'offrent à vous.
-Avant toute chose le projet ne prend aucune contribution de code.
-Voici quelques possibilités pour apporter votre soutient :
+> Vous souhaiter aider le projet Jordson ? Différents moyens s'offrent à vous. Avant toute chose le projet ne prend aucune contribution de code. Voici quelques possibilités pour apporter votre soutient.
 
 ## Tester les version majeurs
 Lorsqu'une version majeur par en état de `testing` vous pouvez la récupérer et la tester afin de voir si les modifications apportés sont 

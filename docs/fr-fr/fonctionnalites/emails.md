@@ -67,13 +67,11 @@ Tous les champs sont obligatoires, ils sont utiles pour le packet npm `nodemaile
 
 La seconde partie est dédiée aux adresses email utilisées par la methode `sendEmail` :
 ```json
-"mail": {
-    "address" : {
-      "noreply": "ne-pas-repondre@domaine.fr",    // Adresse pour indiquer qu'il n'y a pas de réponse possible à l'email
-      "contact": "contact@domaine.fr",            // Adresse de contact général du site pour l'entreprise
-      "support": "support@domaine.fr",            // Adresse de support technique
-    }
-  },
+"address" : {
+  "noreply": "ne-pas-repondre@domaine.fr",    // Adresse pour indiquer qu'il n'y a pas de réponse possible à l'email
+  "contact": "contact@domaine.fr",            // Adresse de contact général du site pour l'entreprise
+  "support": "support@domaine.fr",            // Adresse de support technique
+}
 ```
 > Ces adresses sont liés à des clés qui seront utilisés par la fonction `sendEmail` côté client. Cela à pour but de maitriser les email utilisés.
 > Il est fortement déconseillé de modifier ou supprimer les clés par défaut, à savoir `noreply`, `contact`, `support`. Vous pouvez néanmoins modifier les adresses liés à ces clés et/ou en créer de nouvelles.
