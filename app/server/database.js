@@ -13,6 +13,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
  **/
 
+import crypto from "crypto";
 import couchbase from "couchbase";
 import logSys from "../env/msgSystem.js";
 import loadConfig from "./loadConfig.mjs";
@@ -57,9 +58,8 @@ export default class Database {
         async (err, cluster) => {
 
           if(err) logSys(err, "error")
-
           this.db = cluster.bucket(this.dbBucket).scope('_default')
-          
+      
         }
       )
     } catch (error) {
@@ -77,7 +77,7 @@ export default class Database {
   async getCollection(collection) {
 
     try {
-      let coll = await this.db.query(`select * from ${collection}`);
+      const coll = await this.db.query(`select * from ${collection}`);
       let datas = []
       coll.rows.map((row) => datas.push(row[collection]))
       return datas
@@ -91,22 +91,24 @@ export default class Database {
    * Add new document in specific collection [Couchbase]
    * @method
    * @param {string} [collection] targeted
-   * @param {object} [primaryKey] ex: {key: value} to check if document already exist
+   * @param {object} [primaryKeyValue] ex: {key: value} to check if document already exist
    * @param {object} [fields] to create new document
    * @returns {Promise<string>} message for error or success
    */
-  async createDocument(collection, primaryKey, fields) {
+  async createDocument(collection, primaryKeyValue, fields = null) {
     try {
-      this.document = await this.db.collection(collection).find(primaryKey);
-      if (this.document.length !== undefined) {
+      const document = await this.getDocument(collection, primaryKeyValue)
+     
+      if (document) {
         return "already existing document";
       } else {
-        await this.db.collection(collection).insertOne(fields, (error) => {
-          if (error) logSys(error, "error");
+        const result = await this.db.collection(collection).upsert( crypto.randomUUID(), fields );
+        if(result){
           logSys(`Document ADD with success in ${collection}`, "success");
-        });
-        return "create document";
+          return "create document"
+        }
       }
+
     } catch (error) {
       logSys(error, "error");
       return error;
@@ -121,28 +123,41 @@ export default class Database {
    * @param {object} [fields] to edit document
    * @returns {Promise<string>} message for error or success
    */
-  async editDocument(collection, primaryKey, fields) {
+  async editDocument(collection, primaryKeyValue, fields) {
     try {
-      console.log(fields);
-      await this.db.collection(collection).updateOne(primaryKey, { $set: JSON.parse(fields) });
-      await logSys(`Document EDIT with success in ${collection}`, "success");
-      return "edited document";
+      const document = await this.getDocument(collection, primaryKeyValue);
+      if(document){
+        const result = await this.db.collection(collection).upsert( document.id, fields );
+        if(result){
+          logSys(`Document EDIT with success in ${collection}`, "success");
+          return "edited document"
+        }
+      }
     } catch (error) {
       logSys(error, "error");
     }
   }
 
   /**
-   * Get document on specific collection [MongoDB]
+   * Get document on specific collection [Couchbase]
    * @method
    * @param {string} [collection] targeted
-   * @param {object} [primaryKey] ex: {key: value} to find document
+   * @param {object} [primaryKeyValue] ex: {key: value} to find document
    * @returns {Promise<string|*>}
    */
-  async getDocument(collection, primaryKey) {
+  async getDocument(collection, primaryKeyValue) {
     try {
-      this.document = await this.db.collection(collection).find(primaryKey).toArray();
-      return this.document[0] === undefined ? "document not found" : this.document[0];
+      let primKey, primValue
+      for (const key in primaryKeyValue) {
+        if (Object.hasOwnProperty.call(primaryKeyValue, key)) {
+          primValue = primaryKeyValue[key];
+          primKey = key;
+        }
+      }
+
+      this.document = await this.db.query(`SELECT META().id, * FROM ${collection} WHERE ${primKey} = "${primValue}"`);
+      return this.document.meta.metrics.resultCount === 0 ? null : this.document.rows[0];
+
     } catch (error) {
       logSys(error, "error");
     }
