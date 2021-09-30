@@ -2,7 +2,7 @@
 
 > Vous pouvez configurer votre projet Jordson via le fichier de variables d'environnement, si vous êtes sur votre environnement de developpement vous devez éditer le fichier `jordson.local.json`. Si vous êtes en production il vous suffit de supprimer le fichier `jordson.local.json` pour que le fichier `jordson.json` soit utilisé.
 
-## Global (Général)
+## Général
 
 ```json
 "global": {
@@ -18,7 +18,7 @@
 - `email_admin` - Email de l'administrateur pour les messages techniques
 - `port` - Le port utilisé par le serveur NodeJS
 
-## DB (Base de données)
+## Base de données
 
 ```json
 "db": {
@@ -36,7 +36,7 @@
 - `password` - Mot de passe de l'utilisateur couchbase.
 - `publicCollections` - La liste des collections qui sont autorisées à être récupérées par le client.
 
-## Mail (SMTP & Adresses par défaut)
+## SMTP & Adresses
 
 ```json
 "mail": {
@@ -86,3 +86,7 @@
   }
 ```
 - `mimeTypes` - Liste des extensions autorisées par le serveur, [plus d'infos sur les mimeTypes](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types).
+
+## Problèmes & Questions
+
+> Si vous rencontrez un problème ou si vous avez une question vous pouvez utiliser notre [système de ticket](https://github.com/jordson-io/jordson/issues).

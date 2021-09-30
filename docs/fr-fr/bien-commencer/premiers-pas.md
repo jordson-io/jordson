@@ -32,3 +32,7 @@ Rendez-vous sur votre dashboard Couchbase et dans la collection `pages` ajouté 
 ```
 
 **3. Accéder à la nouvelle page :** Relancez `npm run watch` ou `npm run dev` avant d'accéder à votre nouvelle page : [https://localhost:4004/livraison](https://localhost:4004/livraison)
+
+## Problèmes & Questions
+
+> Si vous rencontrez un problème ou si vous avez une question vous pouvez utiliser notre [système de ticket](https://github.com/jordson-io/jordson/issues).

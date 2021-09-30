@@ -2,6 +2,8 @@
 
 Jordson is a Javascript Framework for eCommerce Single Page Application.
 
+>  **Current Version : Aegir-Unstable**
+
 ![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/jordson-io/jordson)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/jordson-io/jordson)
 ![GitHub issues](https://img.shields.io/github/issues-raw/jordson-io/jordson)
@@ -36,7 +38,7 @@ Jordson is a Javascript Framework for eCommerce Single Page Application.
 
 ## Documentation
 
-**The online documentation is not yet available**, you can find all readme files in the `/docs` folder. You can also run the offline version with [Docsify](https://docsify.js.org/#/).
+> **The online documentation is not yet available**, you can find all readme files in the `/docs` folder. You can also run the offline version with [Docsify](https://docsify.js.org/#/).
 
 ### Offline documentation
 

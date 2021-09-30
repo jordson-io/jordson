@@ -1,6 +1,6 @@
 # Prérequis
 
-Il est important de vérifier que vous disposez de tous les pré-requis indispensables au bon fonctionnement de Jordson.
+> Il est important de vérifier que vous disposez de tous les pré-requis indispensables au bon fonctionnement de Jordson.
 
 ## NodeJS
 
@@ -35,3 +35,7 @@ La version vérifié et conseillé est **libwebp v1.2.1**
 - [Site Webp](https://developers.google.com/speed/webp)
 - [Télécharger](https://storage.googleapis.com/downloads.webmproject.org/releases/webp/index.html)
 - [Documentation](https://storage.googleapis.com/downloads.webmproject.org/releases/webp/index.html)
+
+## Problèmes & Questions
+
+> Si vous rencontrez un problème ou si vous avez une question vous pouvez utiliser notre [système de ticket](https://github.com/jordson-io/jordson/issues).
