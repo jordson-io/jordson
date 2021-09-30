@@ -20,29 +20,29 @@ import path from "path";
 import Terser from "terser";
 import logSys from "./msgSystem.js";
 
-const appHTMLPath = path.join("public/assets/app.html");
-const directoryHTMLPath = path.join("src/");
-const appJSPath = path.join("public/assets/app.js");
-const appTSPath = path.join("public/assets/app-uncompiled.ts");
-const directoryJSPath = path.join("app/client/");
+const sourceDirectoryPath = path.join("src/");
+const publicAppHTMLPath = path.join("public/assets/app.html");
+const publicAppJSPath = path.join("public/assets/app.js");
+const publicAppTSPath = path.join("public/assets/app-uncompiled.ts");
+const appClientJSPath = path.join("app/client/");
 let watching = false;
 let htmlFiles = [];
 let jsFiles = [];
 
-// FIXME: Fixer le changement de la const directoryHTMLPath
 
 /**
  * Transpilation HTML structures
  * @function
- * @param {string} [pathOrigin] Root folder for HTML files. Default value "src/"
+ * @param {string} [pathOrigin] 
+ * @param {string} [type] HTML or JS
  * @param data
  */
-function compileFiles(pathOrigin, data = '') {
+function compileFiles(pathOrigin, type, data = '') {
 
   let files = fs.readdirSync(pathOrigin)
 
   files.forEach(file => {
-    if (path.extname(file) === ".html") {
+    if (type === 'HTML' && path.extname(file) === ".html") {
 
       data += `<div data-id="${file.replace(path.extname(file), "")}">
         ${fs.readFileSync(pathOrigin + file).toString()}</div>`;
@@ -54,7 +54,7 @@ function compileFiles(pathOrigin, data = '') {
         htmlFiles[file] = `${pathOrigin}${file}`;
 
       }
-    } else if (path.extname(file) === '.js' || path.extname(file) === '.ts'){
+    } else if (type === 'JS' && (path.extname(file) === '.js' || path.extname(file) === '.ts')){
 
       data += `//${pathOrigin}${file.replace(path.extname(file), "")}\n
       ${fs.readFileSync(pathOrigin + file).toString()}\n
@@ -68,7 +68,7 @@ function compileFiles(pathOrigin, data = '') {
 
       }
     } else if (path.extname(file) === "") {
-      data += compileFiles(`${pathOrigin}${file}/`);
+      data += compileFiles(`${pathOrigin}${file}/`, type);
     }
   })
   return data
@@ -149,11 +149,13 @@ function compile(arg){
   console.log();
   logSys(`---------- START ${arg} JS FILES -----------`, 'success');
 
-  let jsData = process.argv.includes('--compress')
-      ? Terser.minify(compileFiles(directoryJSPath)).code
-      : compileFiles(directoryJSPath);
+  let type = 'JS'
 
-  fs.writeFile(appTSPath, jsData, 'utf-8', error => {
+  let jsData = process.argv.includes('--compress')
+      ? Terser.minify(compileFiles(appClientJSPath), type).code
+      : compileFiles(appClientJSPath, type);
+
+  fs.writeFile(publicAppTSPath, jsData, 'utf-8', error => {
     if(error){
       logSys(error.message, 'error')
       logSys(error.stack, 'error')
@@ -161,10 +163,10 @@ function compile(arg){
   })
 
   jsData = process.argv.includes('--compress')
-      ? Terser.minify(compileFiles(path.join("src/js/"))).code
-      : compileFiles(path.join("src/js/"));
+      ? Terser.minify(compileFiles(sourceDirectoryPath, type)).code
+      : compileFiles(sourceDirectoryPath, type);
 
-  fs.appendFile(appTSPath, jsData, 'utf-8', error => {
+  fs.appendFile(publicAppTSPath, jsData, 'utf-8', error => {
     if(error){
       logSys(error.message, 'error')
       logSys(error.stack, 'error')
@@ -174,7 +176,9 @@ function compile(arg){
   console.log();
   logSys(`---------- START ${arg} HTML FILES -----------`, 'success');
 
-  fs.writeFile(appHTMLPath, compileFiles(directoryHTMLPath), 'utf-8', error => {
+  type = 'HTML'
+
+  fs.writeFile(publicAppHTMLPath, compileFiles(sourceDirectoryPath, type), 'utf-8', error => {
     if(error){
       logSys(error.message, 'error')
       logSys(error.stack, 'error')
