@@ -1,8 +1,8 @@
 {
   "name": "jordson",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "type": "module",
-  "description": "Javascript Framework for eCommerce",
+  "description": "Javascript Framework for eCommerce SPA",
   "main": "server.js",
   "scripts": {
     "cwebp": "cp src/assets/images/*.* public/assets/images && find public/assets/images -type f \\( -iname \"*.jpg\" -o -iname \"*.jpeg\" -o -iname \"*.png\" \\) -exec cwebp {} -o {}.webp \\;",
@@ -36,7 +36,8 @@
     "javascript-framework",
     "ecommerce-framework",
     "ecommerce",
-    "nodejs"
+    "nodejs",
+    "single page application"
   ],
   "bugs": {
     "url": "https://github.com/jordson-io/jordson/issues"
