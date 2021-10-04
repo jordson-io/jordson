@@ -14,20 +14,11 @@
  **/
 
 
-const dataLoaded: Event = new CustomEvent("dataLoaded", {bubbles: true});
-const htmlLoaded: Event = new CustomEvent("htmlLoaded", {bubbles: true});
-let htmlData: HTMLElement = document.createElement("html");
-let pagesRoutes: unknown;
+const dataLoaded = new CustomEvent("dataLoaded", {bubbles: true});
+const htmlLoaded = new CustomEvent("htmlLoaded", {bubbles: true});
+let htmlData = document.createElement("html");
+let pagesRoutes;
 
-type Route = {
-    slug: string;
-    fileName: string;
-    title: string;
-}
-
-type RoutesList = {
-    [key: string]: Route;
-}
 
 /**
  * Init website
@@ -38,28 +29,28 @@ type RoutesList = {
     /**
      * Load Routes List and app.html
      */
-    let collections: string[] = ["pages"];
-    let routesList: RoutesList = {};
-    let promises: unknown[] = [];
+    let collections = ["pages"];
+    let routesList = {};
+    let promises = [];
 
-    const getHtml: unknown = new Promise<string>(async (resolve: (value: (PromiseLike<string> | string)) => void) => {
-        const getHtmlData: Response = await fetch("assets/app.html");
+    const getHtml = new Promise<string>(async (resolve) => {
+        const getHtmlData = await fetch("assets/app.html");
         resolve(getHtmlData.text());
     })
 
-    for (let i: number = 0; i < collections.length; i++) {
-        promises[i] = new Promise<object>(async (resolve: (value: (PromiseLike<object> | object)) => void) => {
-            const fetchRes: Response = await fetch(`/api?action=get&name=${collections[i]}`);
-            const result: object = fetchRes.json();
+    for (let i = 0; i < collections.length; i++) {
+        promises[i] = new Promise<object>(async (resolve) => {
+            const fetchRes = await fetch(`/api?action=get&name=${collections[i]}`);
+            const result = fetchRes.json();
             resolve(result);
         })
     }
 
     htmlData.innerHTML = await getHtml;
-    let promiseResult: object[] = await Promise.all(promises);
+    let promiseResult = await Promise.all(promises);
 
-    for (let i: number = 0; i < promiseResult.length; i++) {
-        for (let y: number = 0; y < promiseResult[i].length; y++) {
+    for (let i = 0; i < promiseResult.length; i++) {
+        for (let y = 0; y < promiseResult[i].length; y++) {
             routesList[(i * promiseResult[i].length + y).toString()] = {
                 slug: promiseResult[i][y].slug,
                 fileName: promiseResult[i][y].fileName,
@@ -75,7 +66,7 @@ type RoutesList = {
      * Manage history and back to prev page
      */
     window.onpopstate = event => {
-        let dataID: string = "";
+        let dataID = "";
 
         for (const [key, value] of Object.entries(routesList)) {
             if (value.slug === document.location.pathname.replace("/", ""))
@@ -83,7 +74,7 @@ type RoutesList = {
         }
 
         if (event.state !== null) {
-            document.getElementById("content")!.innerHTML = htmlData.querySelector(`[data-id='${dataID}']`)!.innerHTML;
+            document.getElementById("content").innerHTML = htmlData.querySelector(`[data-id='${dataID}']`).innerHTML;
             setTimeout(() => {
                 window.scrollTo(0, 0);
                 document.dispatchEvent(htmlLoaded);

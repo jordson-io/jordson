@@ -23,7 +23,6 @@ import logSys from "./msgSystem.js";
 const sourceDirectoryPath = path.join("src/");
 const publicAppHTMLPath = path.join("public/assets/app.html");
 const publicAppJSPath = path.join("public/assets/app.js");
-const publicAppTSPath = path.join("public/assets/app-uncompiled.ts");
 const appClientJSPath = path.join("app/client/");
 let watching = false;
 let htmlFiles = [];
@@ -54,7 +53,7 @@ function compileFiles(pathOrigin, type, data = '') {
         htmlFiles[file] = `${pathOrigin}${file}`;
 
       }
-    } else if (type === 'JS' && (path.extname(file) === '.js' || path.extname(file) === '.ts')){
+    } else if (type === 'JS' && (path.extname(file) === '.js')){
 
       data += `//${pathOrigin}${file.replace(path.extname(file), "")}\n
       ${fs.readFileSync(pathOrigin + file).toString()}\n
@@ -90,8 +89,8 @@ function watchFiles(eventType, filename){
       let newFileData;
       let regex;
 
-      if(path.extname(filename) === '.js' || path.extname(filename) === '.ts'){
-        appPath = appTSPath;
+      if(path.extname(filename) === '.js'){
+        appPath = appJSPath;
         files = jsFiles;
       }
 
@@ -155,7 +154,7 @@ function compile(arg){
       ? Terser.minify(compileFiles(appClientJSPath), type).code
       : compileFiles(appClientJSPath, type);
 
-  fs.writeFile(publicAppTSPath, jsData, 'utf-8', error => {
+  fs.writeFile(publicAppJSPath, jsData, 'utf-8', error => {
     if(error){
       logSys(error.message, 'error')
       logSys(error.stack, 'error')
@@ -166,7 +165,7 @@ function compile(arg){
       ? Terser.minify(compileFiles(sourceDirectoryPath, type)).code
       : compileFiles(sourceDirectoryPath, type);
 
-  fs.appendFile(publicAppTSPath, jsData, 'utf-8', error => {
+  fs.appendFile(publicAppJSPath, jsData, 'utf-8', error => {
     if(error){
       logSys(error.message, 'error')
       logSys(error.stack, 'error')

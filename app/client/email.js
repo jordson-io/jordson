@@ -23,9 +23,9 @@
  * @param {string} [subject]
  * @returns {Promise<string>}
  */
-async function sendEmail( data: object, from: string, to: string, subject: string, replyTo: string | null ): Promise<string>{
+async function sendEmail( data, from, to, subject, replyTo ){
 
-        let sendData: object = data;
+        let sendData = data;
         sendData.from = from;
         sendData.to = to;
         sendData.replyTo = replyTo || from;
@@ -36,7 +36,7 @@ async function sendEmail( data: object, from: string, to: string, subject: strin
         /**
          * Sending Request
          */
-        const resp: Response = await fetch('/api?action=sendEmail', {
+        const resp = await fetch('/api?action=sendEmail', {
             method: "POST",
             body: JSON.stringify(sendData)
         });

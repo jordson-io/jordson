@@ -16,7 +16,7 @@
 /**
  *
  */
-document.addEventListener('dataLoaded', (event: Event) => {
+document.addEventListener('dataLoaded', (event) => {
 
   console.log(
       "  ╔╦═══╦═══╦═══╦═══╦═══╦═╗ ╔╗\n" +
@@ -37,7 +37,7 @@ document.addEventListener('dataLoaded', (event: Event) => {
 /**
  *
  */
-document.addEventListener('htmlLoaded', (event: Event) => {
+document.addEventListener('htmlLoaded', (event) => {
 
   /**
    * Manage Custom Events
@@ -50,10 +50,10 @@ document.addEventListener('htmlLoaded', (event: Event) => {
  * Manage ALL click events
  * Do not add new elements in this Function, use "customClickEvents" to add new click event matches
  */
-document.addEventListener("click", async (event: Event) => {
+document.addEventListener("click", async (event) => {
 
-  let elementTarget:Element = event.target as Element;
-  let HyperlinkElement:HTMLHyperlinkElementUtils = elementTarget?.closest("A") as HTMLHyperlinkElementUtils;
+  let elementTarget = event.target;
+  let HyperlinkElement = elementTarget?.closest("A");
 
   /**
    * Manage internal Links

@@ -19,14 +19,7 @@
  */
 class Router {
 
-  private currentHTML: string;
-  private currentPage: Route;
-  private currentParam: string
-  private event: object | undefined;
-  private route:string;
-  private routes:RoutesList;
-
-  constructor(routes:RoutesList) {
+  constructor(routes) {
     this.routes = routes;
     window.addEventListener("hashchange", this.loadPage.bind(this));
     document.addEventListener("dataLoaded", this.loadPage.bind(this));
@@ -38,18 +31,18 @@ class Router {
    * @param {object} [event] Event trigger
    * @returns {Promise<void>}
    */
-  async loadPage(event:object) {
+  async loadPage(event) {
     this.event = event;
 
     this.route = location.hash || "#";
     if (this.route.endsWith("/"))
       this.route = this.route.slice(0, -1);
 
-    const regex:RegExp = /(\?|\&)([^=]+)\=([^&]+)/;
-    const params:string[] | null = regex.exec(location.href);
+    const regex = /(\?|\&)([^=]+)\=([^&]+)/;
+    const params = regex.exec(location.href);
 
     if(params !== null) {
-      let thisParam:string = params[0].replace("#", "");
+      let thisParam = params[0].replace("#", "");
       if (thisParam !== this.currentParam) {
         if (location.hash === "")
           this.route += thisParam;
@@ -57,7 +50,7 @@ class Router {
       }
     }
 
-    let newCurrentPage:Route | undefined = await Object.values(this.routes).find(
+    let newCurrentPage = await Object.values(this.routes).find(
       elt => this.route.replace(regex, "") === `#${elt.slug}`
     );
 

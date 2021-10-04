@@ -18,7 +18,7 @@
  * @function
  * @param {object} [form]
  */
-function formActions(form: HTMLFormElement){
+function formActions(form){
     if(form.querySelector('[data-form-action]').getAttribute('data-form-action') === 'sendEmail'){
         actionSendEmail(form)
     }
@@ -30,16 +30,16 @@ function formActions(form: HTMLFormElement){
  * @param {object} [form]
  * @returns {Promise<void>}
  */
-async function actionSendEmail(form: HTMLFormElement){
+async function actionSendEmail(form){
 
     /**
      * Pre-processing of the form
      */
-    let submit:HTMLElement | null = form.querySelector('button[type="submit"]');
-    let submitValue: string | undefined = submit?.innerHTML;
+    let submit = form.querySelector('button[type="submit"]');
+    let submitValue = submit?.innerHTML;
 
     submit?.innerHTML = "Envoie en cours..."
-    submit?.getAttribute('data-disable-class').split(/ /g).forEach((disableClass: string) => {
+    submit?.getAttribute('data-disable-class').split(/ /g).forEach((disableClass) => {
         submit?.classList.add(disableClass);
     })
 
@@ -47,18 +47,18 @@ async function actionSendEmail(form: HTMLFormElement){
     /**
      * Allocation of variables
      */
-    const dataSend: HTMLElement | null = form.querySelector('[data-form-action]');
-    let dataFormSorted: [string, (File | string)][] = Array.from(new FormData(form));
-    let dataFormRemove: string[] = [];
-    let sendData: object = {};
+    const dataSend = form.querySelector('[data-form-action]');
+    let dataFormSorted = Array.from(new FormData(form));
+    let dataFormRemove = [];
+    let sendData = {};
 
     const to = dataSend?.getAttribute('data-to')  || 'contact';
     const from = dataSend?.getAttribute('data-from') || 'site';
     const subject = dataSend?.getAttribute('data-subject') || 'Email';
     const replyTo = dataSend?.getAttribute('data-replyTo') || from;
 
-    const honeypots: NodeListOf<HTMLElement> = form.querySelectorAll('[data-hnpt]');
-    const inputsRemove: NodeListOf<HTMLElement> = form.querySelectorAll('[data-input-remove]');
+    const honeypots = form.querySelectorAll('[data-hnpt]');
+    const inputsRemove = form.querySelectorAll('[data-input-remove]');
 
     /**
      * Removal of unnecessary items before sending the request
@@ -75,24 +75,24 @@ async function actionSendEmail(form: HTMLFormElement){
         });
     }
 
-    for (let i: number in dataFormRemove) {
-        let ItemIndex: number = dataFormSorted.findIndex((dataFormSorted: string[]) => dataFormSorted[0] === dataFormRemove[i]);
+    for (let i in dataFormRemove) {
+        let ItemIndex = dataFormSorted.findIndex((dataFormSorted) => dataFormSorted[0] === dataFormRemove[i]);
         dataFormSorted.splice(ItemIndex, 1)
     }
 
     /**
      * Preparing request data
      */
-    dataFormSorted.forEach((elements:string[]) => {
+    dataFormSorted.forEach((elements) => {
         sendData[`${elements[0]}`] = elements[1];
     })
 
 
-    let formId:string = '0';
-    const forms:NodeListOf<HTMLElementTagNameMap[string]> = document.querySelectorAll('form');
+    let formId = '0';
+    const forms = document.querySelectorAll('form');
     if(forms.length > 1){
-        let id:number = -1;
-        forms.forEach((formNode:HTMLElement) => {
+        let id = -1;
+        forms.forEach((formNode) => {
             id++;
             if(formNode.innerHTML === form.innerHTML){
                 formId = id.toString();
@@ -104,16 +104,16 @@ async function actionSendEmail(form: HTMLFormElement){
     /**
      * Sending request
      */
-    const resp:Response = await fetch('/api?action=formProcessing', {
+    const resp = await fetch('/api?action=formProcessing', {
         method: "POST",
         body: JSON.stringify(sendData)
     });
 
-    const response:string = await resp.text();
+    const response = await resp.text();
 
     if(response === "true"){
         submit?.innerHTML = submitValue;
-        let classes:string | null | undefined = submit?.getAttribute('data-disable-class');
+        let classes = submit?.getAttribute('data-disable-class');
         if(classes){
             classes.split(' ').forEach(disableClass => {
                 submit?.classList.remove(disableClass);
