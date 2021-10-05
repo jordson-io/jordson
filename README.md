@@ -2,9 +2,7 @@
     <img src="docs/logo.png">
 </p>
 
----
-
-Jordson is a fully Javascript Framework for building your eCommerce website. Simple, lightweight, high performance and secure. With NodeJS server-side and Single Page Application modern Javascript for the client-side.
+**Jordson is a fully Javascript Framework for building your eCommerce website. Simple, lightweight, high performance and secure. With NodeJS server-side and Single Page Application modern Javascript for the client-side.**
 
 >  **Current Version : Aegir-Unstable**
 
