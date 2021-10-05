@@ -1,37 +1,42 @@
 {
   "name": "jordson",
-  "version": "0.0.1",
-  "description": "Single Page Application with NodeJS server",
-  "main": "server.js",
+  "version": "1.0.0",
   "type": "module",
+  "description": "Javascript Framework for eCommerce SPA",
+  "main": "server.js",
   "scripts": {
-    "cwebp": "cp components/assets/images/*.* public/assets/images && find public/assets/images -type f \\( -iname \"*.jpg\" -o -iname \"*.jpeg\" -o -iname \"*.png\" \\) -exec cwebp {} -o {}.webp \\;",
-    "watch": "./app/bundler.js --watch public/app.js & sass --watch components/ressources/sass:public/",
-    "prod": "./app/bundler.js --compress public/app.js; sass components/ressources/sass:public/ --style=compressed",
-    "fonts": "./app/bundler.js --fonts",
-    "mexp": "mongoexport --collection=pages --db=jrd --out=components/database/pages.json",
-    "start": "node --experimental-modules --trace-warnings ./server.js"
+    "cwebp": "cp src/assets/images/*.* public/assets/images && find public/assets/images -type f \\( -iname \"*.jpg\" -o -iname \"*.jpeg\" -o -iname \"*.png\" \\) -exec cwebp {} -o {}.webp \\;",
+    "watch": "sass --watch src/sass:public/assets/ & ./app/env/bundler.js --watch",
+    "prod": "./app/env/bundler.js --compress ; sass src/sass:public/assets/ --style=compressed",
+    "dev": "./app/env/bundler.js; sass src/sass:public/assets/",
+    "fonts": "./app/env/bundler.js --fonts",
+    "start": "node --experimental-modules --trace-warnings ./server.mjs"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/AndreLeclercq/jordson.git"
+    "url": "git+https://github.com/jordson-io/jordson.git"
   },
   "author": "Andre LECLERCQ",
-  "license": "CC-BY-NC-SA-4.0",
-  "homepage": "https://github.com/AndreLeclercq/jordson#readme",
+  "license": "MIT",
+  "homepage": "https://github.com/jordson-io/jordson#readme",
   "devDependencies": {
     "argon2": "^0.27.0",
-    "mongodb": "^3.6.2",
+    "couchbase": "^3.2.2",
     "nodemailer": "^6.4.11",
     "sass": "^1.26.11",
     "terser": "^4.8.0"
   },
   "keywords": [
-    "SPA",
+    "javascript",
+    "typescript",
+    "framework",
+    "javascript-framework",
+    "ecommerce-framework",
+    "ecommerce",
     "nodejs",
-    "javascript"
+    "single page application"
   ],
   "bugs": {
-    "url": "https://github.com/AndreLeclercq/jordson/issues"
+    "url": "https://github.com/jordson-io/jordson/issues"
   }
 }

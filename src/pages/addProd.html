@@ -1,0 +1,41 @@
+<div class="d-flex m-auto mt-2">
+    <div class="col-auto d-flex m-auto p-2 brd-1 brd-grey">
+        <div class="h4 mb-05">Création d'un produit.</div>
+        <div class="d-flex justify-between">
+            <input class="col-9 mb-05" type="text" id="prodName" placeholder="Nom du produit">
+            <input class="col-2 mb-05" type="number" step="0.01" id="prodPrice" placeholder="0.00€">
+            <div class="w-100">
+                <input class="w-100" type="text" id="prodCat" placeholder="Choisir la catégorie">
+            </div>
+        </div>
+        <hr class="mt-1 mb-1">
+        <div class="d-flex align-center mb-1 mt-1">
+            <div class="h5 col-8">Ingrédient(s)</div>
+        </div>
+        <div class="w-100 pb-05">
+            <span class="col-1"><span class="typcn typcn-th-small c-pointer"></span></span>
+            <input class="col-6" type="text" id="ing01" value="Ingrédient 1">
+            <span class="col-1"><input class="col-1" type="text" value="" placeholder="Qté"></span>
+            <span class="col-3"><input class="col-3" placeholder="0.00€" type="number" step="0.01" id="ing01price" value=""></span>
+            <span class="col-1"><button class="sh-1 sh-hover-2"><span class="typcn typcn-times c-danger h5"></span></button></span>
+        </div>
+        <div class="w-100 pb-2">
+            <input class="col-12" type="text" placeholder="Choisir un ingrédient">
+        </div>
+        <div class="w-100 brd-1 brd-primary sh-1">
+            <div class="h5 m-1 mb-2"><span class="typcn typcn-th-small c-pointer"></span> Type Ingredient 01 <button class="typcn typcn-times c-pointer h5 c-danger float-right sh-1 sh-hover-2 ml-05"></button> <button class="typcn typcn-pencil c-pointer h5 c-warning float-right sh-1 sh-hover-2"></button></div>
+            <div class="col-11 m-auto p-05">
+                <span class="col-1"><span class="typcn typcn-th-small c-pointer"></span></span>
+                <input class="col-6" type="text" id="ing02" value="Ingrédient 2">
+                <span class="col-1"><input class="col-1" type="text" value="" placeholder="Qté"></span>
+                <span class="col-3"><input class="col-3" placeholder="0.00€" type="number" step="0.01" id="ing02price" value=""></span>
+                <span class="col-1"><button class="sh-1 sh-hover-2"><span class="typcn typcn-times c-danger h5"></span></button></span>
+            </div>
+            <div class="col-11 m-auto pb-2">
+                <input class="col-12" type="text" id="" placeholder="Choisir un ingrédient">
+            </div>
+        </div>
+        <button class="btn btn-primary fw-600 mt-1 fw-600 sh-1 sh-hover-2">Ajouter choix multiple</button>
+        <button class="btn btn-primary fw-600 w-100 mt-2 h5 sh-1 sh-hover-3">Créer le produit</button>
+    </div>
+</div>

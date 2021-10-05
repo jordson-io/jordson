@@ -1,0 +1,271 @@
+<main class="profile-page">
+    <section class="relative block" style="height: 500px;">
+        <div class="absolute top-0 w-full h-full bg-center bg-cover">
+            <span id="blackOverlay" class="w-full h-full absolute opacity-50 bg-black"></span>
+        </div>
+        <div
+                class="top-auto bottom-0 left-0 right-0 w-full absolute pointer-events-none overflow-hidden"
+                style="height: 70px; transform: translateZ(0px);">
+            <svg
+                    class="absolute bottom-0 overflow-hidden"
+                    xmlns="http://www.w3.org/2000/svg"
+                    preserveAspectRatio="none"
+                    version="1.1"
+                    viewBox="0 0 2560 100"
+                    x="0"
+                    y="0">
+                <polygon
+                        class="text-gray-300 fill-current"
+                        points="2560 0 2560 100 0 100"
+                ></polygon>
+            </svg>
+        </div>
+    </section>
+    <section class="relative py-16 bg-gray-300">
+        <div class="container mx-auto px-4">
+            <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
+                <div class="px-6">
+                    <div class="flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+                        <div class="max-w-lg w-full space-y-8">
+                            <div>
+                                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                                    Une question ? Un avis ? Contactez-nous via ce formulaire.
+                                </h2>
+                            </div>
+                            <form class="mt-8 space-y-6" action="#" method="POST">
+                                <div class="rounded-md -space-y-px">
+
+                                    <div class="py-2">
+                                        <label for="email1" class="text-gray-700 pl-2">
+                                            Email
+                                            <span class="text-red-500 required-dot">*</span>
+                                        </label>
+                                        <input type="email"
+                                               id="email1"
+                                               class="rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full
+                                               py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none
+                                               focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                                               name="email"
+                                               autocomplete="email"
+                                               required
+                                               placeholder="Adresse Email"
+                                               data-error-class="ring-red-500 ring-2">
+                                        <span class="text-sm text-red-500" data-error-for="email1"></span>
+                                    </div>
+
+                                    <div class="py-2">
+                                        <label class="text-gray-700 pl-2" for="message1">
+                                            Votre message
+                                            <span class="text-red-500 required-dot">*</span>
+                                        </label>
+                                        <textarea class="flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700
+                                            placeholder-gray-400 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600
+                                            focus:border-transparent"
+                                                  id="message1"
+                                                  placeholder="Entrez votre message"
+                                                  name="message"
+                                                  rows="6"
+                                                  data-error-class="ring-red-500 ring-2"
+                                                  required></textarea>
+                                        <span class="text-sm text-red-500" data-error-for="message1"></span>
+                                    </div>
+
+                                    <div class="h-0 opacity-0">
+                                        <label for="hnpt11" class="sr-only">Votre prénom</label>
+                                        <input id="hnpt11"
+                                               name="hnpt1"
+                                               data-hnpt="Robert"
+                                               required
+                                               value="Robert"
+                                               placeholder="Votre prénom">
+                                    </div>
+                                    <div class="h-0 opacity-0">
+                                        <label for="hnpt21" class="sr-only">Votre truc</label>
+                                        <input id="hnpt21"
+                                               name="hnpt2"
+                                               data-hnpt=""
+                                               placeholder="Votre machin">
+                                    </div>
+                                    <div class="h-0 opacity-0">
+                                        <label for="hnpt31" class="sr-only">Votre machin</label>
+                                        <input id="hnpt31"
+                                               name="hnpt3"
+                                               data-hnpt="chemin des ours"
+                                               value="chemin des ours"
+                                               placeholder="Votre truc">
+                                    </div>
+                                    <div class="h-0 opacity-0">
+                                        <label for="hnpt41" class="sr-only">Votre muche</label>
+                                        <input id="hnpt41"
+                                               name="hnpt4"
+                                               data-hnpt="" 
+                                               required
+                                               placeholder="Votre muche">
+                                    </div>
+                                </div>
+
+                                <div class="text-sm">
+                                    Notre site ne garde aucune information concernant ce formulaire en base de données.
+                                    Un email est immédiatement envoyé à l'adresse de contact du site. Toutes informations concernant un
+                                    moyen de contact pourra être utiliser pour vous répondre.
+                                </div>
+
+                                <div class="flex items-center justify-between">
+
+                                    <div class="flex items-center">
+                                        <input id="rgpd1"
+                                               name="rgpd"
+                                               type="checkbox"
+                                               class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                               data-error-class="border-red-500 border-solid border-2"
+                                               data-input-remove
+                                               required>
+                                        <label for="rgpd1" class="ml-2 block text-sm text-gray-900">
+                                            En cochant cette case j'accepte d'être recontacté via les informations communiquées.
+                                        </label>
+                                    </div>
+                                </div>
+                                <span class="text-sm text-red-500" data-error-for="rgpd1"></span>
+
+                                <div>
+                                    <button type="submit"
+                                            data-form-action="sendEmail"
+                                            data-to="support"
+                                            data-from="site"
+                                            data-replyTo="email"
+                                            data-subject="[Formulaire de Contact]"
+                                            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm
+                                            font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none
+                                            focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                            data-disable-class="opacity-50 cursor-not-allowed">
+                                      <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                                          <svg class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" style="--darkreader-inline-fill:none; --darkreader-inline-stroke:currentColor;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                          </svg>
+                                      </span>
+                                        Envoyer
+                                    </button>
+                                </div>
+                            </form>
+
+                            <form class="mt-8 space-y-6" action="#" method="POST">
+                                <div class="rounded-md -space-y-px">
+
+                                    <div class="py-2">
+                                        <label for="email2" class="text-gray-700 pl-2">
+                                            Email
+                                            <span class="text-red-500 required-dot">*</span>
+                                        </label>
+                                        <input type="email"
+                                               id="email2"
+                                               class="rounded-lg border-transparent flex-1 appearance-none border border-gray-300 w-full
+                                               py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none
+                                               focus:ring-2 focus:ring-purple-600 focus:border-transparent"
+                                               name="email"
+                                               autocomplete="email"
+                                               required
+                                               placeholder="Adresse Email"
+                                               data-error-class="ring-red-500 ring-2">
+                                        <span class="text-sm text-red-500" data-error-for="email2"></span>
+                                    </div>
+
+                                    <div class="py-2">
+                                        <label class="text-gray-700 pl-2" for="message2">
+                                            Votre message
+                                            <span class="text-red-500 required-dot">*</span>
+                                        </label>
+                                        <textarea class="flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700
+                                            placeholder-gray-400 rounded-lg text-base focus:outline-none focus:ring-2 focus:ring-purple-600
+                                            focus:border-transparent"
+                                                  id="message2"
+                                                  placeholder="Entrez votre message"
+                                                  name="message"
+                                                  rows="6"
+                                                  data-error-class="ring-red-500 ring-2"
+                                                  required></textarea>
+                                        <span class="text-sm text-red-500" data-error-for="message2"></span>
+                                    </div>
+
+                                    <div class="h-0 opacity-0">
+                                        <label for="hnpt12" class="sr-only">Votre prénom</label>
+                                        <input id="hnpt12"
+                                               name="hnpt12"
+                                               data-hnpt="Robert"
+                                               required
+                                               value="Robert"
+                                               placeholder="Votre prénom">
+                                    </div>
+                                    <div class="h-0 opacity-0">
+                                        <label for="hnpt22" class="sr-only">Votre truc</label>
+                                        <input id="hnpt22"
+                                               name="hnpt22"
+                                               data-hnpt=""
+                                               placeholder="Votre machin">
+                                    </div>
+                                    <div class="h-0 opacity-0">
+                                        <label for="hnpt32" class="sr-only">Votre machin</label>
+                                        <input id="hnpt32"
+                                               name="hnpt32"
+                                               data-hnpt="chemin des ours"
+                                               value="chemin des ours"
+                                               placeholder="Votre truc">
+                                    </div>
+                                    <div class="h-0 opacity-0">
+                                        <label for="hnpt42" class="sr-only">Votre muche</label>
+                                        <input id="hnpt42"
+                                               name="hnpt42"
+                                               data-hnpt="" required
+                                               placeholder="Votre muche">
+                                    </div>
+                                </div>
+
+                                <div class="text-sm">
+                                    Notre site ne garde aucune information concernant ce formulaire en base de données.
+                                    Un email est immédiatement envoyé à l'adresse de contact du site. Toutes informations concernant un
+                                    moyen de contact pourra être utiliser pour vous répondre.
+                                </div>
+
+                                <div class="flex items-center justify-between">
+
+                                    <div class="flex items-center">
+                                        <input id="rgpd2"
+                                               name="rgpd2"
+                                               type="checkbox"
+                                               class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                                               data-error-class="border-red-500 border-solid border-2"
+                                               data-input-remove
+                                               required>
+                                        <label for="rgpd2" class="ml-2 block text-sm text-gray-900">
+                                            En cochant cette case j'accepte d'être recontacté via les informations communiquées.
+                                        </label>
+                                    </div>
+                                </div>
+                                <span class="text-sm text-red-500" data-error-for="rgpd2"></span>
+
+                                <div>
+                                    <button type="submit"
+                                            data-form-action="sendEmail"
+                                            data-to="contact"
+                                            data-from="site"
+                                            data-replyTo="email"
+                                            data-subject="[Formulaire de Contact]"
+                                            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm
+                                            font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none
+                                            focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                            data-disable-class="opacity-50 cursor-not-allowed">
+                                      <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                                          <svg class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" data-darkreader-inline-fill="" data-darkreader-inline-stroke="" fill="none" stroke="currentColor" style="--darkreader-inline-fill:none; --darkreader-inline-stroke:currentColor;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                          </svg>
+                                      </span>
+                                        Envoyer
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>

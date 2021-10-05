@@ -1,0 +1,43 @@
+{
+  "global": {
+    "siteName": "JORDSON",
+    "domain": "jordson.fr",
+    "email_admin": "a.leclercq@jordson.io",
+    "port": 4004
+  },
+  "db": {
+    "uri": "couchbase://127.0.0.1",
+    "bucket": "jordson",
+    "username": "jordson",
+    "password": "jordson",
+    "publicCollections": ["pages"]
+  },
+  "mail": {
+    "host": "smtp.mailtrap.io",
+    "port": "2525",
+    "user": "0b9dfe8ea837d1",
+    "pass": "c890421a8e87e1",
+    "address" : {
+      "noreply": "ne-pas-repondre@jordson.io",
+      "contact": "contact@jordson.io",
+      "support": "support@jordson.io"
+    }
+  },
+  "mimeTypes": {
+    "html": "text/html",
+    "js": "text/javascript",
+    "css": "text/css",
+    "json": "application/json",
+    "png": "image/png",
+    "jpg": "image/jpg",
+    "gif": "image/gif",
+    "svg": "image/svg+xml",
+    "wav": "audio/wav",
+    "mp4": "video/mp4",
+    "woff": "application/font-woff",
+    "ttf": "application/font-ttf",
+    "eot": "application/vnd.ms-fontobject",
+    "otf": "application/font-otf",
+    "wasm": "application/wasm"
+  }
+}
