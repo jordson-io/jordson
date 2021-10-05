@@ -1,6 +1,10 @@
-# JORDSON
+<p align="center">
+    <img src="docs/logo.png">
+</p>
 
-Jordson is a Javascript Framework for building your eCommerce website. Lightweight, high performance and secure. With NodeJS server-side and Single Page Application modern Javascript for the client-side.
+---
+
+Jordson is a fully Javascript Framework for building your eCommerce website. Simple, lightweight, high performance and secure. With NodeJS server-side and Single Page Application modern Javascript for the client-side.
 
 >  **Current Version : Aegir-Unstable**
 
@@ -20,7 +24,9 @@ Jordson is a Javascript Framework for building your eCommerce website. Lightweig
 
 ## Documentation
 
-> **The online documentation is not yet available**, you can find all readme files in the `/docs` folder. You can also run the offline version with [Docsify](https://docsify.js.org/#/).
+> **The online documentation is not yet available**
+
+You can find all readme files in the `/docs` folder. You can also run the offline version with [Docsify](https://docsify.js.org/#/).
 
 ### Offline documentation
 
@@ -32,19 +38,19 @@ Use the link in the console.
 
 ## Support
 
-in comming
+Jordson is an MIT-Licenced Open Source Project, it can grow thanks to the sponsors and support by the amazing backers, please consider to become Backers / Sponsors on Open Collective (comming soon)
+
+> You can transparently track where your money comes from and where it goes with the [Open Collective](https://opencollective.com) platform.
+
+You can also help Jordson to be more visible, by talking about it around you, put a star on Github or even follow the twitter.
 
 ## Contributing
 
-in comming
+You want to contribute to Jordson project ? There are different ways to help. First of all the project doesn't take any code contribution. Here are some possibilities :
+
+- Report Bugs [Issues](https://github.com/jordson-io/jordson/issues)
+- Propose new features [Discord](https://discord.gg/zTucuMucwG)
 
 ## License
 
-The MIT License (MIT)
-Copyright © 2021 André LECLERCQ
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+Jordson is [MIT Licensed](LICENCE)
