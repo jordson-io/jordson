@@ -7,7 +7,7 @@
 
 ## Participer
 
-Vous pouvez vous aussi participer à l'écriture et la traduction de la documentation. Que ce soit pour corriger des fautes ou ajouter une nouvelle traduction il vous suffit de vous rendre sur le repository [jordson-io/jordson-docs-i18n]() et de suivre les indications.
+Vous pouvez vous aussi participer à l'écriture et la traduction de la documentation. Que ce soit pour corriger des fautes ou ajouter une nouvelle traduction il vous suffit de vous rendre sur le repository [jordson-io/jordson-docs-i18n](https://github.com/jordson-io/jordson-docs-i18n) et de suivre les indications.
 
 ## Problèmes & Questions
 
