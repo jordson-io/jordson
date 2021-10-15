@@ -17,7 +17,7 @@
 
 import fs from "fs";
 import path from "path";
-import Terser from "terser";
+import { minify } from "terser";
 import logSys from "./msgSystem.js";
 
 const sourceDirectoryPath = path.join("src/");
@@ -140,7 +140,7 @@ function watchFiles(eventType, filename){
  * @param {string} [arg] watch or compress
  * @returns {Promise<void>}
  */
-function compile(arg){
+async function compile(arg){
 
   logSys(`-------------------------------------------`, 'success');
   logSys(`---------- START BUILD (${arg}) ----------`, 'success');
@@ -151,7 +151,7 @@ function compile(arg){
   let type = 'JS'
 
   let jsData = process.argv.includes('--compress')
-      ? Terser.minify(compileFiles(appClientJSPath), type).code
+      ? (await minify(compileFiles(appClientJSPath, type))).code
       : compileFiles(appClientJSPath, type);
 
   fs.writeFile(publicAppJSPath, jsData, 'utf-8', error => {
@@ -162,8 +162,10 @@ function compile(arg){
   })
 
   jsData = process.argv.includes('--compress')
-      ? Terser.minify(compileFiles(sourceDirectoryPath, type)).code
+      ? (await minify(compileFiles(sourceDirectoryPath, type))).code
       : compileFiles(sourceDirectoryPath, type);
+
+  jsData = compileFiles(sourceDirectoryPath, type);
 
   fs.appendFile(publicAppJSPath, jsData, 'utf-8', error => {
     if(error){
