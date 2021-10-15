@@ -40,7 +40,7 @@ function cleanInputsError(form){
 
     function cleanTextContent(elementId) {
         let errorMsg = document.querySelector(`[data-error-for="${elementId}"]`)
-        errorMsg?.textContent = '';
+        errorMsg.textContent = '';
     }
 
 }

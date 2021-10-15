@@ -77,8 +77,8 @@ function showNotification( message = "", type = 'default', title = "default", au
         (notification.querySelector('[data-message]')).innerText = message;
     }
 
-    notification?.classList.remove('fade-out');
-    notification?.classList.add('fade-in');
+    notification.classList.remove('fade-out');
+    notification.classList.add('fade-in');
 
     if(autoHide) setTimeout( () => hideNotification(type), 5000 );
 }
