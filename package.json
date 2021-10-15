@@ -7,7 +7,7 @@
   "scripts": {
     "cwebp": "cp src/assets/images/*.* public/assets/images && find public/assets/images -type f \\( -iname \"*.jpg\" -o -iname \"*.jpeg\" -o -iname \"*.png\" \\) -exec cwebp {} -o {}.webp \\;",
     "watch": "sass --watch src/sass:public/assets/ & ./app/env/bundler.js --watch",
-    "prod": "./app/env/bundler.js --compress ; sass src/sass:public/assets/ --style=compressed",
+    "prod": "sass src/sass:public/assets/ --style=compressed & ./app/env/bundler.js --compress",
     "dev": "./app/env/bundler.js; sass src/sass:public/assets/",
     "fonts": "./app/env/bundler.js --fonts",
     "start": "node --experimental-modules --trace-warnings ./server.mjs"
@@ -24,7 +24,7 @@
     "couchbase": "^3.2.2",
     "nodemailer": "^6.4.11",
     "sass": "^1.26.11",
-    "terser": "^4.8.0"
+    "terser": "^5.9.0"
   },
   "keywords": [
     "javascript",
