@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /** Copyright © 2021 André LECLERCQ
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
  * (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
  * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished
@@ -12,7 +12,7 @@
  * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  **/
 
 import fs from "fs";
@@ -32,7 +32,7 @@ let jsFiles = [];
 /**
  * Transpilation HTML structures
  * @function
- * @param {string} [pathOrigin] 
+ * @param {string} [pathOrigin]
  * @param {string} [type] HTML or JS
  * @param data
  */
@@ -178,14 +178,73 @@ async function compile(arg){
   logSys(`---------- START ${arg} HTML FILES -----------`, 'success');
 
   type = 'HTML'
+  let HTMLdata = compileFiles(sourceDirectoryPath, type);
 
-  fs.writeFile(publicAppHTMLPath, compileFiles(sourceDirectoryPath, type), 'utf-8', error => {
+  fs.writeFile(publicAppHTMLPath, HTMLdata, 'utf-8', error => {
     if(error){
       logSys(error.message, 'error')
       logSys(error.stack, 'error')
     }
   });
 
+  if(arg === 'COMPRESS') {
+    console.log();
+    logSys(`--------- START CLEAN APP.CSS FILE ----------`, 'success');
+
+    let classes = [];
+    let ids = [];
+    let classRegex = new RegExp(`(?<= class=")(.*?)(?=")`, 'gm');
+    let idRegex = new RegExp(`(?<= id=")(.*?)(?=")`, 'gm');
+
+    HTMLdata.match(classRegex).forEach(element => {
+      classes = classes.concat(element.split(' '));
+    })
+    classes = [...new Set(classes)]
+    for (const key in classes) {
+      if (Object.hasOwnProperty.call(classes, key)) {
+        const element = classes[key];
+        classes[key] = '.' + element
+      }
+    }
+    classes = classes.concat(['/*',':root'])
+
+    ids = [...new Set(HTMLdata.match(idRegex))];
+
+    //TODO: Get app.css and find classes and ids to create new data
+
+    let CSSdata = '}' + fs.readFileSync('./public/assets/app.css').toString();
+    console.log(CSSdata.length);
+    //console.log(classes)
+
+    //TODO: Get all normal classes
+    //TODO: Get all * classes
+    //TODO: Get media queries
+    //FIXME: Fix @keyframes
+
+    //FIXME: Hmmm it's ugly and it doesn't work. DO SOMETHING !!
+    const regex = new RegExp(`([^}]*((?![-:])${classes.join('|')})(?!-))(.*?)}`, 'gm');
+    let cssDataArray = CSSdata.match(regex);
+    for (const key in cssDataArray) {
+      if (Object.hasOwnProperty.call(cssDataArray, key)) {
+        const element = cssDataArray[key];
+        if(element.startsWith('@')) {
+          cssDataArray[key] = element + '}'
+        } else if(element === '}') {
+          delete cssDataArray[key]
+        }
+      }
+    }
+
+    //console.log(cssDataArray)
+    //console.log(CSSdata.match(regex))
+    console.log(cssDataArray.join('').length);
+    fs.writeFile('./public/assets/app.css', cssDataArray.join(''), 'utf-8', error => {
+      if(error){
+        logSys(error.message, 'error')
+        logSys(error.stack, 'error')
+      }
+    });
+  }
 }
 
 if (process.argv.includes("--watch")) {
@@ -210,6 +269,6 @@ if (process.argv.includes("--watch")) {
       })
     })
   })
-} else {
+} else if (process.argv.includes("--compress")) {
   await compile('COMPRESS');
 }
