@@ -22,6 +22,7 @@
   "devDependencies": {
     "argon2": "^0.27.0",
     "couchbase": "^3.2.2",
+    "css": "^3.0.0",
     "nodemailer": "^6.4.11",
     "sass": "^1.26.11",
     "terser": "^5.9.0"
