@@ -19,6 +19,7 @@ import fs from "fs";
 import path from "path";
 import { minify } from "terser";
 import logSys from "./msgSystem.js";
+import css from "css";
 
 const sourceDirectoryPath = path.join("src/");
 const publicAppHTMLPath = path.join("public/assets/app.html");
@@ -191,6 +192,9 @@ async function compile(arg){
     console.log();
     logSys(`--------- START CLEAN APP.CSS FILE ----------`, 'success');
 
+    // TODO: Add ids
+    // TODO: Refacto and clean the code
+
     let classes = [];
     let ids = [];
     let classRegex = new RegExp(`(?<= class=")(.*?)(?=")`, 'gm');
@@ -198,7 +202,8 @@ async function compile(arg){
 
     HTMLdata.match(classRegex).forEach(element => {
       classes = classes.concat(element.split(' '));
-    })
+    });
+
     classes = [...new Set(classes)]
     for (const key in classes) {
       if (Object.hasOwnProperty.call(classes, key)) {
@@ -206,44 +211,38 @@ async function compile(arg){
         classes[key] = '.' + element
       }
     }
-    classes = classes.concat(['/*',':root'])
+    classes = classes.concat([':root', '*', 'body', 'html'])
 
     ids = [...new Set(HTMLdata.match(idRegex))];
 
-    //TODO: Get app.css and find classes and ids to create new data
+    const cssParse = css.parse(fs.readFileSync('./public/assets/app.css').toString(), { source: './public/assets/app.css' });
 
-    let CSSdata = '}' + fs.readFileSync('./public/assets/app.css').toString();
-    console.log(CSSdata.length);
-    //console.log(classes)
-
-    //TODO: Get all normal classes
-    //TODO: Get all * classes
-    //TODO: Get media queries
-    //FIXME: Fix @keyframes
-
-    //FIXME: Hmmm it's ugly and it doesn't work. DO SOMETHING !!
-    const regex = new RegExp(`([^}]*((?![-:])${classes.join('|')})(?!-))(.*?)}`, 'gm');
-    let cssDataArray = CSSdata.match(regex);
-    for (const key in cssDataArray) {
-      if (Object.hasOwnProperty.call(cssDataArray, key)) {
-        const element = cssDataArray[key];
-        if(element.startsWith('@')) {
-          cssDataArray[key] = element + '}'
-        } else if(element === '}') {
-          delete cssDataArray[key]
-        }
+    cssParse.stylesheet.rules.forEach(rules => {
+      if(rules.type === 'rule') {
+        classes.filter(element => {
+          const index = rules.selectors.indexOf(element);
+          if(index === -1) {
+            cssParse.stylesheet.rules.splice(index, 1);
+          }
+        })
       }
-    }
+    });
 
-    //console.log(cssDataArray)
-    //console.log(CSSdata.match(regex))
-    console.log(cssDataArray.join('').length);
-    fs.writeFile('./public/assets/app.css', cssDataArray.join(''), 'utf-8', error => {
+    const cssStringify = css.stringify(cssParse, { compress:true, sourcemap: true });
+
+    fs.writeFile('./public/assets/app.css', cssStringify.code, 'utf-8', error => {
       if(error){
         logSys(error.message, 'error')
         logSys(error.stack, 'error')
       }
     });
+
+    fs.writeFile('./public/assets/app.css.map', cssStringify.map.mappings, 'utf-8', error => {
+      if(error) {
+        logSys(error.message, 'error');
+        logSys(error.stack, 'error');
+      }
+    })
   }
 }
 
