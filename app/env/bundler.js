@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+// TODO: REFACTO THIS FILE
+
 /** Copyright © 2021 André LECLERCQ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
@@ -16,10 +18,10 @@
  **/
 
 import fs from "fs";
+import css from "css";
 import path from "path";
 import { minify } from "terser";
 import logSys from "./msgSystem.js";
-import css from "css";
 
 const sourceDirectoryPath = path.join("src/");
 const publicAppHTMLPath = path.join("public/assets/app.html");
@@ -204,27 +206,36 @@ async function compile(arg){
       classes = classes.concat(element.split(' '));
     });
 
-    classes = [...new Set(classes)]
+    classes = [...new Set(classes)].filter(Boolean);
     for (const key in classes) {
       if (Object.hasOwnProperty.call(classes, key)) {
         const element = classes[key];
-        classes[key] = '.' + element
+        if(element.length !== 0) {
+          classes[key] = '.' + element
+        }
       }
     }
-    classes = classes.concat([':root', '*', 'body', 'html'])
 
-    ids = [...new Set(HTMLdata.match(idRegex))];
+    ids = [...new Set(HTMLdata.match(idRegex))].filter(Boolean);
+    for (const key in ids) {
+      if (Object.hasOwnProperty.call(ids, key)) {
+        const element = ids[key];
+        ids[key] = '#' + element;
+      }
+    }
+
+    const cssRules = classes.concat([':root', '*', 'body', 'html', 'input', 'textarea', 'select', 'option', 'button', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'p', 'div', 'span', 'ol', 'ul', 'li', 'img'])
 
     const cssParse = css.parse(fs.readFileSync('./public/assets/app.css').toString(), { source: './public/assets/app.css' });
 
     cssParse.stylesheet.rules.forEach(rules => {
       if(rules.type === 'rule') {
-        classes.filter(element => {
+        cssRules.filter(element => {
           const index = rules.selectors.indexOf(element);
           if(index === -1) {
             cssParse.stylesheet.rules.splice(index, 1);
           }
-        })
+        });
       }
     });
 
