@@ -36,11 +36,11 @@ async function actionSendEmail(form){
      * Pre-processing of the form
      */
     let submit = form.querySelector('button[type="submit"]');
-    let submitValue = submit?.innerHTML;
+    let submitValue = submit.innerHTML;
 
-    submit?.innerHTML = "Envoie en cours..."
-    submit?.getAttribute('data-disable-class').split(/ /g).forEach((disableClass) => {
-        submit?.classList.add(disableClass);
+    submit.innerHTML = "Envoie en cours..."
+    submit.getAttribute('data-disable-class').split(/ /g).forEach((disableClass) => {
+        submit.classList.add(disableClass);
     })
 
 
@@ -52,10 +52,10 @@ async function actionSendEmail(form){
     let dataFormRemove = [];
     let sendData = {};
 
-    const to = dataSend?.getAttribute('data-to')  || 'contact';
-    const from = dataSend?.getAttribute('data-from') || 'site';
-    const subject = dataSend?.getAttribute('data-subject') || 'Email';
-    const replyTo = dataSend?.getAttribute('data-replyTo') || from;
+    const to = dataSend.getAttribute('data-to')  || 'contact';
+    const from = dataSend.getAttribute('data-from') || 'site';
+    const subject = dataSend.getAttribute('data-subject') || 'Email';
+    const replyTo = dataSend.getAttribute('data-replyTo') || from;
 
     const honeypots = form.querySelectorAll('[data-hnpt]');
     const inputsRemove = form.querySelectorAll('[data-input-remove]');
@@ -65,13 +65,13 @@ async function actionSendEmail(form){
      */
     if(honeypots.length !== 0){
         Array.prototype.forEach.call(honeypots, honeypot => {
-            dataFormRemove?.push(honeypot.name)
+            dataFormRemove.push(honeypot.name)
         });
     }
 
     if(inputsRemove.length !== 0){
         Array.prototype.forEach.call(inputsRemove, inputRemove => {
-            dataFormRemove?.push(inputRemove.name)
+            dataFormRemove.push(inputRemove.name)
         });
     }
 
@@ -112,11 +112,11 @@ async function actionSendEmail(form){
     const response = await resp.text();
 
     if(response === "true"){
-        submit?.innerHTML = submitValue;
-        let classes = submit?.getAttribute('data-disable-class');
+        submit.innerHTML = submitValue;
+        let classes = submit.getAttribute('data-disable-class');
         if(classes){
             classes.split(' ').forEach(disableClass => {
-                submit?.classList.remove(disableClass);
+                submit.classList.remove(disableClass);
             })
         }
         showNotification('Message envoyé avec succès !', 'success')

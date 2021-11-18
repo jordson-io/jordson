@@ -44,7 +44,7 @@ export default class Form {
         for( let inputKey in this.inputs ){
             if(!this.inputs[inputKey].match(/data-hnpt=/gs) && !this.inputs[inputKey].match(/data-input-remove/gs)){
 				let input = this.inputs[inputKey];
-				let inputType = input.match(/(?<=type=(['"])).*(?=\1)/gs)?.[0];
+				let inputType = input.match(/(?<=type=(['"])).*(?=\1)/gs)[0];
 				if(inputType){
                     let id = input.match(/(?<=id=(['"])).*(?=\1)/)[0];
                     switch (inputType) {
@@ -76,10 +76,10 @@ export default class Form {
 
         switch (type) {
             case "sendEmail":
-                data.from =  this.structureForm.match(/(?<=data-from=)(['"]).*1/)?.[0];
-                data.to = this.structureForm.match(/(?<=data-to=(['"])).*(?=\1)/)?.[0];
-                data.replyto = this.structureForm.match(/(?<=data-replyto=(['"])).*(?=\1)/)?.[0];
-                data.subject = this.structureForm.match(/(?<=data-subject=(['"])).*(?=\1)/)?.[0];
+                data.from =  this.structureForm.match(/(?<=data-from=)(['"]).*1/)[0];
+                data.to = this.structureForm.match(/(?<=data-to=(['"])).*(?=\1)/)[0];
+                data.replyto = this.structureForm.match(/(?<=data-replyto=(['"])).*(?=\1)/)[0];
+                data.subject = this.structureForm.match(/(?<=data-subject=(['"])).*(?=\1)/)[0];
 
                 const email = new Email();
                 if(await email.send(data) === 'success'){

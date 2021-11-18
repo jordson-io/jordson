@@ -53,7 +53,7 @@ document.addEventListener('htmlLoaded', (event) => {
 document.addEventListener("click", async (event) => {
 
   let elementTarget = event.target;
-  let HyperlinkElement = elementTarget?.closest("A");
+  let HyperlinkElement = elementTarget.closest("A");
 
   /**
    * Manage internal Links

@@ -1,5 +1,5 @@
-{"_id":{"$oid":"5fa27465070f119a7aead14e"},"slug":"","fileName":"home","title":"JORD - La performance au service de votre projet"}
-{"_id":{"$oid":"5fa2bba646f7559d126d4068"},"slug":"a-propos","fileName":"about","title":"JORD - La performance au service de votre projet"}
-{"_id":{"$oid":"5fa299eb46f7559d126d4067"},"slug":"admin","fileName":"adminAccess","title":"JORD - La performance au service de votre projet"}
-{"_id":{"$oid":"60449c2362ee1fa29b02fff2"},"slug":"contact","fileName":"contact","title":"JORD - Contactez nous"}
-{"_id":{"$oid":"60449c4a62ee1fa29b02fff3"},"slug":"licence","fileName":"licence","title":"JORD - Licence GNUv3 Open Source"}
+{"slug":"","fileName":"home","title":"JORD - La performance au service de votre projet"}
+{"slug":"a-propos","fileName":"about","title":"JORD - La performance au service de votre projet"}
+{"slug":"admin","fileName":"adminAccess","title":"JORD - La performance au service de votre projet"}
+{"slug":"contact","fileName":"contact","title":"JORD - Contactez nous"}
+{"slug":"licence","fileName":"licence","title":"JORD - Licence MIT"}

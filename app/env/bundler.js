@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
+// TODO: REFACTO THIS FILE
+
 /** Copyright © 2021 André LECLERCQ
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
  * (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
  * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished
@@ -12,12 +14,13 @@
  * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  **/
 
 import fs from "fs";
+import css from "css";
 import path from "path";
-import Terser from "terser";
+import { minify } from "terser";
 import logSys from "./msgSystem.js";
 
 const sourceDirectoryPath = path.join("src/");
@@ -32,7 +35,7 @@ let jsFiles = [];
 /**
  * Transpilation HTML structures
  * @function
- * @param {string} [pathOrigin] 
+ * @param {string} [pathOrigin]
  * @param {string} [type] HTML or JS
  * @param data
  */
@@ -140,7 +143,7 @@ function watchFiles(eventType, filename){
  * @param {string} [arg] watch or compress
  * @returns {Promise<void>}
  */
-function compile(arg){
+async function compile(arg){
 
   logSys(`-------------------------------------------`, 'success');
   logSys(`---------- START BUILD (${arg}) ----------`, 'success');
@@ -151,7 +154,7 @@ function compile(arg){
   let type = 'JS'
 
   let jsData = process.argv.includes('--compress')
-      ? Terser.minify(compileFiles(appClientJSPath), type).code
+      ? (await minify(compileFiles(appClientJSPath, type))).code
       : compileFiles(appClientJSPath, type);
 
   fs.writeFile(publicAppJSPath, jsData, 'utf-8', error => {
@@ -162,8 +165,10 @@ function compile(arg){
   })
 
   jsData = process.argv.includes('--compress')
-      ? Terser.minify(compileFiles(sourceDirectoryPath, type)).code
+      ? (await minify(compileFiles(sourceDirectoryPath, type))).code
       : compileFiles(sourceDirectoryPath, type);
+
+  jsData = compileFiles(sourceDirectoryPath, type);
 
   fs.appendFile(publicAppJSPath, jsData, 'utf-8', error => {
     if(error){
@@ -176,14 +181,80 @@ function compile(arg){
   logSys(`---------- START ${arg} HTML FILES -----------`, 'success');
 
   type = 'HTML'
+  let HTMLdata = compileFiles(sourceDirectoryPath, type);
 
-  fs.writeFile(publicAppHTMLPath, compileFiles(sourceDirectoryPath, type), 'utf-8', error => {
+  fs.writeFile(publicAppHTMLPath, HTMLdata, 'utf-8', error => {
     if(error){
       logSys(error.message, 'error')
       logSys(error.stack, 'error')
     }
   });
 
+  if(arg === 'COMPRESS') {
+    console.log();
+    logSys(`--------- START CLEAN APP.CSS FILE ----------`, 'success');
+
+    // TODO: Add ids
+    // TODO: Refacto and clean the code
+
+    let classes = [];
+    let ids = [];
+    let classRegex = new RegExp(`(?<= class=")(.*?)(?=")`, 'gm');
+    let idRegex = new RegExp(`(?<= id=")(.*?)(?=")`, 'gm');
+
+    HTMLdata.match(classRegex).forEach(element => {
+      classes = classes.concat(element.split(' '));
+    });
+
+    classes = [...new Set(classes)].filter(Boolean);
+    for (const key in classes) {
+      if (Object.hasOwnProperty.call(classes, key)) {
+        const element = classes[key];
+        if(element.length !== 0) {
+          classes[key] = '.' + element
+        }
+      }
+    }
+
+    ids = [...new Set(HTMLdata.match(idRegex))].filter(Boolean);
+    for (const key in ids) {
+      if (Object.hasOwnProperty.call(ids, key)) {
+        const element = ids[key];
+        ids[key] = '#' + element;
+      }
+    }
+
+    const cssRules = classes.concat([':root', '*', 'body', 'html', 'input', 'textarea', 'select', 'option', 'button', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'p', 'div', 'span', 'ol', 'ul', 'li', 'img'])
+
+    const cssParse = css.parse(fs.readFileSync('./public/assets/app.css').toString(), { source: './public/assets/app.css' });
+
+    cssParse.stylesheet.rules.forEach(rules => {
+      if(rules.type === 'rule') {
+        cssRules.filter(element => {
+          const index = rules.selectors.indexOf(element);
+          if(index === -1) {
+            cssParse.stylesheet.rules.splice(index, 1);
+          }
+        });
+      }
+    });
+
+    const cssStringify = css.stringify(cssParse, { compress:true, sourcemap: true });
+
+    fs.writeFile('./public/assets/app.css', cssStringify.code, 'utf-8', error => {
+      if(error){
+        logSys(error.message, 'error')
+        logSys(error.stack, 'error')
+      }
+    });
+
+    fs.writeFile('./public/assets/app.css.map', cssStringify.map.mappings, 'utf-8', error => {
+      if(error) {
+        logSys(error.message, 'error');
+        logSys(error.stack, 'error');
+      }
+    })
+  }
 }
 
 if (process.argv.includes("--watch")) {
@@ -208,6 +279,6 @@ if (process.argv.includes("--watch")) {
       })
     })
   })
-} else {
+} else if (process.argv.includes("--compress")) {
   await compile('COMPRESS');
 }
