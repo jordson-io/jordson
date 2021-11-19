@@ -42,7 +42,7 @@ const isJsFile = (file) => {
 
 
 /**
- * Transpilation HTML structures
+ * Transpilation HTML/JS structures
  * @function
  * @param {string} [pathOrigin]
  * @param {string} [type] HTML or JS
@@ -78,15 +78,26 @@ function compileFiles({pathOrigin, type, data = ''}) {
     data.concat(newData);
   };
 
+  const fileExtension = (file)=> {
+    return path.extname(file);
+  };
+
+  const fileNameWithoutExt = ({file, extension}) => {
+    return file.replace(extension, "");
+  };
+
+  const fileContent = (file) => {
+    return fs.readFileSync(file).toString();
+  };
+
   files.forEach(file => {
 
-    const extensionName = path.extname(file);
-    const fileNameWithoutExt = file.replace(extensionName, "");
-    const fileContent = fs.readFileSync(pathOrigin + file).toString();
+    const fileName = isDirectory(file) ? null : fileNameWithoutExt({file: file, extension: fileExtension(file)});
+    const fileContentString = isDirectory(file) ? null : fileContent(file);
 
     if( isHtml(file) ) {
 
-      const htmlData = `<div data-id="${ fileNameWithoutExt }">${ fileContent }</div>`;
+      const htmlData = `<div data-id="${ fileName}">${ fileContentString }</div>`;
 
       addToData(htmlData);
 
@@ -99,9 +110,9 @@ function compileFiles({pathOrigin, type, data = ''}) {
 
     } else if( isJs(file) ) {
 
-      const jsData = `//${ pathOrigin }${ fileNameWithoutExt }\n
-        ${ fileContent }\n
-        //${ pathOrigin }${ fileNameWithoutExt }\n`;
+      const jsData = `//${ pathOrigin }${ fileName }\n
+        ${ fileContentString }\n
+        //${ pathOrigin }${ fileName }\n`;
 
       addToData(jsData);
 
@@ -127,7 +138,7 @@ function compileFiles({pathOrigin, type, data = ''}) {
 }
 
 /**
- * Function trigger when html file was changed
+ * Function trigger when html/js file was changed
  * @function
  * @param {string} [eventType] change or rename
  * @param {string} [filename]
@@ -139,10 +150,13 @@ function watchFiles(eventType, filename){
       watching = true;
       let appPath = appHTMLPath;
       let files = htmlFiles;
-      let newFileData;
-      let regex;
 
-      if(path.extname(filename) === '.js'){
+      const updateData = ({regexValue, regexFlag, newData}) => {
+        const regex = new RegExp(regexValue, regexFlag)
+        appData = appData.replace(regex, newData);
+      };
+
+      if(isJs(filename)){
         appPath = appJSPath;
         files = jsFiles;
       }
@@ -157,27 +171,30 @@ function watchFiles(eventType, filename){
         }
       }
 
-      let name = filename.replace(path.extname(filename), '');
+      if( isHtml(filename) ) {
 
-      if(path.extname(filename) === '.html'){
+        const fileName = fileNameWithoutExt({file: filename, extension: fileExtension(filename)});
 
-        newFileData = `<div data-id="${name}">${fs
-            .readFileSync(filePath)
-            .toString()}</div>`;
+        updateData({
+          regexValue: `<div data-id="${ fileName }">(.*?)(?=<div data-id)`,
+          regexFlag: 's',
+          newData: `<div data-id="${ fileName }">${ fileContent(filename) }</div>`
+        });
 
-        regex = new RegExp(`<div data-id="${name}">(.*?)(?=<div data-id)`, 's');
+      } else if( isJs(filename) ) {
 
-      } else if(path.extname(filename) === '.js' || path.extname(filename) === '.ts'){
+        const fileName = fileNameWithoutExt({file: filePath, extension: fileExtension(filename)})
 
-        newFileData = `\/\/${filePath.replace(path.extname(filename), '')}\n
-          ${fs.readFileSync(filePath).toString()}\n
-          \/\/${filePath.replace(path.extname(filename), '')}\n`;
-
-        regex = new RegExp(`\/\/${filePath.replace(path.extname(filename), '')}(.*?)${filePath.replace(path.extname(filename), '')}`, 's');
+        updateData({
+          regexValue: `\/\/${ fileName }(.*?)${ fileName }`,
+          regexFlag: 's',
+          newData: `\/\/${ fileName }\n
+            ${ fileContent(filePath) }\n
+            \/\/${ fileName }\n`
+        });
       }
 
-      appData = appData.replace(regex, newFileData);
-      logSys(`app${path.extname(filename)} update (${filename})`, 'success');
+      logSys(`app${ fileExtension(filename) } update (${ filename })`, 'success');
       fs.writeFileSync(appPath, appData);
       setTimeout(() => watching = false, 100);
     }
@@ -202,8 +219,8 @@ async function compile(arg){
   logSys(`---------- START ${arg} JS FILES -----------`, 'success');
 
   let jsData = process.argv.includes('--compress')
-      ? (await minify(compileFiles({pathOrigin: PATH_CLIENT_DIRECTORY, type: 'JS'}))).code
-      : compileFiles({pathOrigin: PATH_CLIENT_DIRECTORY, type: 'JS'});
+      ? (await minify(compileFiles({ pathOrigin: PATH_CLIENT_DIRECTORY, type: 'JS' }))).code
+      : compileFiles({ pathOrigin: PATH_CLIENT_DIRECTORY, type: 'JS' });
 
   fs.writeFile(PATH_APP_JS_FILE, jsData, 'utf-8', error => {
     if(error){
@@ -213,8 +230,8 @@ async function compile(arg){
   })
 
   jsData = process.argv.includes('--compress')
-      ? (await minify(compileFiles({pathOrigin: PATH_SRC_DIRECTORY, type: 'JS'}))).code
-      : compileFiles({pathOrigin: PATH_SRC_DIRECTORY, type: 'JS'});
+      ? (await minify(compileFiles({ pathOrigin: PATH_SRC_DIRECTORY, type: 'JS' }))).code
+      : compileFiles({ pathOrigin: PATH_SRC_DIRECTORY, type: 'JS' });
 
   //jsData = compileFiles({pathOrigin: PATH_SRC_DIRECTORY, type: 'JS'});
 
@@ -228,7 +245,7 @@ async function compile(arg){
   console.log();
   logSys(`---------- START ${arg} HTML FILES -----------`, 'success');
 
-  let HTMLdata = compileFiles({pathOrigin: PATH_SRC_DIRECTORY, type: 'HTML'});
+  let HTMLdata = compileFiles({ pathOrigin: PATH_SRC_DIRECTORY, type: 'HTML' });
 
   fs.writeFile(PATH_APP_HTML_FILE, HTMLdata, 'utf-8', error => {
     if(error){
@@ -240,9 +257,6 @@ async function compile(arg){
   if(arg === 'COMPRESS') {
     console.log();
     logSys(`--------- START CLEAN APP.CSS FILE ----------`, 'success');
-
-    // TODO: Add ids
-    // TODO: Refacto and clean the code
 
     let classes = [];
     let ids = [];
