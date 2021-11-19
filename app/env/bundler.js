@@ -23,13 +23,22 @@ import path from "path";
 import { minify } from "terser";
 import logSys from "./msgSystem.js";
 
-const sourceDirectoryPath = path.join("src/");
-const publicAppHTMLPath = path.join("public/assets/app.html");
-const publicAppJSPath = path.join("public/assets/app.js");
-const appClientJSPath = path.join("app/client/");
+const PATH_SRC_DIRECTORY = "src/";
+const PATH_CLIENT_DIRECTORY = "app/client/";
+const PATH_APP_JS_FILE = "public/assets/app.js";
+const PATH_APP_HTML_FILE = "public/assets/app.html";
+
 let watching = false;
 let htmlFiles = [];
 let jsFiles = [];
+
+const isHtmlFile = (file) => {
+  return path.extname(file) === ".html";
+};
+
+const isJsFile = (file) => {
+  return path.extname(file) === '.js';
+};
 
 
 /**
@@ -39,41 +48,82 @@ let jsFiles = [];
  * @param {string} [type] HTML or JS
  * @param data
  */
-function compileFiles(pathOrigin, type, data = '') {
+function compileFiles({pathOrigin, type, data = ''}) {
 
-  let files = fs.readdirSync(pathOrigin)
+  const files = fs.readdirSync(pathOrigin);
+
+  const isHtml = (file) => {
+    return type === 'HTML' && isHtmlFile(file);
+  };
+
+  const isJs = (file) => {
+    return type === 'JS' && (isJsFile(file));
+  };
+
+  const isDirectory = (file) => {
+    return path.extname(file) === "";
+  };
+
+  const watchProcessEnable = () => {
+    return process.argv.includes("--watch");
+  };
+
+  const watchFile = ({file, filesList}) => {
+    fs.watch(pathOrigin + file, watchFiles);
+    logSys(`${pathOrigin}${file}`, 'info');
+    filesList[file] = `${pathOrigin}${file}`;
+  };
+
+  const addToData = (newData) => {
+    data.concat(newData);
+  };
 
   files.forEach(file => {
-    if (type === 'HTML' && path.extname(file) === ".html") {
 
-      data += `<div data-id="${file.replace(path.extname(file), "")}">
-        ${fs.readFileSync(pathOrigin + file).toString()}</div>`;
+    const extensionName = path.extname(file);
+    const fileNameWithoutExt = file.replace(extensionName, "");
+    const fileContent = fs.readFileSync(pathOrigin + file).toString();
 
-      if (process.argv.includes("--watch")) {
+    if( isHtml(file) ) {
 
-        fs.watch(pathOrigin + file, watchFiles);
-        logSys(`${pathOrigin}${file}`, 'info');
-        htmlFiles[file] = `${pathOrigin}${file}`;
+      const htmlData = `<div data-id="${ fileNameWithoutExt }">${ fileContent }</div>`;
 
+      addToData(htmlData);
+
+      if( watchProcessEnable() ) {
+        watchFile({
+          file: file,
+          filesList: htmlFiles
+        });
       }
-    } else if (type === 'JS' && (path.extname(file) === '.js')){
 
-      data += `//${pathOrigin}${file.replace(path.extname(file), "")}\n
-      ${fs.readFileSync(pathOrigin + file).toString()}\n
-      //${pathOrigin}${file.replace(path.extname(file), "")}\n`;
+    } else if( isJs(file) ) {
 
-      if (process.argv.includes("--watch")) {
+      const jsData = `//${ pathOrigin }${ fileNameWithoutExt }\n
+        ${ fileContent }\n
+        //${ pathOrigin }${ fileNameWithoutExt }\n`;
 
-        fs.watch(pathOrigin + file, watchFiles);
-        logSys(`${pathOrigin}${file}`, 'info');
-        jsFiles[file] = `${pathOrigin}${file}`;
+      addToData(jsData);
 
+      if( watchProcessEnable() ) {
+        watchFile({
+          file: file,
+          filesList: jsFiles,
+        });
       }
-    } else if (path.extname(file) === "") {
-      data += compileFiles(`${pathOrigin}${file}/`, type);
+
+    } else if (isDirectory(file)) {
+
+      const recursiveData = compileFiles({
+        pathOrigin: `${pathOrigin}${file}/`,
+        type: type
+      });
+
+      addToData(recursiveData);
     }
   })
-  return data
+
+  return data;
 }
 
 /**
@@ -151,13 +201,11 @@ async function compile(arg){
   console.log();
   logSys(`---------- START ${arg} JS FILES -----------`, 'success');
 
-  let type = 'JS'
-
   let jsData = process.argv.includes('--compress')
-      ? (await minify(compileFiles(appClientJSPath, type))).code
-      : compileFiles(appClientJSPath, type);
+      ? (await minify(compileFiles({pathOrigin: PATH_CLIENT_DIRECTORY, type: 'JS'}))).code
+      : compileFiles({pathOrigin: PATH_CLIENT_DIRECTORY, type: 'JS'});
 
-  fs.writeFile(publicAppJSPath, jsData, 'utf-8', error => {
+  fs.writeFile(PATH_APP_JS_FILE, jsData, 'utf-8', error => {
     if(error){
       logSys(error.message, 'error')
       logSys(error.stack, 'error')
@@ -165,12 +213,12 @@ async function compile(arg){
   })
 
   jsData = process.argv.includes('--compress')
-      ? (await minify(compileFiles(sourceDirectoryPath, type))).code
-      : compileFiles(sourceDirectoryPath, type);
+      ? (await minify(compileFiles({pathOrigin: PATH_SRC_DIRECTORY, type: 'JS'}))).code
+      : compileFiles({pathOrigin: PATH_SRC_DIRECTORY, type: 'JS'});
 
-  jsData = compileFiles(sourceDirectoryPath, type);
+  //jsData = compileFiles({pathOrigin: PATH_SRC_DIRECTORY, type: 'JS'});
 
-  fs.appendFile(publicAppJSPath, jsData, 'utf-8', error => {
+  fs.appendFile(PATH_APP_JS_FILE, jsData, 'utf-8', error => {
     if(error){
       logSys(error.message, 'error')
       logSys(error.stack, 'error')
@@ -180,10 +228,9 @@ async function compile(arg){
   console.log();
   logSys(`---------- START ${arg} HTML FILES -----------`, 'success');
 
-  type = 'HTML'
-  let HTMLdata = compileFiles(sourceDirectoryPath, type);
+  let HTMLdata = compileFiles({pathOrigin: PATH_SRC_DIRECTORY, type: 'HTML'});
 
-  fs.writeFile(publicAppHTMLPath, HTMLdata, 'utf-8', error => {
+  fs.writeFile(PATH_APP_HTML_FILE, HTMLdata, 'utf-8', error => {
     if(error){
       logSys(error.message, 'error')
       logSys(error.stack, 'error')
