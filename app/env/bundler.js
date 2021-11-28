@@ -40,6 +40,21 @@ const isJsFile = (file) => {
   return path.extname(file) === '.js';
 };
 
+const isDirectory = (file) => {
+  return path.extname(file) === "";
+};
+
+const fileExtension = (file)=> {
+  return path.extname(file);
+};
+
+const fileNameWithoutExt = ({file, extension}) => {
+  return file.replace(extension, "");
+};
+
+const fileContent = (file) => {
+  return fs.readFileSync(file).toString();
+};
 
 /**
  * Transpilation HTML/JS structures
@@ -60,10 +75,6 @@ function compileFiles({pathOrigin, type, data = ''}) {
     return type === 'JS' && (isJsFile(file));
   };
 
-  const isDirectory = (file) => {
-    return path.extname(file) === "";
-  };
-
   const watchProcessEnable = () => {
     return process.argv.includes("--watch");
   };
@@ -75,29 +86,22 @@ function compileFiles({pathOrigin, type, data = ''}) {
   };
 
   const addToData = (newData) => {
-    data.concat(newData);
-  };
-
-  const fileExtension = (file)=> {
-    return path.extname(file);
-  };
-
-  const fileNameWithoutExt = ({file, extension}) => {
-    return file.replace(extension, "");
-  };
-
-  const fileContent = (file) => {
-    return fs.readFileSync(file).toString();
+    data = data.concat(newData);
   };
 
   files.forEach(file => {
 
+    if( isJs(file) || isHtml(file) ) {
+      logSys(pathOrigin + file, 'info');
+    }
+
     const fileName = isDirectory(file) ? null : fileNameWithoutExt({file: file, extension: fileExtension(file)});
-    const fileContentString = isDirectory(file) ? null : fileContent(file);
+    const fileContentString = isDirectory(file) ? null : fileContent(pathOrigin + file);
+
 
     if( isHtml(file) ) {
 
-      const htmlData = `<div data-id="${ fileName}">${ fileContentString }</div>`;
+      const htmlData = `<div data-id="${ fileName }">${ fileContentString }</div>`;
 
       addToData(htmlData);
 
@@ -145,33 +149,28 @@ function compileFiles({pathOrigin, type, data = ''}) {
  */
 function watchFiles(eventType, filename){
 
+  //FIXME: Fix the watch process
+
   try {
     if(!watching){
       watching = true;
-      let appPath = appHTMLPath;
-      let files = htmlFiles;
+      const appPath = isJsFile(filename) ? PATH_APP_JS_FILE : PATH_APP_HTML_FILE;
+      const files = isJsFile(filename) ? jsFiles : htmlFiles;
 
-      const updateData = ({regexValue, regexFlag, newData}) => {
-        const regex = new RegExp(regexValue, regexFlag)
+      const updateData = ({ regexValue, regexFlag, newData }) => {
+        const regex = new RegExp(regexValue, regexFlag);
         appData = appData.replace(regex, newData);
       };
 
-      if(isJs(filename)){
+      /**if(isJs(filename)){
         appPath = appJSPath;
         files = jsFiles;
-      }
+      }**/
 
-      let appData = fs.readFileSync(appPath, "utf-8");
-      let filePath
+      const appData = fs.readFileSync(appPath, "utf-8");
 
-      for (const key in files) {
-        if(key === filename) {
-          filePath = files[key];
-          break;
-        }
-      }
 
-      if( isHtml(filename) ) {
+      if( isHtmlFile(filename) ) {
 
         const fileName = fileNameWithoutExt({file: filename, extension: fileExtension(filename)});
 
@@ -181,7 +180,30 @@ function watchFiles(eventType, filename){
           newData: `<div data-id="${ fileName }">${ fileContent(filename) }</div>`
         });
 
-      } else if( isJs(filename) ) {
+      } else if( isJsFile(filename) ) {
+
+        /**let filePath
+
+        for (const key in files) {
+          if(key === filename) {
+            filePath = files[key];
+            break;
+          }
+        }**/
+
+        const filePath = () => {
+
+          let filePath
+
+          for (const key in files) {
+            if(key === filename) {
+              filePath = files[key];
+              break;
+            }
+          }
+
+          return filePath;
+        }
 
         const fileName = fileNameWithoutExt({file: filePath, extension: fileExtension(filename)})
 
@@ -245,7 +267,7 @@ async function compile(arg){
   console.log();
   logSys(`---------- START ${arg} HTML FILES -----------`, 'success');
 
-  let HTMLdata = compileFiles({ pathOrigin: PATH_SRC_DIRECTORY, type: 'HTML' });
+  const HTMLdata = compileFiles({ pathOrigin: PATH_SRC_DIRECTORY, type: 'HTML'});
 
   fs.writeFile(PATH_APP_HTML_FILE, HTMLdata, 'utf-8', error => {
     if(error){
@@ -260,8 +282,8 @@ async function compile(arg){
 
     let classes = [];
     let ids = [];
-    let classRegex = new RegExp(`(?<= class=")(.*?)(?=")`, 'gm');
-    let idRegex = new RegExp(`(?<= id=")(.*?)(?=")`, 'gm');
+    const classRegex = new RegExp(`(?<= class=")(.*?)(?=")`, 'gm');
+    const idRegex = new RegExp(`(?<= id=")(.*?)(?=")`, 'gm');
 
     HTMLdata.match(classRegex).forEach(element => {
       classes = classes.concat(element.split(' '));
