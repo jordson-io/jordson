@@ -156,6 +156,7 @@ function watchFiles(eventType, filename){
       watching = true;
       const appPath = isJsFile(filename) ? PATH_APP_JS_FILE : PATH_APP_HTML_FILE;
       const files = isJsFile(filename) ? jsFiles : htmlFiles;
+      let appData = fs.readFileSync(appPath, "utf-8");
 
       const updateData = ({ regexValue, regexFlag, newData }) => {
         const regex = new RegExp(regexValue, regexFlag);
@@ -167,7 +168,6 @@ function watchFiles(eventType, filename){
         files = jsFiles;
       }**/
 
-      const appData = fs.readFileSync(appPath, "utf-8");
 
 
       if( isHtmlFile(filename) ) {
@@ -192,26 +192,20 @@ function watchFiles(eventType, filename){
         }**/
 
         const filePath = () => {
-
-          let filePath
-
           for (const key in files) {
             if(key === filename) {
-              filePath = files[key];
-              break;
+              return files[key];
             }
           }
-
-          return filePath;
         }
 
-        const fileName = fileNameWithoutExt({file: filePath, extension: fileExtension(filename)})
+        const fileName = fileNameWithoutExt({file: filePath(), extension: fileExtension(filename)})
 
         updateData({
           regexValue: `\/\/${ fileName }(.*?)${ fileName }`,
           regexFlag: 's',
           newData: `\/\/${ fileName }\n
-            ${ fileContent(filePath) }\n
+            ${ fileContent( filePath() ) }\n
             \/\/${ fileName }\n`
         });
       }
