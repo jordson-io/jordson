@@ -1,7 +1,5 @@
 #!/usr/bin/env node
 
-// TODO: REFACTO THIS FILE
-
 /** Copyright © 2021 André LECLERCQ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
@@ -25,6 +23,8 @@ import logSys from "./msgSystem.js";
 
 const PATH_SRC_DIRECTORY = "src/";
 const PATH_CLIENT_DIRECTORY = "app/client/";
+const PATH_SRC_FONTS_DIRECTORY = "src/assets/fonts/";
+const PATH_PUBLIC_FONTS_DIRECTORY = "public/assets/fonts/";
 const PATH_APP_JS_FILE = "public/assets/app.js";
 const PATH_APP_HTML_FILE = "public/assets/app.html";
 
@@ -149,11 +149,11 @@ function compileFiles({pathOrigin, type, data = ''}) {
  */
 function watchFiles(eventType, filename){
 
-  //FIXME: Fix the watch process
-
   try {
     if(!watching){
+
       watching = true;
+
       const appPath = isJsFile(filename) ? PATH_APP_JS_FILE : PATH_APP_HTML_FILE;
       const files = isJsFile(filename) ? jsFiles : htmlFiles;
       let appData = fs.readFileSync(appPath, "utf-8");
@@ -163,12 +163,13 @@ function watchFiles(eventType, filename){
         appData = appData.replace(regex, newData);
       };
 
-      /**if(isJs(filename)){
-        appPath = appJSPath;
-        files = jsFiles;
-      }**/
-
-
+      const filePath = () => {
+        for (const key in files) {
+          if(key === filename) {
+            return files[key];
+          }
+        }
+      }
 
       if( isHtmlFile(filename) ) {
 
@@ -177,27 +178,10 @@ function watchFiles(eventType, filename){
         updateData({
           regexValue: `<div data-id="${ fileName }">(.*?)(?=<div data-id)`,
           regexFlag: 's',
-          newData: `<div data-id="${ fileName }">${ fileContent(filename) }</div>`
+          newData: `<div data-id="${ fileName }">${ fileContent( filePath() ) }</div>`
         });
 
       } else if( isJsFile(filename) ) {
-
-        /**let filePath
-
-        for (const key in files) {
-          if(key === filename) {
-            filePath = files[key];
-            break;
-          }
-        }**/
-
-        const filePath = () => {
-          for (const key in files) {
-            if(key === filename) {
-              return files[key];
-            }
-          }
-        }
 
         const fileName = fileNameWithoutExt({file: filePath(), extension: fileExtension(filename)})
 
@@ -215,8 +199,8 @@ function watchFiles(eventType, filename){
       setTimeout(() => watching = false, 100);
     }
   } catch (error){
-    logSys(error.message, 'error')
-    logSys(error.stack, 'error')
+    logSys(error.message, 'error');
+    logSys(error.stack, 'error');
   }
 }
 
@@ -235,8 +219,8 @@ async function compile(arg){
   logSys(`---------- START ${arg} JS FILES -----------`, 'success');
 
   let jsData = process.argv.includes('--compress')
-      ? (await minify(compileFiles({ pathOrigin: PATH_CLIENT_DIRECTORY, type: 'JS' }))).code
-      : compileFiles({ pathOrigin: PATH_CLIENT_DIRECTORY, type: 'JS' });
+    ? (await minify(compileFiles({ pathOrigin: PATH_CLIENT_DIRECTORY, type: 'JS' }))).code
+    : compileFiles({ pathOrigin: PATH_CLIENT_DIRECTORY, type: 'JS' });
 
   fs.writeFile(PATH_APP_JS_FILE, jsData, 'utf-8', error => {
     if(error){
@@ -246,10 +230,8 @@ async function compile(arg){
   })
 
   jsData = process.argv.includes('--compress')
-      ? (await minify(compileFiles({ pathOrigin: PATH_SRC_DIRECTORY, type: 'JS' }))).code
-      : compileFiles({ pathOrigin: PATH_SRC_DIRECTORY, type: 'JS' });
-
-  //jsData = compileFiles({pathOrigin: PATH_SRC_DIRECTORY, type: 'JS'});
+    ? (await minify(compileFiles({ pathOrigin: PATH_SRC_DIRECTORY, type: 'JS' }))).code
+    : compileFiles({ pathOrigin: PATH_SRC_DIRECTORY, type: 'JS' });
 
   fs.appendFile(PATH_APP_JS_FILE, jsData, 'utf-8', error => {
     if(error){
@@ -301,6 +283,7 @@ async function compile(arg){
       }
     }
 
+    // TODO: Add data-class in default css rules
     const cssRules = classes.concat([':root', '*', 'body', 'html', 'input', 'textarea', 'select', 'option', 'button', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'p', 'div', 'span', 'ol', 'ul', 'li', 'img'])
 
     const cssParse = css.parse(fs.readFileSync('./public/assets/app.css').toString(), { source: './public/assets/app.css' });
@@ -340,19 +323,19 @@ if (process.argv.includes("--watch")) {
 
 } else if (process.argv.includes("--fonts")) {
 
-  // TODO: Sortir ce code dans une fonction dédiée au fonts
-  logSys("Import FONTS files", "info");
-  fs.readdir("./src/assets/fonts", (error, files) => {
+  logSys("------- Import FONTS files -------", "info");
+
+  fs.readdir(PATH_SRC_FONTS_DIRECTORY, (error, files) => {
     if (error) {
       logSys(error.message, 'error')
       logSys(error.stack, 'error')
     }
     files.forEach((file) => {
 
-      fs.copyFile(`./src/assets/fonts/${file}`, `./public/assets/fonts/${file}`, (error) => {
+      fs.copyFile(`${ PATH_SRC_FONTS_DIRECTORY }${ file }`, `${ PATH_PUBLIC_FONTS_DIRECTORY }${ file }`, (error) => {
         err
             ? (logSys(error.message, 'error'), logSys(error.stack, 'error'))
-            : logSys(`${file} was copied into public/assets/fonts`, "info");
+            : logSys(`${file} was copied into ${PATH_PUBLIC_FONTS_DIRECTORY}`, "info");
       })
     })
   })
