@@ -1,5 +1,5 @@
 /** Copyright © 2021 André LECLERCQ
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
  * (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
  * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished
@@ -10,11 +10,11 @@
  * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  **/
 
 import argon2 from "argon2";
-import logSys from "/app/env/msgSystem.js";
+import { log } from "/app/env/logSystem.js";
 import Database from "./database.js";
 
 let db = new Database();
@@ -35,7 +35,7 @@ export default class User {
       data.password = await argon2.hash(data.password);
       return await db.createDocument("users", { email: data.email }, data);
     } catch (error) {
-      await logSys(error, "error");
+      await log.error(error);
       return error;
     }
   }
@@ -50,7 +50,7 @@ export default class User {
     try {
       return await db.editDocument("users", { email: data.email }, data);
     } catch (error) {
-      await logSys(error, "error");
+      await log.error(error);
       return error;
     }
   }
@@ -68,7 +68,7 @@ export default class User {
         ? await db.editDocument("users", { email: data.email }, { password: await argon2.hash(data.newPassword) })
         : "old password invalid";
     } catch (error) {
-      await logSys(error, "error");
+      await log.error(error);
       return error;
     }
   }
@@ -86,12 +86,12 @@ export default class User {
       this.document = await db.getDocument("users", { email: data.email });
       if (typeof this.document === "object") {
         if (await argon2.verify(this.document.password, data.password)) {
-          logSys(`User login "${this.document._id}"`);
+          log.sys(`User login "${this.document._id}"`);
           return this.document.public;
         } else return "password incorrect";
       } else return this.document;
     } catch (error) {
-      await logSys(error, "error");
+      await log.error(error);
       return error;
     }
   }

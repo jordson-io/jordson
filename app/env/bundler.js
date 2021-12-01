@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+'use strict'
 
 /** Copyright © 2021 André LECLERCQ
  *
@@ -19,7 +20,7 @@ import fs from "fs";
 import css from "css";
 import path from "path";
 import { minify } from "terser";
-import logSys from "./msgSystem.js";
+import { log } from "./logSystem.js";
 
 const PATH_SRC_DIRECTORY = "src/";
 const PATH_CLIENT_DIRECTORY = "app/client/";
@@ -81,7 +82,7 @@ function compileFiles({pathOrigin, type, data = ''}) {
 
   const watchFile = ({file, filesList}) => {
     fs.watch(pathOrigin + file, watchFiles);
-    logSys(`${pathOrigin}${file}`, 'info');
+    log.info(`${pathOrigin}${file}`);
     filesList[file] = `${pathOrigin}${file}`;
   };
 
@@ -92,7 +93,7 @@ function compileFiles({pathOrigin, type, data = ''}) {
   files.forEach(file => {
 
     if( isJs(file) || isHtml(file) ) {
-      logSys(pathOrigin + file, 'info');
+      log.info(pathOrigin + file);
     }
 
     const fileName = isDirectory(file) ? null : fileNameWithoutExt({file: file, extension: fileExtension(file)});
@@ -194,13 +195,13 @@ function watchFiles(eventType, filename){
         });
       }
 
-      logSys(`app${ fileExtension(filename) } update (${ filename })`, 'success');
+      log.success(`app${ fileExtension(filename) } update (${ filename })`);
       fs.writeFileSync(appPath, appData);
       setTimeout(() => watching = false, 100);
     }
   } catch (error){
-    logSys(error.message, 'error');
-    logSys(error.stack, 'error');
+    log.error(error.message);
+    log.error(error.stack);
   }
 }
 
@@ -212,11 +213,11 @@ function watchFiles(eventType, filename){
  */
 async function compile(arg){
 
-  logSys(`-------------------------------------------`, 'success');
-  logSys(`---------- START BUILD (${arg}) ----------`, 'success');
-  logSys(`-------------------------------------------`, 'success');
+  log.success(`-------------------------------------------`);
+  log.success(`---------- START BUILD (${arg}) ----------`);
+  log.success(`-------------------------------------------`);
   console.log();
-  logSys(`---------- START ${arg} JS FILES -----------`, 'success');
+  log.success(`---------- START ${arg} JS FILES -----------`);
 
   let jsData = process.argv.includes('--compress')
     ? (await minify(compileFiles({ pathOrigin: PATH_CLIENT_DIRECTORY, type: 'JS' }))).code
@@ -224,8 +225,8 @@ async function compile(arg){
 
   fs.writeFile(PATH_APP_JS_FILE, jsData, 'utf-8', error => {
     if(error){
-      logSys(error.message, 'error')
-      logSys(error.stack, 'error')
+      log.error(error.message);
+      log.error(error.stack);
     }
   })
 
@@ -235,26 +236,26 @@ async function compile(arg){
 
   fs.appendFile(PATH_APP_JS_FILE, jsData, 'utf-8', error => {
     if(error){
-      logSys(error.message, 'error')
-      logSys(error.stack, 'error')
+      log.error(error.message);
+      log.error(error.stack);
     }
   })
 
   console.log();
-  logSys(`---------- START ${arg} HTML FILES -----------`, 'success');
+  log.success(`---------- START ${arg} HTML FILES -----------`);
 
   const HTMLdata = compileFiles({ pathOrigin: PATH_SRC_DIRECTORY, type: 'HTML'});
 
   fs.writeFile(PATH_APP_HTML_FILE, HTMLdata, 'utf-8', error => {
     if(error){
-      logSys(error.message, 'error')
-      logSys(error.stack, 'error')
+      log.error(error.message);
+      log.error(error.stack);
     }
   });
 
   if(arg === 'COMPRESS') {
     console.log();
-    logSys(`--------- START CLEAN APP.CSS FILE ----------`, 'success');
+    log.success(`--------- START CLEAN APP.CSS FILE ----------`);
 
     let classes = [];
     let ids = [];
@@ -303,15 +304,15 @@ async function compile(arg){
 
     fs.writeFile('./public/assets/app.css', cssStringify.code, 'utf-8', error => {
       if(error){
-        logSys(error.message, 'error')
-        logSys(error.stack, 'error')
+        log.error(error.message);
+        log.error(error.stack);
       }
     });
 
     fs.writeFile('./public/assets/app.css.map', cssStringify.map.mappings, 'utf-8', error => {
       if(error) {
-        logSys(error.message, 'error');
-        logSys(error.stack, 'error');
+        log.error(error.message);
+        log.error(error.stack);
       }
     })
   }
@@ -323,19 +324,19 @@ if (process.argv.includes("--watch")) {
 
 } else if (process.argv.includes("--fonts")) {
 
-  logSys("------- Import FONTS files -------", "info");
+  log.info("------- Import FONTS files -------");
 
   fs.readdir(PATH_SRC_FONTS_DIRECTORY, (error, files) => {
     if (error) {
-      logSys(error.message, 'error')
-      logSys(error.stack, 'error')
+      log.error(error.message)
+      log.error(error.stack)
     }
     files.forEach((file) => {
 
       fs.copyFile(`${ PATH_SRC_FONTS_DIRECTORY }${ file }`, `${ PATH_PUBLIC_FONTS_DIRECTORY }${ file }`, (error) => {
         err
-            ? (logSys(error.message, 'error'), logSys(error.stack, 'error'))
-            : logSys(`${file} was copied into ${PATH_PUBLIC_FONTS_DIRECTORY}`, "info");
+            ? (log.error(error.message), log.error(error.stack))
+            : log.info(`${file} was copied into ${PATH_PUBLIC_FONTS_DIRECTORY}`);
       })
     })
   })

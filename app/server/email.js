@@ -1,5 +1,5 @@
 /** Copyright © 2021 André LECLERCQ
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
  * (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
  * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished
@@ -10,11 +10,11 @@
  * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  **/
 
 import nodeMailer from "nodemailer";
-import logSys from "../env/msgSystem.js";
+import { log } from "../env/logSystem.js";
 import loadConfig from "./loadConfig.mjs";
 
 let gConfig = new loadConfig();
@@ -44,7 +44,7 @@ export default class Email {
      * @returns {Promise<string>}
      */
     async send(data) {
-        await logSys("EMAIL: Generate email");
+        await log.info("EMAIL: Generate email");
 
         this.message = {
             subject: data.subject,
@@ -63,12 +63,12 @@ export default class Email {
         return new Promise(async resolve => {
             await this.transporter.sendMail(this.message, function (err, res) {
                 if (err) {
-                    logSys(err, "error");
+                    log.error(err);
                     return err;
                 } else {
-                    logSys("EMAIL: Email SEND", "success");
-                    logSys(`EMAIL: Response >> ${res.response}`);
-                    logSys(`EMAIL: MessageID >> ${res.messageId}`);
+                    log.success("EMAIL: Email SEND");
+                    log.info(`EMAIL: Response >> ${res.response}`);
+                    log.info(`EMAIL: MessageID >> ${res.messageId}`);
 
                     if (res.accepted.length > 0 && res.rejected.length === 0) {
                         resolve("success")
