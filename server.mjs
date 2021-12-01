@@ -31,10 +31,11 @@ const gConfig = new loadConfig();
 
 const port = gConfig.global.port;
 const mimeTypes = gConfig.mimeTypes;
+const localhostUrl = `https://localhost:${port}`
 
 async function parseRequest(stream, headers, req) {
 
-  req.url = new URL(headers[":path"], `https://localhost:${port}`);
+  req.url = new URL(headers[":path"], localhostUrl);
   req.param = Object.fromEntries(req.url.searchParams.entries());
   req.path = req.url.pathname.split("/");
 
@@ -43,25 +44,27 @@ async function parseRequest(stream, headers, req) {
   stream.setEncoding("utf8");
   req.body = "";
 
-  for await (const chunk of stream) req.body += chunk;
+  for await (const chunk of stream) {
+    req.body += chunk;
+  };
 }
 
 async function readFile(req, res) {
 
   const fileName = req.path.join(path.sep);
-  let filePath = "public/" + (fileName === "" ? "index.html" : fileName);
+  const filePath = "public/" + (fileName === "" ? "index.html" : fileName);
   const ext = path.extname(filePath).substring(1);
+
   res.headers["content-type"] = ext in mimeTypes ? mimeTypes[ext] : "text/plain";
 
   try {
-
     res.data = await fs.promises.readFile(filePath);
-
   } catch (error) {
-
-    if (error.code === "ENOENT") throw new Error("404 Not Found");
+    if (error.code === "ENOENT") {
+      throw new Error("404 Not Found")
+    };
+    log.error(error);
     throw error;
-
   }
 }
 
@@ -69,7 +72,6 @@ async function prepareResponse(res, data) {
 
   res.headers["content-type"] = "application/json";
   res.data = typeof data === "object" ? JSON.stringify(data) : data;
-
 }
 
 async function handleRequest(req, res) {
@@ -154,5 +156,5 @@ server.on("error", (err) => log.error(err));
 server.on("stream", executeRequest);
 server.listen(port);
 
-log.success(`Server READY at https://localhost:${port}`);
+log.success(`Server READY at ${ localhostUrl }`);
 log.success("-----------------------------------------------");
