@@ -40,6 +40,7 @@ export default class Form {
   }
 
   check(data){
+    
     this.inputs = this.structureForm.match(/<input(.*?)(>)/gs);
     this.textareas = this.structureForm.match(/<textarea(.*?)(<\/textarea>)/gs);
 
