@@ -1,3 +1,5 @@
+'use strict';
+
 /** Copyright © 2021 André LECLERCQ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
@@ -17,7 +19,7 @@ import nodeMailer from "nodemailer";
 import { log } from "../env/logSystem.js";
 import loadConfig from "./loadConfig.mjs";
 
-let gConfig = new loadConfig();
+const gConfig = new loadConfig();
 
 // TODO: Fixer la vulnérabilité du \n dans le subject du message.
 
@@ -52,8 +54,12 @@ export default class Email {
             html: `${data.message}`,
         };
 
-        if (!data.email.match(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i)) {
-            return "rejected"
+        const emailAddressIncorrect = () => {
+          return !data.email.match(/(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i)
+        }
+
+        if ( emailAddressIncorrect() ) {
+            return "rejected";
         }
 
         this.message.to = gConfig.mail.address[data.to] || gConfig.mail.address.contact;
@@ -61,22 +67,27 @@ export default class Email {
         this.message.replyTo = data[data.replyTo] || this.message.from;
 
         return new Promise(async resolve => {
-            await this.transporter.sendMail(this.message, function (err, res) {
-                if (err) {
-                    log.error(err);
-                    return err;
-                } else {
-                    log.success("EMAIL: Email SEND");
-                    log.info(`EMAIL: Response >> ${res.response}`);
-                    log.info(`EMAIL: MessageID >> ${res.messageId}`);
+          await this.transporter.sendMail(this.message, (err, res) => {
+            if (err) {
+                log.error(err);
+                return err;
+            } else {
 
-                    if (res.accepted.length > 0 && res.rejected.length === 0) {
-                        resolve("success")
-                    } else {
-                        resolve("rejected")
-                    }
-                }
-            })
-        })
-    }
+              const isAcceptedAndNotRejected = () => {
+                return (res.accepted.length > 0 && res.rejected.length === 0);
+              }
+
+              log.success("EMAIL: Email SEND");
+              log.info(`EMAIL: Response >> ${res.response}`);
+              log.info(`EMAIL: MessageID >> ${res.messageId}`);
+
+              if( isAcceptedAndNotRejected() ) {
+                  resolve("success");
+              } else {
+                  resolve("rejected");
+              }
+            }
+          })
+      })
+  }
 }
