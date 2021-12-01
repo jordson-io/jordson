@@ -1,3 +1,5 @@
+'use strict';
+
 /** Copyright © 2021 André LECLERCQ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
@@ -37,9 +39,11 @@ const gConfig = new loadConfig();
  */
 export async function get(req) {
 
-    if(gConfig.db.publicCollections.some(elt => elt === req.param.name))
-        return await db.getCollection(req.param.name)
+  const isPublicCollection = gConfig.db.publicCollections.some(collection => collection === req.param.name);
 
+  if( isPublicCollection ) {
+    return await db.getCollection(req.param.name);
+  }
 }
 
 /**
@@ -50,9 +54,11 @@ export async function get(req) {
  */
 export async function sendEmail(req, res) {
 
-    let email = new Email();
-    log.info(JSON.parse(req.body))
-    return await email.send(JSON.parse(req.body))
+  const emailData = JSON.parse(req.body);
+  const email = new Email();
+
+  log.debug(emailData);
+  return await email.send(emailData);
 }
 
 /**
@@ -63,8 +69,8 @@ export async function sendEmail(req, res) {
  */
 export async function formProcessing(req, res) {
 
-    let formData = JSON.parse(req.body)
-    let form = new Form(formData.id);
-    return JSON.stringify(await form.check(formData))
+    const formData = JSON.parse(req.body);
+    const form = new Form(formData.id);
 
+    return JSON.stringify(await form.check(formData));
 }
