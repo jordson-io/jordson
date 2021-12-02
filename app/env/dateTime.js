@@ -1,5 +1,6 @@
+'use strict';
 /** Copyright © 2021 André LECLERCQ
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
  * (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
  * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished
@@ -10,7 +11,7 @@
  * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  **/
 
 /**
@@ -19,9 +20,16 @@
  * @returns {string}
  */
 export default function dateTime() {
-  let today = new Date();
-  let addZero = (e) => (e >= 10 ? e : `0${e}`);
-  return `${today.getFullYear()}-${addZero(today.getMonth() + 1)}-${addZero(today.getDate())} ${addZero(
-    today.getHours()
-  )}:${addZero(today.getMinutes())}:${addZero(today.getSeconds())}`;
+
+  const today = new Date();
+  const addZero = (number) => (number >= 10 ? number : `0${ number }`);
+
+  const year = today.getFullYear();
+  const month = today.getMonth() + 1;
+  const day = addZero(today.getDate());
+  const hours = addZero(today.getHours());
+  const minutes = addZero(today.getMinutes());
+  const seconds = addZero(today.getSeconds());
+
+  return `${ year }-${ month }-${ day } ${ hours }:${ minutes }:${ seconds }`;
 }
