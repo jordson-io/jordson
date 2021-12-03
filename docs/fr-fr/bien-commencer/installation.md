@@ -4,8 +4,8 @@
 
 ## Récupérer les sources
 
-``` 
-git clone https://github.com/jordson-io/jordson.git 
+```
+git clone https://github.com/jordson-io/jordson.git
 ```
 
 ## Installation des packets NPM
@@ -19,9 +19,18 @@ npm install
 - Télécharger Couchbase Server Community Edition : [https://www.couchbase.com/downloads](https://www.couchbase.com/downloads)
 - Documentation : [https://docs.couchbase.com/home/server.html](https://docs.couchbase.com/home/server.html)
 
-> Connectez vous à l'administration et créez un nouveau bucket ainsi qu'un nouvel utilisateur rattaché à ce bucket et conservez les de côté pour la configuration. Laissez le scope par défaut.
+1. Connectez vous à l'administration via l'adresse [http://localhost:8091](http://localhost:8091)
 
-> Importer les documents dans les collections correspondantes situés dans `src/data`, par exemple `pages.json` dans la collection `pages`.
+> Lors de votre première connexion Couchbase va vous faire créer le compte administrateur, surtout n'utilisez JAMAIS ces identifiants dans la configuration de JORDSON.
+
+2. Vous pouvez créer un nouveau bucket via le menu à gauche "Buckets" puis le bouton en haut à droite "ADD BUCKET", vous pouvez nommer le nouveau bucket comme vous le souhaitez.
+
+3. Une fois le bucket créé, cliquez sur "Scopes & Collections" à droite sur la ligne du nouveau bucket. Ensuite cliquez sur "Add Collection" sur la ligne du scope _default.
+
+4. Importer les documents dans les collections correspondantes situés dans `src/data`, par exemple `pages.json` dans la collection `pages`.
+
+> Pour importez une nouvelle collection vous pouvez cliquez sur "Import" au milieu de la navbar quand vous êtes dans le menu "Documents".
+> Vérifier que le Keyspace est correctement rempli et que la bonne collection est selectionné.
 
 ## Installer docsify (facultatif)
 

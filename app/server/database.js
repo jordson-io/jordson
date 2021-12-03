@@ -1,5 +1,5 @@
 /** Copyright © 2021 André LECLERCQ
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
  * (the “Software”), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge,
  * publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished
@@ -10,12 +10,12 @@
  * THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
  * OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
  * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  **/
 
 import crypto from "crypto";
 import couchbase from "couchbase";
-import logSys from "../env/msgSystem.js";
+import { log } from "../env/logSystem.js";
 import loadConfig from "./loadConfig.mjs";
 
 let gConfig = new loadConfig();
@@ -37,7 +37,7 @@ export default class Database {
       this.dbPassword = gConfig.db.password;
       this.connection().then();
     } catch (error) {
-      logSys(error, "error");
+      log.error(error);
       return error;
     }
   }
@@ -57,13 +57,13 @@ export default class Database {
         },
         async (err, cluster) => {
 
-          if(err) logSys(err, "error")
+          if(err) log.error(err)
           this.db = cluster.bucket(this.dbBucket).scope('_default')
-      
+
         }
       )
     } catch (error) {
-      logSys(error, "error");
+      log.error(error);
       return error;
     }
   }
@@ -82,7 +82,7 @@ export default class Database {
       coll.rows.map((row) => datas.push(row[collection]))
       return datas
     } catch (error) {
-      logSys(error, "error");
+      log.error(error);
       return error;
     }
   }
@@ -98,19 +98,19 @@ export default class Database {
   async createDocument(collection, primaryKeyValue, fields = null) {
     try {
       const document = await this.getDocument(collection, primaryKeyValue)
-     
+
       if (document) {
         return "already existing document";
       } else {
         const result = await this.db.collection(collection).upsert( crypto.randomUUID(), fields );
         if(result){
-          logSys(`Document ADD with success in ${collection}`, "success");
+          log.success(`Document ADD with success in ${collection}`);
           return "create document"
         }
       }
 
     } catch (error) {
-      logSys(error, "error");
+      log.error(error);
       return error;
     }
   }
@@ -129,12 +129,12 @@ export default class Database {
       if(document){
         const result = await this.db.collection(collection).upsert( document.id, fields );
         if(result){
-          logSys(`Document EDIT with success in ${collection}`, "success");
+          log.success(`Document EDIT with success in ${collection}`);
           return "edited document"
         }
       }
     } catch (error) {
-      logSys(error, "error");
+      log.error(error);
     }
   }
 
@@ -159,7 +159,7 @@ export default class Database {
       return this.document.meta.metrics.resultCount === 0 ? null : this.document.rows[0];
 
     } catch (error) {
-      logSys(error, "error");
+      log.error(error);
     }
   }
 }

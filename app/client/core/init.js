@@ -33,13 +33,13 @@ let pagesRoutes;
     let routesList = {};
     let promises = [];
 
-    const getHtml = new Promise<string>(async (resolve) => {
+    const getHtml = new Promise(async (resolve) => {
         const getHtmlData = await fetch("assets/app.html");
         resolve(getHtmlData.text());
     })
 
     for (let i = 0; i < collections.length; i++) {
-        promises[i] = new Promise<object>(async (resolve) => {
+        promises[i] = new Promise(async (resolve) => {
             const fetchRes = await fetch(`/api?action=get&name=${collections[i]}`);
             const result = fetchRes.json();
             resolve(result);

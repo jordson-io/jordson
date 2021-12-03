@@ -18,7 +18,7 @@
 |--------------|---------------|
 |[Github](https://github.com/jordson-io/jordson)|[Website](https://www.jordson.io)|
 |[Issues](https://github.com/jordson-io/jordson/issues)|[Twitter](https://twitter.com/JORDSONoff)|
-|[Road Map](https://github.com/orgs/jordson-io/projects/2)|[Discord](https://discord.gg/zTucuMucwG)|
+|[Road Map](https://github.com/orgs/jordson-io/projects/3)|[Discord](https://discord.gg/zTucuMucwG)|
 
 ## Documentation
 
