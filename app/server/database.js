@@ -1,3 +1,4 @@
+'use strict';
 /** Copyright © 2021 André LECLERCQ
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files
@@ -14,27 +15,26 @@
  **/
 
 import crypto from "crypto";
-import couchbase from "couchbase";
+import { createClient } from "redis";
 import { log } from "../env/logSystem.js";
 import loadConfig from "./loadConfig.mjs";
 
-let gConfig = new loadConfig();
+const gConfig = new loadConfig();
 
 /**
- * Manage Couchbase database
+ * Manage Redis database
  * @class
  */
 export default class Database {
   /**
-   * Prepare Couchbase instance
+   * Prepare Redis instance
    * @constructor
    */
   constructor() {
     try {
-      this.dbUri = gConfig.db.uri;
-      this.dbBucket = gConfig.db.bucket;
-      this.dbUsername = gConfig.db.username;
-      this.dbPassword = gConfig.db.password;
+      this.client = createClient();
+      this.client.on('error', (err) => log.error(err));
+
       this.connection().then();
     } catch (error) {
       log.error(error);
@@ -43,33 +43,22 @@ export default class Database {
   }
 
   /**
-   * Connection to Couchbase
+   * Connection to Redis
    * @method
-   * @returns {Promise<void>} a Couchbase instance
+   * @returns {Promise<void>} a Redis instance
    */
   async connection() {
     try {
-      couchbase.connect(
-        this.dbUri,
-        {
-          username: this.dbUsername,
-          password: this.dbPassword,
-        },
-        async (err, cluster) => {
-
-          if(err) log.error(err)
-          this.db = cluster.bucket(this.dbBucket).scope('_default')
-
-        }
-      )
+      await this.client.connect();
     } catch (error) {
-      log.error(error);
+      log.error(error.message);
+      log.error(error.stack);
       return error;
     }
   }
 
   /**
-   * Get all documents in targeted collection into Array [Couchbase]
+   * Get all documents in targeted collection into Array [Redis]
    * @method
    * @param {string} [collection] targeted
    * @returns {Promise<Array>} Get all documents in collection
@@ -77,18 +66,28 @@ export default class Database {
   async getCollection(collection) {
 
     try {
-      const coll = await this.db.query(`select * from ${collection}`);
-      let datas = []
-      coll.rows.map((row) => datas.push(row[collection]))
-      return datas
+      const isPublicCollection = () => { gConfig.db.publicCollections.includes(collection) };
+
+      if( isPublicCollection() ) {
+        let datas = [];
+        for await (const key of this.client.scanIterator()) {
+          if(key.startsWith(`${ collection }:`)) {
+            datas.push(JSON.stringify(await this.client.hGetAll(key)));
+          }
+        }
+        return datas;
+      } else {
+        log.error('This collection doesn't exist');
+      }
     } catch (error) {
-      log.error(error);
+      log.error(error.message);
+      log.error(error.stack);
       return error;
     }
   }
 
   /**
-   * Add new document in specific collection [Couchbase]
+   * Add new document in specific collection [Redis]
    * @method
    * @param {string} [collection] targeted
    * @param {object} [primaryKeyValue] ex: {key: value} to check if document already exist
@@ -110,7 +109,8 @@ export default class Database {
       }
 
     } catch (error) {
-      log.error(error);
+      log.error(error.message);
+      log.error(error.stack);
       return error;
     }
   }
@@ -134,7 +134,8 @@ export default class Database {
         }
       }
     } catch (error) {
-      log.error(error);
+      log.error(error.message);
+      log.error(error.stack);
     }
   }
 
@@ -159,7 +160,8 @@ export default class Database {
       return this.document.meta.metrics.resultCount === 0 ? null : this.document.rows[0];
 
     } catch (error) {
-      log.error(error);
+      log.error(error.message);
+      log.error(error.stack);
     }
   }
 }
