@@ -50,6 +50,8 @@ export default class Database {
   async connection() {
     try {
       await this.client.connect();
+
+      await this.getDocument('pages', {fileName: "home"});
     } catch (error) {
       log.error(error.message);
       log.error(error.stack);
@@ -77,7 +79,7 @@ export default class Database {
         }
         return datas;
       } else {
-        log.error('This collection doesn't exist');
+        log.error("This collection doesn't exist");
       }
     } catch (error) {
       log.error(error.message);
@@ -140,7 +142,7 @@ export default class Database {
   }
 
   /**
-   * Get document on specific collection [Couchbase]
+   * Get document on specific collection [Redis]
    * @method
    * @param {string} [collection] targeted
    * @param {object} [primaryKeyValue] ex: {key: value} to find document
@@ -156,8 +158,19 @@ export default class Database {
         }
       }
 
-      this.document = await this.db.query(`SELECT META().id, * FROM ${collection} WHERE ${primKey} = "${primValue}"`);
-      return this.document.meta.metrics.resultCount === 0 ? null : this.document.rows[0];
+      /**for await (const key of this.client.scanIterator()) {
+        if(key.startsWith(`${ collection }:`)) {
+          const document = await this.client.HSET(key, primKey, primValue);
+          log.debug(JSON.stringify(document));
+        }
+      }*/
+
+      const results = await this.client.json.get('pages:jsondata', '$');
+
+      console.log(results);
+
+      //this.document = await this.db.query(`SELECT META().id, * FROM ${collection} WHERE ${primKey} = "${primValue}"`);
+      //return this.document.meta.metrics.resultCount === 0 ? null : this.document.rows[0];
 
     } catch (error) {
       log.error(error.message);

@@ -1,5 +1,24 @@
-{"slug":"","fileName":"home","title":"JORD - La performance au service de votre projet"}
-{"slug":"a-propos","fileName":"about","title":"JORD - La performance au service de votre projet"}
-{"slug":"admin","fileName":"adminAccess","title":"JORD - La performance au service de votre projet"}
-{"slug":"contact","fileName":"contact","title":"JORD - Contactez nous"}
-{"slug":"licence","fileName":"licence","title":"JORD - Licence MIT"}
+{
+  "pages:jsondata": {
+    "page:1":{
+      "slug":"",
+      "fileName":"home",
+      "title":"JORDSON - Made with passion"
+    },
+    "page:2":{
+      "slug":"a-propos",
+      "fileName":"about",
+      "title":"JORDSON - About the project"
+    },
+    "page:3":{
+      "slug":"contact",
+      "fileName":"contact",
+      "title":"JORDSON - Contact-us"
+    },
+    "page:4":{
+      "slug":"licence",
+      "fileName":"licence",
+      "title":"JORDSON - Licence MIT"
+    }
+  }
+}
